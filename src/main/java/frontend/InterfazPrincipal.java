@@ -34,7 +34,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuItem1 = new javax.swing.JMenuItem();
         pnlFrame = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         btnImportarDatos = new javax.swing.JButton();
@@ -51,8 +50,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         itemRegistrarPrestamo = new javax.swing.JMenuItem();
         menuAyuda = new javax.swing.JMenu();
         menuAcercaDe = new javax.swing.JMenu();
-
-        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -245,7 +242,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem itemRegistrarEstudiante;
     private javax.swing.JMenuItem itemRegistrarLibro;
     private javax.swing.JMenuItem itemRegistrarPrestamo;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lblAlmacenarInfo;
     private javax.swing.JLabel lblReportes;
     private javax.swing.JLabel lblTitulo;
