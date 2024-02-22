@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
 
-package Backend;
+package backend;
 
 /**
  *
@@ -10,7 +10,7 @@ package Backend;
  */
 public class Ipc2Ptc1Git {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         System.out.println("Hello World!");
-    }
+    }*/
 }

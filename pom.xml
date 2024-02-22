@@ -9,6 +9,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <exec.mainClass>com.mycompany.ipc2.ptc1.git.Ipc2Ptc1Git</exec.mainClass>
+        <exec.mainClass>frontend.InterfazPrincipal</exec.mainClass>
     </properties>
 </project>
