@@ -4,17 +4,29 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Estudiante;
+import java.util.ArrayList;
+
 /**
  *
  * @author ronyrojas
  */
-public class RegistrarEstudiante extends javax.swing.JFrame {
+public class RegistroEstudiante extends javax.swing.JFrame {
 
     /**
      * Creates new form RegistrarEstudiante
      */
-    public RegistrarEstudiante() {
+    
+    private Biblioteca biblioteca;
+    private ArrayList<Estudiante> estudiantes;
+    
+    public RegistroEstudiante(Biblioteca biblioteca) {
         initComponents();
+        
+        this.biblioteca = biblioteca;
+        estudiantes = biblioteca.getEstudiantes();
+        
     }
 
     /**
@@ -35,9 +47,8 @@ public class RegistrarEstudiante extends javax.swing.JFrame {
         fieldCarnet = new javax.swing.JTextField();
         fieldNombre = new javax.swing.JTextField();
         fieldCodigoCarrera = new javax.swing.JTextField();
-        fieldFecha = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
-        lblIcono = new javax.swing.JLabel();
+        fieldFecha = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,25 +93,20 @@ public class RegistrarEstudiante extends javax.swing.JFrame {
         pnlFrame.add(fieldCodigoCarrera);
         fieldCodigoCarrera.setBounds(50, 230, 150, 24);
 
-        fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
-        fieldFecha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldFechaActionPerformed(evt);
-            }
-        });
-        pnlFrame.add(fieldFecha);
-        fieldFecha.setBounds(50, 290, 150, 24);
-
         btnRegistrar.setBackground(new java.awt.Color(0, 204, 204));
         btnRegistrar.setForeground(new java.awt.Color(0, 0, 255));
         btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnRegistrar);
         btnRegistrar.setBounds(190, 350, 150, 30);
 
-        lblIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/estudiante.png"))); // NOI18N
-        lblIcono.setPreferredSize(new java.awt.Dimension(90, 90));
-        pnlFrame.add(lblIcono);
-        lblIcono.setBounds(320, 130, 70, 110);
+        fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
+        pnlFrame.add(fieldFecha);
+        fieldFecha.setBounds(50, 300, 150, 24);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -116,44 +122,16 @@ public class RegistrarEstudiante extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void fieldFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldFechaActionPerformed
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_fieldFechaActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistrarEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistrarEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistrarEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistrarEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistrarEstudiante().setVisible(true);
-            }
-        });
-    }
+        int carnet = Integer.parseInt(fieldCarnet.getText());
+        String nombre = fieldNombre.getText();
+        int codigoCarrera = Integer.parseInt(fieldCodigoCarrera.getText());
+        String fechaNacimiento = fieldFecha.getText();
+        
+        estudiantes.add(new Estudiante(carnet, nombre, codigoCarrera, fechaNacimiento));
+        this.setVisible(false);
+    }//GEN-LAST:event_btnRegistrarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
@@ -164,7 +142,6 @@ public class RegistrarEstudiante extends javax.swing.JFrame {
     private javax.swing.JLabel lblCarnet;
     private javax.swing.JLabel lblCarrera;
     private javax.swing.JLabel lblFecha;
-    private javax.swing.JLabel lblIcono;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblRegistarEstudiante;
     private javax.swing.JPanel pnlFrame;

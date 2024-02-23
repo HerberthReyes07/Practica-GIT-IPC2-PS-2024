@@ -4,17 +4,26 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Libro;
+import java.util.ArrayList;
+
 /**
  *
  * @author herberthreyes
  */
 public class InterfazPrincipal extends javax.swing.JFrame {
 
+    private Biblioteca biblioteca;
+    private ArrayList<Libro> libros;
+
     /**
      * Creates new form InterfazPrincipal
      */
     public InterfazPrincipal() {
         initComponents();
+        biblioteca = new Biblioteca();
+        libros = biblioteca.getLibros();
         
         menuBar.setVisible(false);
         lblReportes.setVisible(false);
@@ -86,14 +95,29 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblReportes.setBounds(360, 80, 90, 18);
 
         btnGuardarLibros.setText("Libros");
+        btnGuardarLibros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarLibrosActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnGuardarLibros);
         btnGuardarLibros.setBounds(220, 460, 120, 40);
 
         btnGuardarEstudiantes.setText("Estudiantes");
+        btnGuardarEstudiantes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarEstudiantesActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnGuardarEstudiantes);
         btnGuardarEstudiantes.setBounds(340, 460, 120, 40);
 
         btnGuardarPrestamos.setText("Prestamos");
+        btnGuardarPrestamos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarPrestamosActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnGuardarPrestamos);
         btnGuardarPrestamos.setBounds(460, 460, 120, 40);
 
@@ -164,10 +188,14 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     private void itemRegistrarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRegistrarLibroActionPerformed
         // TODO add your handling code here:
+        RegistroLibro registrarLibro = new RegistroLibro(biblioteca);
+        registrarLibro.setVisible(true);
     }//GEN-LAST:event_itemRegistrarLibroActionPerformed
 
     private void itemRegistrarEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRegistrarEstudianteActionPerformed
         // TODO add your handling code here:
+        RegistroEstudiante registrarEstudiante = new RegistroEstudiante(biblioteca);
+        registrarEstudiante.setVisible(true);
     }//GEN-LAST:event_itemRegistrarEstudianteActionPerformed
 
     private void itemRegistrarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRegistrarPrestamoActionPerformed
@@ -197,6 +225,19 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private void comboBoxReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxReportesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxReportesActionPerformed
+
+    private void btnGuardarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLibrosActionPerformed
+        // TODO add your handling code here:
+        System.out.println(libros.toString());
+    }//GEN-LAST:event_btnGuardarLibrosActionPerformed
+
+    private void btnGuardarEstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEstudiantesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarEstudiantesActionPerformed
+
+    private void btnGuardarPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarPrestamosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarPrestamosActionPerformed
 
     /**
      * @param args the command line arguments

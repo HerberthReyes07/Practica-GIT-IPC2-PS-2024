@@ -4,17 +4,25 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Libro;
+import java.util.ArrayList;
+
 /**
  *
  * @author ronyrojas
  */
 public class RegistroLibro extends javax.swing.JFrame {
-
+    
+    private Biblioteca biblioteca;
+    private ArrayList<Libro> libros;
     /**
      * Creates new form RegistroLibro
      */
-    public RegistroLibro() {
+    public RegistroLibro(Biblioteca biblioteca) {
         initComponents();
+        this.biblioteca= biblioteca;
+        libros = biblioteca.getLibros();
     }
 
     /**
@@ -41,7 +49,6 @@ public class RegistroLibro extends javax.swing.JFrame {
         fieldFecha = new javax.swing.JTextField();
         fieldEditorial = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
-        lblIcono = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(600, 540));
@@ -112,12 +119,13 @@ public class RegistroLibro extends javax.swing.JFrame {
         btnRegistrar.setBackground(new java.awt.Color(0, 204, 204));
         btnRegistrar.setForeground(new java.awt.Color(0, 0, 255));
         btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnRegistrar);
         btnRegistrar.setBounds(210, 470, 180, 30);
-
-        lblIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/libro.png"))); // NOI18N
-        pnlFrame.add(lblIcono);
-        lblIcono.setBounds(350, 130, 70, 80);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,40 +141,18 @@ public class RegistroLibro extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistroLibro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistroLibro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistroLibro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistroLibro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistroLibro().setVisible(true);
-            }
-        });
-    }
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        // TODO add your handling code here:
+        String codigo = fieldCodigo.getText();
+        String autor = fieldAutor.getText();
+        String titulo = fieldTitulo.getText();
+        int cantidad = Integer.parseInt(fieldCopias.getText());
+        String fecha = fieldFecha.getText();
+        String editorial = fieldEditorial.getText();
+        
+        libros.add(new Libro(titulo, autor, codigo, cantidad, fecha, editorial));
+        this.setVisible(false);
+    }//GEN-LAST:event_btnRegistrarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
@@ -181,7 +167,6 @@ public class RegistroLibro extends javax.swing.JFrame {
     private javax.swing.JLabel lblCopias;
     private javax.swing.JLabel lblEditorial;
     private javax.swing.JLabel lblFecha;
-    private javax.swing.JLabel lblIcono;
     private javax.swing.JLabel lblRegistrarLibro;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JPanel pnlFrame;
