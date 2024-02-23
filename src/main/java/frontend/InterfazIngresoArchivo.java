@@ -71,7 +71,7 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
         if (res == JFileChooser.APPROVE_OPTION) {
             try {
                 LeerArchivo lra = new LeerArchivo();
-                String textoLeido = lra.leerArchivoEntrada(jFileChooser1.getSelectedFile());
+                lra.leerArchivoEntrada(jFileChooser1.getSelectedFile());
                 //System.out.println(textoLeido);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(InterfazIngresoArchivo.class.getName()).log(Level.SEVERE, null, ex);

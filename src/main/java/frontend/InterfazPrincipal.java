@@ -4,6 +4,12 @@
  */
 package frontend;
 
+import backend.LeerArchivo;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author herberthreyes
@@ -34,6 +40,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         pnlFrame = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         btnImportarDatos = new javax.swing.JButton();
@@ -83,7 +90,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblReportes.setForeground(new java.awt.Color(0, 0, 0));
         lblReportes.setText("Reportes");
         pnlFrame.add(lblReportes);
-        lblReportes.setBounds(360, 80, 90, 18);
+        lblReportes.setBounds(360, 80, 90, 22);
 
         btnGuardarLibros.setText("Libros");
         pnlFrame.add(btnGuardarLibros);
@@ -100,7 +107,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblAlmacenarInfo.setForeground(new java.awt.Color(0, 0, 0));
         lblAlmacenarInfo.setText("Almacenar informacion");
         pnlFrame.add(lblAlmacenarInfo);
-        lblAlmacenarInfo.setBounds(330, 430, 150, 18);
+        lblAlmacenarInfo.setBounds(330, 430, 150, 22);
 
         menuRegistrar.setText("Registrar");
 
@@ -184,6 +191,17 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     private void btnImportarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarDatosActionPerformed
         // TODO add your handling code here:
+        jFileChooser1.setVisible(true);
+        int res = jFileChooser1.showOpenDialog(this);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            try {
+                LeerArchivo lra = new LeerArchivo();
+                lra.leerArchivoEntrada(jFileChooser1.getSelectedFile());
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(InterfazIngresoArchivo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         btnImportarDatos.setVisible(false);
         menuBar.setVisible(true);
         lblReportes.setVisible(true);
@@ -242,6 +260,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem itemRegistrarEstudiante;
     private javax.swing.JMenuItem itemRegistrarLibro;
     private javax.swing.JMenuItem itemRegistrarPrestamo;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel lblAlmacenarInfo;
     private javax.swing.JLabel lblReportes;
     private javax.swing.JLabel lblTitulo;

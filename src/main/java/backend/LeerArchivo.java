@@ -32,9 +32,9 @@ public class LeerArchivo {
     private ArrayList<Prestamo> prestamos = new ArrayList();
     private boolean enPrestamo = false;
 
-    public String leerArchivoEntrada(File archivo) throws FileNotFoundException {
+    public void leerArchivoEntrada(File archivo) throws FileNotFoundException {
         BufferedReader brp = new BufferedReader(new FileReader(archivo));
-        String textoTotal = "";
+        //String textoTotal = "";
 
         try {
             String cadena = brp.readLine();
@@ -151,13 +151,14 @@ public class LeerArchivo {
                         break;
                 }
 
-                textoTotal = textoTotal + cadena;
+                //textoTotal = textoTotal + cadena;
                 cadena = brp.readLine();
-                if (cadena != null) {
-                    textoTotal = textoTotal + "\n";
-                } else {
+                if (cadena == null) {
                     nuevoRegistroLeido();
-                }
+                    //textoTotal = textoTotal + "\n";
+                } /*else {
+                    nuevoRegistroLeido();
+                }*/
             }
         } catch (IOException ex) {
             Logger.getLogger(LeerArchivo.class.getName()).log(Level.SEVERE, null, ex);
@@ -239,8 +240,6 @@ public class LeerArchivo {
         System.out.println("Total de prestamos: " + prestamos.size());
         System.out.println(prestamos);
         System.out.println("");
-
-        return textoTotal;
     }
 
     private void nuevoRegistroLeido() {
