@@ -44,20 +44,20 @@ public class LeerArchivo {
 
                 switch (cadena) {
                     case "LIBRO":
-                        nuevoRegistro();
+                        nuevoRegistroLeido();
                         lbr = new Libro();
                         lbr.setCantidad(-1);
                         enLibro = true;
                         break;
                     case "ESTUDIANTE":
-                        nuevoRegistro();
+                        nuevoRegistroLeido();
                         est = new Estudiante();
                         est.setCarnet(-1);
                         est.setCodigoCarrera(-1);
                         enEstudiante = true;
                         break;
                     case "PRESTAMO":
-                        nuevoRegistro();
+                        nuevoRegistroLeido();
                         prt = new Prestamo();
                         prt.setCarnetEstudiante(-1);
                         enPrestamo = true;
@@ -156,25 +156,74 @@ public class LeerArchivo {
                 if (cadena != null) {
                     textoTotal = textoTotal + "\n";
                 } else {
-                    nuevoRegistro();
+                    nuevoRegistroLeido();
                 }
             }
         } catch (IOException ex) {
             Logger.getLogger(LeerArchivo.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        /*for (int i = 0; i < prestamos.size(); i++) {
-            boolean codigoLibroEncontrado = false; 
+        // Verificar errores luego de la lectura en caso de que sea un solo archivo de entrada
+        int contEliminados = 0;
+        int cantidadPrestamos = prestamos.size();
+        for (int i = 0; i < cantidadPrestamos; i++) {
+            boolean codigoLibroEncontrado = false;
+            boolean carnetEstudianteEncontrado = false;
             for (int j = 0; j < libros.size(); j++) {
-                if (prestamos.get(i).getCodigoLibro().equals(libros.get(j).getCodigo())) {
+                if (prestamos.get(i - contEliminados).getCodigoLibro().equals(libros.get(j).getCodigo())) {
                     codigoLibroEncontrado = true;
                 }
             }
-            if (!codigoLibroEncontrado) {
-                //prestamos.get(i).
+            for (int j = 0; j < estudiantes.size(); j++) {
+                if (prestamos.get(i - contEliminados).getCarnetEstudiante() == estudiantes.get(j).getCarnet()) {
+                    carnetEstudianteEncontrado = true;
+                }
             }
-        }*/
+            if (!codigoLibroEncontrado || !carnetEstudianteEncontrado) {
+                prestamos.remove(i - contEliminados);
+                contEliminados++;
+            }
+        }
+
+        // Verificar que no se repite alguna llave primaria en el archivo de entrada
         
+        int contEstudiantesVerificados = 0;
+        while (true) {
+            int cantidadEstudiantes = estudiantes.size();
+            for (int j = 0; j < cantidadEstudiantes; j++) {
+                if (j < estudiantes.size()) {
+                    if ((estudiantes.get(contEstudiantesVerificados).getCarnet() == estudiantes.get(j).getCarnet())
+                            && (contEstudiantesVerificados) != j) {
+                        estudiantes.remove(j);
+                    }
+                } else {
+                    break;
+                }
+            }
+            contEstudiantesVerificados++;
+            if (contEstudiantesVerificados == estudiantes.size()) {
+                break;
+            }
+        }
+        
+        int contLibrosVerificados = 0;
+        while (true) {
+            int cantidadLibros = libros.size();
+            for (int j = 0; j < cantidadLibros; j++) {
+                if (j < libros.size()) {
+                    if ((libros.get(contLibrosVerificados).getCodigo().equals(libros.get(j).getCodigo()))
+                            && (contLibrosVerificados) != j) {
+                        libros.remove(j);
+                    }
+                } else {
+                    break;
+                }
+            }
+            contLibrosVerificados++;
+            if (contLibrosVerificados == libros.size()) {
+                break;
+            }
+        }
         
         System.out.println("\n----- LIBROS -----");
         System.out.println("Total de libros: " + libros.size());
@@ -194,15 +243,11 @@ public class LeerArchivo {
         return textoTotal;
     }
 
-    private void nuevoRegistro() {
+    private void nuevoRegistroLeido() {
         if (enLibro) {
             if (!isAllBlank(lbr.getTitulo()) && !isAllBlank(lbr.getAutor()) && lbr.getCodigo() != null && lbr.getCantidad() >= 0) {
                 libros.add(lbr);
             } else {
-                /*System.out.println("Titulo: " + lbr.getTitulo());
-                System.out.println("Autor: " + lbr.getAutor());
-                System.out.println("Codigo: " + lbr.getCodigo());
-                System.out.println("Cantidad: " + lbr.getCantidad());*/
                 System.out.println("ERROR EN LIBRO");
             }
             enLibro = false;
