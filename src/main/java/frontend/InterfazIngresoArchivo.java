@@ -4,8 +4,13 @@
  */
 package frontend;
 
+import backend.ErrorLecturaArchivo;
+import backend.Estudiante;
 import backend.LeerArchivo;
+import backend.Libro;
+import backend.Prestamo;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -110,7 +115,26 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
             try {
                 LeerArchivo lra = new LeerArchivo();
                 lra.leerArchivoEntrada(jFileChooser1.getSelectedFile());
-                //System.out.println(textoLeido);
+                ArrayList<Libro> librosEntrada = lra.getLibros();
+                ArrayList<Estudiante> estudiantesEntrada = lra.getEstudiantes();
+                ArrayList<Prestamo> prestamosEntrada = lra.getPrestamos();
+                ArrayList<ErrorLecturaArchivo> erroresEntrada = lra.getErroresLectura();
+
+                System.out.println("\n----- LIBROS -----");
+                System.out.println("Total de libros: " + librosEntrada.size());
+                System.out.println(librosEntrada);
+
+                System.out.println("\n----- ESTUDIANTES -----");
+                System.out.println("Total de estudiantes: " + estudiantesEntrada.size());
+                System.out.println(estudiantesEntrada);
+
+                System.out.println("\n----- PRESTAMOS -----");
+                System.out.println("Total de prestamos: " + prestamosEntrada.size());
+                System.out.println(prestamosEntrada);
+
+                System.out.println("\n----- ERRORES -----");
+                System.out.println(erroresEntrada);
+
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(InterfazIngresoArchivo.class.getName()).log(Level.SEVERE, null, ex);
             }
