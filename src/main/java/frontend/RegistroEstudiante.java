@@ -49,6 +49,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         fieldCodigoCarrera = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
         fieldFecha = new javax.swing.JTextField();
+        btnListadoEstudiantes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -102,11 +103,22 @@ public class RegistroEstudiante extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnRegistrar);
-        btnRegistrar.setBounds(190, 350, 150, 30);
+        btnRegistrar.setBounds(50, 350, 150, 30);
 
         fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldFecha);
         fieldFecha.setBounds(50, 300, 150, 24);
+
+        btnListadoEstudiantes.setBackground(new java.awt.Color(0, 204, 204));
+        btnListadoEstudiantes.setForeground(new java.awt.Color(0, 0, 255));
+        btnListadoEstudiantes.setText("Ver Listado Estudiantes");
+        btnListadoEstudiantes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListadoEstudiantesActionPerformed(evt);
+            }
+        });
+        pnlFrame.add(btnListadoEstudiantes);
+        btnListadoEstudiantes.setBounds(290, 350, 200, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,7 +145,15 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    private void btnListadoEstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListadoEstudiantesActionPerformed
+        // TODO add your handling code here:
+        System.out.println("boton registrar");
+        ListadoEstudiantes listadoEstudiantes = new ListadoEstudiantes();
+        listadoEstudiantes.setVisible(true);
+    }//GEN-LAST:event_btnListadoEstudiantesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnListadoEstudiantes;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JTextField fieldCarnet;
     private javax.swing.JTextField fieldCodigoCarrera;

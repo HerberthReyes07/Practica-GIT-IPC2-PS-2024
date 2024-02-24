@@ -49,6 +49,7 @@ public class RegistroLibro extends javax.swing.JFrame {
         fieldFecha = new javax.swing.JTextField();
         fieldEditorial = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
+        btnListadoLibros = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(600, 540));
@@ -94,29 +95,29 @@ public class RegistroLibro extends javax.swing.JFrame {
 
         fieldCodigo.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCodigo);
-        fieldCodigo.setBounds(60, 100, 150, 24);
+        fieldCodigo.setBounds(60, 100, 180, 24);
 
         fieldAutor.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldAutor);
-        fieldAutor.setBounds(60, 160, 150, 24);
+        fieldAutor.setBounds(60, 160, 180, 24);
 
         fieldTitulo.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldTitulo);
-        fieldTitulo.setBounds(60, 220, 150, 24);
+        fieldTitulo.setBounds(60, 220, 180, 24);
 
         fieldCopias.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCopias);
-        fieldCopias.setBounds(60, 280, 150, 24);
+        fieldCopias.setBounds(60, 280, 180, 24);
 
         fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldFecha);
-        fieldFecha.setBounds(60, 340, 150, 24);
+        fieldFecha.setBounds(60, 340, 180, 24);
 
         fieldEditorial.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldEditorial);
-        fieldEditorial.setBounds(60, 400, 150, 24);
+        fieldEditorial.setBounds(60, 400, 180, 24);
 
-        btnRegistrar.setBackground(new java.awt.Color(0, 204, 204));
+        btnRegistrar.setBackground(new java.awt.Color(0, 255, 255));
         btnRegistrar.setForeground(new java.awt.Color(0, 0, 255));
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
@@ -125,7 +126,18 @@ public class RegistroLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnRegistrar);
-        btnRegistrar.setBounds(210, 470, 180, 30);
+        btnRegistrar.setBounds(60, 460, 180, 30);
+
+        btnListadoLibros.setBackground(new java.awt.Color(0, 255, 255));
+        btnListadoLibros.setForeground(new java.awt.Color(0, 0, 255));
+        btnListadoLibros.setText("Ver Listado de Libros Existentes");
+        btnListadoLibros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListadoLibrosActionPerformed(evt);
+            }
+        });
+        pnlFrame.add(btnListadoLibros);
+        btnListadoLibros.setBounds(320, 460, 240, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -154,7 +166,14 @@ public class RegistroLibro extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    private void btnListadoLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListadoLibrosActionPerformed
+        // TODO add your handling code here:
+        ListadoLibros listadoLibros = new ListadoLibros();
+        listadoLibros.setVisible(true);
+    }//GEN-LAST:event_btnListadoLibrosActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnListadoLibros;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JTextField fieldAutor;
     private javax.swing.JTextField fieldCodigo;
