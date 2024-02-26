@@ -13,14 +13,16 @@ public class Estudiante {
     private int carnet;
     private String nombre;
     private int codigoCarrera;
+    private String fechaNacimiento; 
 
     public Estudiante() {
     }
 
-    public Estudiante(int carnet, String nombre, int codigoCarrera) {
+    public Estudiante(int carnet, String nombre, int codigoCarrera, String fechaNacimiento) {
         this.carnet = carnet;
         this.nombre = nombre;
         this.codigoCarrera = codigoCarrera;
+        this.fechaNacimiento = fechaNacimiento;
     }
 
     public int getCarnet() {
@@ -47,8 +49,19 @@ public class Estudiante {
         this.codigoCarrera = codigoCarrera;
     }
 
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(String fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
     @Override
     public String toString() {
-        return "Estudiante{" + "carnet=" + carnet + ", nombre=" + nombre + ", codigoCarrera=" + codigoCarrera + '}';
+        return "Estudiante{" + "carnet=" + carnet + ", nombre=" + nombre + ", codigoCarrera=" + codigoCarrera + ", fechaNacimiento=" + fechaNacimiento + '}';
     }
+    
+    
+    
 }
