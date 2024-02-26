@@ -9,10 +9,7 @@ import backend.Estudiante;
 import backend.LeerArchivo;
 import backend.Libro;
 import backend.Prestamo;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 /**
@@ -21,11 +18,19 @@ import javax.swing.JFileChooser;
  */
 public class InterfazIngresoArchivo extends javax.swing.JFrame {
 
+    ArrayList<ErrorLecturaArchivo> erroresEntrada = new ArrayList();
+
     /**
      * Creates new form InterfazIngresoArchivo
      */
     public InterfazIngresoArchivo() {
         initComponents();
+        //this.setLocationRelativeTo(null);
+        jLabel1.setVisible(false);
+        jButton2.setVisible(false);
+        jButton3.setVisible(false);
+        jButton4.setVisible(false);
+        jButton5.setVisible(false);
     }
 
     /**
@@ -39,11 +44,13 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
 
         jFileChooser1 = new javax.swing.JFileChooser();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,54 +61,83 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel1.setText("Cargando #");
+
+        jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("BIBLIOTECA - CUNOC");
+
+        jPanel1.setLayout(new java.awt.GridLayout(1, 3, 15, 0));
+
         jButton2.setText("Libros");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2);
 
         jButton3.setText("Estudiantes");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton3);
 
         jButton4.setText("Prestamos");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton4);
 
-        jLabel1.setText("Ver errores en:");
-
-        jLabel2.setText("BIBLIOTECA CUNOC");
+        jButton5.setText("Ir al Menú Principal");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(289, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(306, 306, 306))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(61, 61, 61)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(63, 63, 63)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(144, 144, 144)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(292, 292, 292)
-                        .addComponent(jLabel2)))
-                .addContainerGap(99, Short.MAX_VALUE))
+                        .addGap(92, 92, 92)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(274, 274, 274)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(90, Short.MAX_VALUE)
+                .addGap(65, 65, 65)
                 .addComponent(jLabel2)
-                .addGap(77, 77, 77)
+                .addGap(52, 52, 52)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(109, 109, 109)
+                .addGap(39, 39, 39)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(44, 44, 44)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(159, 159, 159))
+                .addGap(39, 39, 39)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(85, 85, 85))
         );
 
         pack();
@@ -112,34 +148,106 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
         jFileChooser1.setVisible(true);
         int res = jFileChooser1.showOpenDialog(this);
         if (res == JFileChooser.APPROVE_OPTION) {
-            try {
-                LeerArchivo lra = new LeerArchivo();
-                lra.leerArchivoEntrada(jFileChooser1.getSelectedFile());
-                ArrayList<Libro> librosEntrada = lra.getLibros();
-                ArrayList<Estudiante> estudiantesEntrada = lra.getEstudiantes();
-                ArrayList<Prestamo> prestamosEntrada = lra.getPrestamos();
-                ArrayList<ErrorLecturaArchivo> erroresEntrada = lra.getErroresLectura();
-
-                System.out.println("\n----- LIBROS -----");
-                System.out.println("Total de libros: " + librosEntrada.size());
-                System.out.println(librosEntrada);
-
-                System.out.println("\n----- ESTUDIANTES -----");
-                System.out.println("Total de estudiantes: " + estudiantesEntrada.size());
-                System.out.println(estudiantesEntrada);
-
-                System.out.println("\n----- PRESTAMOS -----");
-                System.out.println("Total de prestamos: " + prestamosEntrada.size());
-                System.out.println(prestamosEntrada);
-
-                System.out.println("\n----- ERRORES -----");
-                System.out.println(erroresEntrada);
-
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(InterfazIngresoArchivo.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            LeerArchivo lra = new LeerArchivo();
+            lra.setArchivoEntrada(jFileChooser1.getSelectedFile());
+            lra.setIia(this);
+            lra.setLblCarga(jLabel1);
+            lra.start();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        ArrayList<ErrorLecturaArchivo> erroresLibro = new ArrayList();
+        for (int i = 0; i < erroresEntrada.size(); i++) {
+            if (erroresEntrada.get(i).getTipo() == 1) {
+                erroresLibro.add(erroresEntrada.get(i));
+            }
+        }
+        ErrorLibro el = new ErrorLibro();
+        el.listarErroresLibros(erroresLibro);
+        el.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        ArrayList<ErrorLecturaArchivo> erroresEstudiante = new ArrayList();
+        for (int i = 0; i < erroresEntrada.size(); i++) {
+            if (erroresEntrada.get(i).getTipo() == 2) {
+                erroresEstudiante.add(erroresEntrada.get(i));
+            }
+        }
+        ErrorEstudiante ee = new ErrorEstudiante();
+        ee.listarErroresEstudiantes(erroresEstudiante);
+        ee.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        ArrayList<ErrorLecturaArchivo> erroresPrestamo = new ArrayList();
+        for (int i = 0; i < erroresEntrada.size(); i++) {
+            if (erroresEntrada.get(i).getTipo() == 3) {
+                erroresPrestamo.add(erroresEntrada.get(i));
+            }
+        }
+        ErrorPrestamo ep = new ErrorPrestamo();
+        ep.listarErroresPrestamos(erroresPrestamo);
+        ep.setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        InterfazPrincipal ip = new InterfazPrincipal();
+        this.dispose();
+        ip.setVisible(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    public void verErrores(ArrayList<Libro> librosAnalizados, ArrayList<Estudiante> estudiantesAnalizados,
+            ArrayList<Prestamo> prestamosAnalizados, ArrayList<ErrorLecturaArchivo> erroresAnalizados) {
+
+        jButton5.setVisible(true);
+        ArrayList<Libro> librosEntrada = librosAnalizados;
+        ArrayList<Estudiante> estudiantesEntrada = estudiantesAnalizados;
+        ArrayList<Prestamo> prestamosEntrada = prestamosAnalizados;
+        erroresEntrada = erroresAnalizados;
+
+        if (!erroresEntrada.isEmpty()) {
+            jLabel1.setText("Ver errores en:");
+            boolean errorLibro = false;
+            boolean errorEstudiante = false;
+            boolean errorPrestamo = false;
+            for (int i = 0; i < erroresEntrada.size(); i++) {
+                if (erroresEntrada.get(i).getTipo() == 1 && !errorLibro) {
+                    errorLibro = true;
+                    jButton2.setVisible(true);
+                } else if (erroresEntrada.get(i).getTipo() == 2 && !errorEstudiante) {
+                    errorEstudiante = true;
+                    jButton3.setVisible(true);
+                } else if (erroresEntrada.get(i).getTipo() == 3 && !errorPrestamo) {
+                    errorPrestamo = true;
+                    jButton4.setVisible(true);
+                }
+
+                if (errorLibro && errorEstudiante && errorPrestamo) {
+                    break;
+                }
+            }
+        } else {
+            jLabel1.setText("No hay errores en el archivo de entrada");
+        }
+
+        System.out.println("\n----- LIBROS -----");
+        System.out.println("Total de libros: " + librosEntrada.size());
+        System.out.println(librosEntrada);
+        System.out.println("\n----- ESTUDIANTES -----");
+        System.out.println("Total de estudiantes: " + estudiantesEntrada.size());
+        System.out.println(estudiantesEntrada);
+        System.out.println("\n----- PRESTAMOS -----");
+        System.out.println("Total de prestamos: " + prestamosEntrada.size());
+        System.out.println(prestamosEntrada);
+        System.out.println("\n----- ERRORES -----");
+        System.out.println(erroresEntrada);
+    }
 
     /**
      * @param args the command line arguments
@@ -181,8 +289,10 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

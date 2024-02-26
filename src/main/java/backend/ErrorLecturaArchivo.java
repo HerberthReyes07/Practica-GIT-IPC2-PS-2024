@@ -15,9 +15,9 @@ public class ErrorLecturaArchivo {
     private Libro libroError;
     private Estudiante estudianteError;
     private Prestamo prestamoError;
-    //private String mensaje;
     ArrayList<String> mensaje;
-
+    private int lineaError;
+    
     public ErrorLecturaArchivo() {
     }
 
@@ -79,6 +79,14 @@ public class ErrorLecturaArchivo {
         this.mensaje = mensaje;
     }
 
+    public int getLineaError() {
+        return lineaError;
+    }
+
+    public void setLineaError(int lineaError) {
+        this.lineaError = lineaError;
+    }
+    
     @Override
     public String toString() {
         return "ErrorLecturaArchivo{" + "tipo=" + tipo + ", libroError=" + libroError + ", estudianteError=" + estudianteError + ", prestamoError=" + prestamoError + ", mensaje=" + mensaje + '}';

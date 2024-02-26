@@ -4,12 +4,6 @@
  */
 package frontend;
 
-import backend.LeerArchivo;
-import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-
 /**
  *
  * @author herberthreyes
@@ -21,14 +15,15 @@ public class InterfazPrincipal extends javax.swing.JFrame {
      */
     public InterfazPrincipal() {
         initComponents();
+        //this.setLocationRelativeTo(null);
         
-        menuBar.setVisible(false);
+        /*menuBar.setVisible(false);
         lblReportes.setVisible(false);
         lblAlmacenarInfo.setVisible(false);
         comboBoxReportes.setVisible(false);
         btnGuardarLibros.setVisible(false);
         btnGuardarEstudiantes.setVisible(false);
-        btnGuardarPrestamos.setVisible(false);
+        btnGuardarPrestamos.setVisible(false);*/
     }
 
     /**
@@ -43,7 +38,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         jFileChooser1 = new javax.swing.JFileChooser();
         pnlFrame = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
-        btnImportarDatos = new javax.swing.JButton();
         comboBoxReportes = new javax.swing.JComboBox<>();
         lblReportes = new javax.swing.JLabel();
         btnGuardarLibros = new javax.swing.JButton();
@@ -68,15 +62,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblTitulo.setText("BIBLIOTECA - CUNOC");
         pnlFrame.add(lblTitulo);
         lblTitulo.setBounds(290, 20, 220, 50);
-
-        btnImportarDatos.setText("Importar Datos");
-        btnImportarDatos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnImportarDatosActionPerformed(evt);
-            }
-        });
-        pnlFrame.add(btnImportarDatos);
-        btnImportarDatos.setBounds(10, 20, 200, 40);
 
         comboBoxReportes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Prestamos de libros a entregar hoy", "Prestamos de libros con mora", "Dinero recaudado en intervalo de tiempo", "Todos los prestamos hechos a un estudiante", "Prestamos actuales a un estudiante", "Prestamos hechos a cada carrera en intervalo de tiempo" }));
         comboBoxReportes.addActionListener(new java.awt.event.ActionListener() {
@@ -189,29 +174,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuAcercaDeActionPerformed
 
-    private void btnImportarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarDatosActionPerformed
-        // TODO add your handling code here:
-        jFileChooser1.setVisible(true);
-        int res = jFileChooser1.showOpenDialog(this);
-        if (res == JFileChooser.APPROVE_OPTION) {
-            try {
-                LeerArchivo lra = new LeerArchivo();
-                lra.leerArchivoEntrada(jFileChooser1.getSelectedFile());
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(InterfazIngresoArchivo.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        btnImportarDatos.setVisible(false);
-        menuBar.setVisible(true);
-        lblReportes.setVisible(true);
-        lblAlmacenarInfo.setVisible(true);
-        comboBoxReportes.setVisible(true);
-        btnGuardarLibros.setVisible(true);
-        btnGuardarEstudiantes.setVisible(true);
-        btnGuardarPrestamos.setVisible(true);
-    }//GEN-LAST:event_btnImportarDatosActionPerformed
-
     private void comboBoxReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxReportesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxReportesActionPerformed
@@ -221,7 +183,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardarEstudiantes;
     private javax.swing.JButton btnGuardarLibros;
     private javax.swing.JButton btnGuardarPrestamos;
-    private javax.swing.JButton btnImportarDatos;
     private javax.swing.JComboBox<String> comboBoxReportes;
     private javax.swing.JMenuItem itemRegistrarEstudiante;
     private javax.swing.JMenuItem itemRegistrarLibro;

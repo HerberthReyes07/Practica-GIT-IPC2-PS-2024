@@ -4,6 +4,7 @@
  */
 package backend;
 
+import frontend.InterfazIngresoArchivo;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,13 +13,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author herberthreyes
  */
-public class LeerArchivo {
+public class LeerArchivo extends Thread {
+
+    private File archivoEntrada;
+    private InterfazIngresoArchivo iia;
+    private JLabel lblCarga;
 
     private Libro lbr = new Libro();
     private ArrayList<Libro> libros = new ArrayList();
@@ -35,233 +41,252 @@ public class LeerArchivo {
     private ArrayList<ErrorLecturaArchivo> erroresLectura = new ArrayList();
     private ArrayList<String> mensajeError = new ArrayList();
 
-    public void leerArchivoEntrada(File archivo) throws FileNotFoundException {
-        BufferedReader brp = new BufferedReader(new FileReader(archivo));
+    @Override
+    public void run() {
+        BarraCarga bc = new BarraCarga();
+        bc.setjLabel1(lblCarga);
+        bc.setExecute(true);
+        bc.start();
 
+        BufferedReader brp = null;
         try {
-            String cadena = brp.readLine();
-            while (cadena != null) {
-                //System.out.println("Cadena: " + cadena);
-                switch (cadena) {
-                    case "LIBRO":
-                        nuevoRegistroLeido();
-                        lbr = new Libro();
-                        lbr.setCantidad(-1);
-                        enLibro = true;
-                        break;
-                    case "ESTUDIANTE":
-                        nuevoRegistroLeido();
-                        est = new Estudiante();
-                        est.setCarnet(-1);
-                        est.setCodigoCarrera(-1);
-                        enEstudiante = true;
-                        break;
-                    case "PRESTAMO":
-                        nuevoRegistroLeido();
-                        prt = new Prestamo();
-                        prt.setCarnetEstudiante(-1);
-                        enPrestamo = true;
-                        break;
-                    default:
-                        if (!cadena.isBlank()) {
-                            String[] info = cadena.split(":");
-                            if (info.length >= 2) {
-                                String tipoDato = info[0];
-                                String dato = info[1];
-                                if (enLibro) {
-                                    switch (tipoDato) {
-                                        case "TITULO":
-                                            lbr.setTitulo(dato);
-                                            break;
-                                        case "AUTOR":
-                                            lbr.setAutor(dato);
-                                            break;
-                                        case "CODIGO":
-                                            if (codigoLibroValido(dato)) {
-                                                lbr.setCodigo(dato);
-                                            } else {
-                                                mensajeError.add("El codigo: '" + dato + "' no es valido");
-                                                lbr.setCodigo("CNV");
-                                            }
-                                            break;
-                                        case "CANTIDAD":
-                                            if (isNumeric(dato)) {
-                                                lbr.setCantidad(Integer.parseInt(dato));
-                                            } else {
-                                                mensajeError.add("La cantidad: '" + dato + "' no es valida");
-                                                lbr.setCantidad(-2);
-                                            }
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-
-                                if (enEstudiante) {
-                                    switch (tipoDato) {
-                                        case "CARNET":
-                                            if (isNumeric(dato)) {
-                                                est.setCarnet(Integer.parseInt(dato));
-                                            } else {
-                                                mensajeError.add("El carnet: '" + dato + "' no es valido");
-                                                est.setCarnet(-2);
-                                            }
-                                            break;
-                                        case "NOMBRE":
-                                            est.setNombre(dato);
-                                            break;
-                                        case "CARRERA":
-                                            boolean carreraCorrecta = false;
-                                            if (isNumeric(dato)) {
-                                                int codigoCarrera = Integer.parseInt(dato);
-                                                if (codigoCarrera > 0 && codigoCarrera < 6) {
-                                                    est.setCodigoCarrera(codigoCarrera);
-                                                    carreraCorrecta = true;
+            brp = new BufferedReader(new FileReader(archivoEntrada));
+            int linea = 1;
+            int lineaError = 1;
+            try {
+                String cadena = brp.readLine();
+                while (cadena != null) {
+                    //System.out.println("Cadena: " + cadena);
+                    linea++;
+                    switch (cadena) {
+                        case "LIBRO":
+                            nuevoRegistroLeido();
+                            lbr = new Libro();
+                            lbr.setCantidad(-1);
+                            enLibro = true;
+                            break;
+                        case "ESTUDIANTE":
+                            nuevoRegistroLeido();
+                            est = new Estudiante();
+                            est.setCarnet(-1);
+                            est.setCodigoCarrera(-1);
+                            enEstudiante = true;
+                            break;
+                        case "PRESTAMO":
+                            nuevoRegistroLeido();
+                            prt = new Prestamo();
+                            prt.setCarnetEstudiante(-1);
+                            enPrestamo = true;
+                            break;
+                        default:
+                            if (!cadena.isBlank()) {
+                                String[] info = cadena.split(":");
+                                if (info.length >= 2) {
+                                    String tipoDato = info[0];
+                                    String dato = info[1];
+                                    if (enLibro) {
+                                        switch (tipoDato) {
+                                            case "TITULO":
+                                                lbr.setTitulo(dato);
+                                                break;
+                                            case "AUTOR":
+                                                lbr.setAutor(dato);
+                                                break;
+                                            case "CODIGO":
+                                                if (codigoLibroValido(dato)) {
+                                                    lbr.setCodigo(dato);
+                                                } else {
+                                                    mensajeError.add("CODIGO: '" + dato + "' no valido");
+                                                    lbr.setCodigo("CNV");
                                                 }
-                                            }
-                                            if (!carreraCorrecta) {
-                                                mensajeError.add("El codigo de la carrera: '" + dato + "' no es valido (1-5)");
-                                                est.setCodigoCarrera(-2);
-                                            }
-                                            break;
-                                        default:
-                                            break;
+                                                break;
+                                            case "CANTIDAD":
+                                                if (isNumeric(dato)) {
+                                                    lbr.setCantidad(Integer.parseInt(dato));
+                                                } else {
+                                                    mensajeError.add("CANTIDAD: '" + dato + "' no valida");
+                                                    lbr.setCantidad(-2);
+                                                }
+                                                break;
+                                            default:
+                                                break;
+                                        }
                                     }
-                                }
 
-                                if (enPrestamo) {
-                                    switch (tipoDato) {
-                                        case "CODIGOLIBRO":
-                                            if (codigoLibroValido(dato)) {
-                                                prt.setCodigoLibro(dato);
-                                            } else {
-                                                mensajeError.add("El codigo de libro: '" + dato + "' no es valido");
-                                                prt.setCodigoLibro("CNV");
-                                            }
-                                            break;
-                                        case "CARNET":
-                                            if (isNumeric(dato)) {
-                                                prt.setCarnetEstudiante(Integer.parseInt(dato));
-                                            } else {
-                                                mensajeError.add("El carnet de estudiante: '" + dato + "' no es valido");
-                                                prt.setCarnetEstudiante(-2);
-                                            }
-                                            break;
-                                        case "FECHA":
-                                            boolean formatoCorrecto = false;
-                                            if (dato.contains("-")) {
-                                                String[] fecha = dato.split("-");
-                                                if (fecha.length == 3) {
-                                                    String yyyy = fecha[0];
-                                                    String mm = fecha[1];
-                                                    String dd = fecha[2];
-                                                    if (yyyy.length() == 4 && mm.length() == 2 && dd.length() == 2
-                                                            && isNumeric(yyyy) && isNumeric(mm) && isNumeric(dd)) {
-                                                        if (Integer.parseInt(mm) < 13 && Integer.parseInt(dd) < 32) {
-                                                            prt.setFecha(dato);
-                                                            formatoCorrecto = true;
+                                    if (enEstudiante) {
+                                        switch (tipoDato) {
+                                            case "CARNET":
+                                                if (isNumeric(dato)) {
+                                                    est.setCarnet(Integer.parseInt(dato));
+                                                } else {
+                                                    mensajeError.add("CARNET: '" + dato + "' no valido");
+                                                    est.setCarnet(-2);
+                                                }
+                                                break;
+                                            case "NOMBRE":
+                                                est.setNombre(dato);
+                                                break;
+                                            case "CARRERA":
+                                                boolean carreraCorrecta = false;
+                                                if (isNumeric(dato)) {
+                                                    int codigoCarrera = Integer.parseInt(dato);
+                                                    if (codigoCarrera > 0 && codigoCarrera < 6) {
+                                                        est.setCodigoCarrera(codigoCarrera);
+                                                        carreraCorrecta = true;
+                                                    }
+                                                }
+                                                if (!carreraCorrecta) {
+                                                    mensajeError.add("CARRERA: '" + dato + "' no valida (1-5)");
+                                                    est.setCodigoCarrera(-2);
+                                                }
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+
+                                    if (enPrestamo) {
+                                        switch (tipoDato) {
+                                            case "CODIGOLIBRO":
+                                                if (codigoLibroValido(dato)) {
+                                                    prt.setCodigoLibro(dato);
+                                                } else {
+                                                    mensajeError.add("CODIGO_LIBRO: '" + dato + "' no valido");
+                                                    prt.setCodigoLibro("CNV");
+                                                }
+                                                break;
+                                            case "CARNET":
+                                                if (isNumeric(dato)) {
+                                                    prt.setCarnetEstudiante(Integer.parseInt(dato));
+                                                } else {
+                                                    mensajeError.add("CARNET_ESTUDIANTE: '" + dato + "' no valido");
+                                                    prt.setCarnetEstudiante(-2);
+                                                }
+                                                break;
+                                            case "FECHA":
+                                                boolean formatoCorrecto = false;
+                                                if (dato.contains("-")) {
+                                                    String[] fecha = dato.split("-");
+                                                    if (fecha.length == 3) {
+                                                        String yyyy = fecha[0];
+                                                        String mm = fecha[1];
+                                                        String dd = fecha[2];
+                                                        if (yyyy.length() == 4 && mm.length() == 2 && dd.length() == 2
+                                                                && isNumeric(yyyy) && isNumeric(mm) && isNumeric(dd)) {
+                                                            if (Integer.parseInt(mm) < 13 && Integer.parseInt(dd) < 32) {
+                                                                prt.setFecha(dato);
+                                                                formatoCorrecto = true;
+                                                            }
                                                         }
                                                     }
                                                 }
-                                            }
-                                            if (!formatoCorrecto) {
-                                                mensajeError.add("La fecha: '" + dato + "' no es valida");
-                                                prt.setFecha("FNV");
-                                            }
-                                            break;
-                                        default:
-                                            break;
+                                                if (!formatoCorrecto) {
+                                                    mensajeError.add("FECHA: '" + dato + "' no valida");
+                                                    prt.setFecha("FNV");
+                                                }
+                                                break;
+                                            default:
+                                                break;
+                                        }
                                     }
                                 }
                             }
+                            break;
+                    }
+                    cadena = brp.readLine();
+                    if (cadena == null) {
+                        nuevoRegistroLeido();
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(LeerArchivo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // Verificar errores luego de la lectura en caso de que sea un solo archivo de entrada
+            int contEliminados = 0;
+            int cantidadPrestamos = prestamos.size();
+            for (int i = 0; i < cantidadPrestamos; i++) {
+                boolean codigoLibroEncontrado = false;
+                boolean carnetEstudianteEncontrado = false;
+                for (int j = 0; j < libros.size(); j++) {
+                    if (prestamos.get(i - contEliminados).getCodigoLibro().equals(libros.get(j).getCodigo())) {
+                        codigoLibroEncontrado = true;
+                    }
+                }
+                for (int j = 0; j < estudiantes.size(); j++) {
+                    if (prestamos.get(i - contEliminados).getCarnetEstudiante() == estudiantes.get(j).getCarnet()) {
+                        carnetEstudianteEncontrado = true;
+                    }
+                }
+                if (!codigoLibroEncontrado || !carnetEstudianteEncontrado) {
+                    if (!codigoLibroEncontrado) {
+                        mensajeError.add("CODIGO_LIBRO: '" + prestamos.get(i - contEliminados).getCodigoLibro() + "' no existe");
+                    }
+                    if (!carnetEstudianteEncontrado) {
+                        mensajeError.add("CARNET_ESTUDIANTE: '" + prestamos.get(i - contEliminados).getCarnetEstudiante() + "' no exite");
+                    }
+                    erroresLectura.add(new ErrorLecturaArchivo(3, prestamos.get(i - contEliminados), mensajeError));
+                    prestamos.remove(i - contEliminados);
+                    mensajeError = new ArrayList();
+                    contEliminados++;
+                }
+            }
+            // Verificar que no se repite alguna llave primaria en el archivo de entrada
+            int contLibrosVerificados = 0;
+            while (true) {
+                int cantidadLibros = libros.size();
+                for (int j = 0; j < cantidadLibros; j++) {
+                    if (j < libros.size()) {
+                        if ((libros.get(contLibrosVerificados).getCodigo().equals(libros.get(j).getCodigo()))
+                                && (contLibrosVerificados) != j) {
+                            mensajeError.add("CODIGO: '" + libros.get(j).getCodigo() + "' ya existente en otro libro");
+                            erroresLectura.add(new ErrorLecturaArchivo(1, libros.get(j), mensajeError));
+                            libros.remove(j);
+                            mensajeError = new ArrayList();
                         }
+                    } else {
                         break;
+                    }
                 }
-                cadena = brp.readLine();
-                if (cadena == null) {
-                    nuevoRegistroLeido();
+                contLibrosVerificados++;
+                if (contLibrosVerificados == libros.size()) {
+                    break;
                 }
             }
-        } catch (IOException ex) {
+            int contEstudiantesVerificados = 0;
+            while (true) {
+                int cantidadEstudiantes = estudiantes.size();
+                for (int j = 0; j < cantidadEstudiantes; j++) {
+                    if (j < estudiantes.size()) {
+                        if ((estudiantes.get(contEstudiantesVerificados).getCarnet() == estudiantes.get(j).getCarnet())
+                                && (contEstudiantesVerificados) != j) {
+                            mensajeError.add("CARNET: '" + estudiantes.get(j).getCarnet() + "' ya existente en otro estudiante");
+                            erroresLectura.add(new ErrorLecturaArchivo(2, estudiantes.get(j), mensajeError));
+                            estudiantes.remove(j);
+                            mensajeError = new ArrayList();
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                contEstudiantesVerificados++;
+                if (contEstudiantesVerificados == estudiantes.size()) {
+                    break;
+                }
+            }
+            
+            Thread.sleep(3000);
+            bc.setExecute(false);
+            iia.verErrores(libros, estudiantes, prestamos, erroresLectura);
+
+        } catch (FileNotFoundException | InterruptedException ex) {
             Logger.getLogger(LeerArchivo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        // Verificar errores luego de la lectura en caso de que sea un solo archivo de entrada
-        int contEliminados = 0;
-        int cantidadPrestamos = prestamos.size();
-        for (int i = 0; i < cantidadPrestamos; i++) {
-            boolean codigoLibroEncontrado = false;
-            boolean carnetEstudianteEncontrado = false;
-            for (int j = 0; j < libros.size(); j++) {
-                if (prestamos.get(i - contEliminados).getCodigoLibro().equals(libros.get(j).getCodigo())) {
-                    codigoLibroEncontrado = true;
-                }
-            }
-            for (int j = 0; j < estudiantes.size(); j++) {
-                if (prestamos.get(i - contEliminados).getCarnetEstudiante() == estudiantes.get(j).getCarnet()) {
-                    carnetEstudianteEncontrado = true;
-                }
-            }
-            if (!codigoLibroEncontrado || !carnetEstudianteEncontrado) {
-                if (!codigoLibroEncontrado) {
-                    mensajeError.add("El codigo de libro: '" + prestamos.get(i - contEliminados).getCodigoLibro()+ "' no existe");
-                }
-                if (!carnetEstudianteEncontrado) {
-                    mensajeError.add("El carnet de estudiante: '" + prestamos.get(i - contEliminados).getCarnetEstudiante()+ "' no exite");
-                }
-                erroresLectura.add(new ErrorLecturaArchivo(3, prestamos.get(i - contEliminados), mensajeError));
-                prestamos.remove(i - contEliminados);
-                mensajeError = new ArrayList();
-                contEliminados++;
+        } finally {
+            try {
+                brp.close();
+            } catch (IOException ex) {
+                Logger.getLogger(LeerArchivo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
-        // Verificar que no se repite alguna llave primaria en el archivo de entrada
-        int contLibrosVerificados = 0;
-        while (true) {
-            int cantidadLibros = libros.size();
-            for (int j = 0; j < cantidadLibros; j++) {
-                if (j < libros.size()) {
-                    if ((libros.get(contLibrosVerificados).getCodigo().equals(libros.get(j).getCodigo()))
-                            && (contLibrosVerificados) != j) {
-                        mensajeError.add("Ya existe un libro con el codigo: '" + libros.get(j).getCodigo() + "'");
-                        erroresLectura.add(new ErrorLecturaArchivo(1, libros.get(j), mensajeError));
-                        libros.remove(j);
-                        mensajeError = new ArrayList();
-                    }
-                } else {
-                    break;
-                }
-            }
-            contLibrosVerificados++;
-            if (contLibrosVerificados == libros.size()) {
-                break;
-            }
-        }
-        
-        
-        int contEstudiantesVerificados = 0;
-        while (true) {
-            int cantidadEstudiantes = estudiantes.size();
-            for (int j = 0; j < cantidadEstudiantes; j++) {
-                if (j < estudiantes.size()) {
-                    if ((estudiantes.get(contEstudiantesVerificados).getCarnet() == estudiantes.get(j).getCarnet())
-                            && (contEstudiantesVerificados) != j) {
-                        mensajeError.add("Ya existe un estudiante con el carnet: '" + estudiantes.get(j).getCarnet() + "'");
-                        erroresLectura.add(new ErrorLecturaArchivo(2, estudiantes.get(j), mensajeError));
-                        estudiantes.remove(j);
-                        mensajeError = new ArrayList();
-                    }
-                } else {
-                    break;
-                }
-            }
-            contEstudiantesVerificados++;
-            if (contEstudiantesVerificados == estudiantes.size()) {
-                break;
-            }
-        }
-
     }
 
     private void nuevoRegistroLeido() {
@@ -271,16 +296,16 @@ public class LeerArchivo {
                 libros.add(lbr);
             } else {
                 if (isAllBlank(lbr.getTitulo())) {
-                    mensajeError.add("Falta el titulo");
+                    mensajeError.add("TITULO: ausente");
                 }
                 if (isAllBlank(lbr.getAutor())) {
-                    mensajeError.add("Falta el autor");
+                    mensajeError.add("AUTOR: ausente");
                 }
                 if (lbr.getCodigo() == null) {
-                    mensajeError.add("Falta el codigo");
+                    mensajeError.add("CODIGO: ausente");
                 }
                 if (lbr.getCantidad() == -1) {
-                    mensajeError.add("Falta la cantidad");
+                    mensajeError.add("CANTIDAD: ausente");
                 }
                 erroresLectura.add(new ErrorLecturaArchivo(1, lbr, mensajeError));
             }
@@ -290,13 +315,13 @@ public class LeerArchivo {
                 estudiantes.add(est);
             } else {
                 if (est.getCarnet() == -1) {
-                    mensajeError.add("Falta el carnet");
+                    mensajeError.add("CARNET: ausente");
                 }
                 if (isAllBlank(est.getNombre())) {
-                    mensajeError.add("Falta el nombre");
+                    mensajeError.add("NOMBRE: ausente");
                 }
                 if (est.getCodigoCarrera() == -1) {
-                    mensajeError.add("Falta la carrera");
+                    mensajeError.add("CARRERA: ausente");
                 }
                 erroresLectura.add(new ErrorLecturaArchivo(2, est, mensajeError));
             }
@@ -307,13 +332,13 @@ public class LeerArchivo {
                 prestamos.add(prt);
             } else {
                 if (prt.getCodigoLibro() == null) {
-                    mensajeError.add("Falta el codigo del libro");
+                    mensajeError.add("CODIGO_LIBRO: ausente");
                 }
                 if (prt.getCarnetEstudiante() == -1) {
-                    mensajeError.add("Falta el carnet del estudiate");
+                    mensajeError.add("CARNET_ESTUDIANTE: ausente");
                 }
                 if (isAllBlank(prt.getFecha())) {
-                    mensajeError.add("Falta la fecha");
+                    mensajeError.add("FECHA: ausente");
                 }
                 erroresLectura.add(new ErrorLecturaArchivo(3, prt, mensajeError));
             }
@@ -334,6 +359,26 @@ public class LeerArchivo {
             }
         }
         return false;
+    }
+
+    public File getArchivoEntrada() {
+        return archivoEntrada;
+    }
+
+    public void setArchivoEntrada(File archivoEntrada) {
+        this.archivoEntrada = archivoEntrada;
+    }
+
+    public InterfazIngresoArchivo getIia() {
+        return iia;
+    }
+
+    public void setIia(InterfazIngresoArchivo iia) {
+        this.iia = iia;
+    }
+
+    public void setLblCarga(JLabel lblCarga) {
+        this.lblCarga = lblCarga;
     }
 
     public ArrayList<Libro> getLibros() {
@@ -367,7 +412,7 @@ public class LeerArchivo {
     public void setErroresLectura(ArrayList<ErrorLecturaArchivo> erroresLectura) {
         this.erroresLectura = erroresLectura;
     }
-    
+
     private boolean isNumeric(String digitos) {
         return StringUtils.isNumeric(digitos);
     }
