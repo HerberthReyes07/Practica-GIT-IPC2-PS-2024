@@ -5,10 +5,18 @@
     <artifactId>ipc2-ptc1-git</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.13.0</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <exec.mainClass>frontend.InterfazPrincipal</exec.mainClass>
+        <exec.mainClass>frontend.InterfazIngresoArchivo</exec.mainClass>
     </properties>
 </project>

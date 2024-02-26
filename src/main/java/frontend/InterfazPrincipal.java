@@ -22,16 +22,18 @@ public class InterfazPrincipal extends javax.swing.JFrame {
      */
     public InterfazPrincipal() {
         initComponents();
+        //this.setLocationRelativeTo(null);
+
         biblioteca = new Biblioteca();
         libros = biblioteca.getLibros();
         
-        menuBar.setVisible(false);
+        /*menuBar.setVisible(false);
         lblReportes.setVisible(false);
         lblAlmacenarInfo.setVisible(false);
         comboBoxReportes.setVisible(false);
         btnGuardarLibros.setVisible(false);
         btnGuardarEstudiantes.setVisible(false);
-        btnGuardarPrestamos.setVisible(false);
+        btnGuardarPrestamos.setVisible(false);*/
     }
 
     /**
@@ -43,6 +45,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         pnlFrame = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         comboBoxReportes = new javax.swing.JComboBox<>();
@@ -85,7 +88,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblReportes.setForeground(new java.awt.Color(0, 0, 0));
         lblReportes.setText("Reportes");
         pnlFrame.add(lblReportes);
-        lblReportes.setBounds(360, 80, 90, 18);
+        lblReportes.setBounds(360, 80, 90, 22);
 
         btnGuardarLibros.setText("Libros");
         btnGuardarLibros.addActionListener(new java.awt.event.ActionListener() {
@@ -117,7 +120,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblAlmacenarInfo.setForeground(new java.awt.Color(0, 0, 0));
         lblAlmacenarInfo.setText("Almacenar informacion");
         pnlFrame.add(lblAlmacenarInfo);
-        lblAlmacenarInfo.setBounds(330, 430, 150, 18);
+        lblAlmacenarInfo.setBounds(330, 430, 150, 22);
 
         menuRegistrar.setText("Registrar");
 
@@ -232,6 +235,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxReportesActionPerformed
 
+
     private void btnGuardarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLibrosActionPerformed
         // TODO add your handling code here:
         System.out.println(libros.toString());
@@ -306,6 +310,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem itemRegistrarEstudiante;
     private javax.swing.JMenuItem itemRegistrarLibro;
     private javax.swing.JMenuItem itemRegistrarPrestamo;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel lblAlmacenarInfo;
     private javax.swing.JLabel lblReportes;
     private javax.swing.JLabel lblTitulo;
