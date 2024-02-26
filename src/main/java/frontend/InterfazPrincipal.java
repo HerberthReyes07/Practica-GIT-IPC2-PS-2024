@@ -4,17 +4,26 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Libro;
+import java.util.ArrayList;
+
 /**
  *
  * @author herberthreyes
  */
 public class InterfazPrincipal extends javax.swing.JFrame {
 
+    private Biblioteca biblioteca;
+    private ArrayList<Libro> libros;
+
     /**
      * Creates new form InterfazPrincipal
      */
     public InterfazPrincipal() {
         initComponents();
+        biblioteca = new Biblioteca();
+        libros = biblioteca.getLibros();
         
         menuBar.setVisible(false);
         lblReportes.setVisible(false);
@@ -36,7 +45,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
         pnlFrame = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
-        btnImportarDatos = new javax.swing.JButton();
         comboBoxReportes = new javax.swing.JComboBox<>();
         lblReportes = new javax.swing.JLabel();
         btnGuardarLibros = new javax.swing.JButton();
@@ -48,6 +56,9 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         itemRegistrarLibro = new javax.swing.JMenuItem();
         itemRegistrarEstudiante = new javax.swing.JMenuItem();
         itemRegistrarPrestamo = new javax.swing.JMenuItem();
+        menuPrestamos = new javax.swing.JMenu();
+        itemPrestarLibro = new javax.swing.JMenuItem();
+        itemDevolverLibro = new javax.swing.JMenuItem();
         menuAyuda = new javax.swing.JMenu();
         menuAcercaDe = new javax.swing.JMenu();
 
@@ -61,15 +72,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblTitulo.setText("BIBLIOTECA - CUNOC");
         pnlFrame.add(lblTitulo);
         lblTitulo.setBounds(290, 20, 220, 50);
-
-        btnImportarDatos.setText("Importar Datos");
-        btnImportarDatos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnImportarDatosActionPerformed(evt);
-            }
-        });
-        pnlFrame.add(btnImportarDatos);
-        btnImportarDatos.setBounds(10, 20, 200, 40);
 
         comboBoxReportes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Prestamos de libros a entregar hoy", "Prestamos de libros con mora", "Dinero recaudado en intervalo de tiempo", "Todos los prestamos hechos a un estudiante", "Prestamos actuales a un estudiante", "Prestamos hechos a cada carrera en intervalo de tiempo" }));
         comboBoxReportes.addActionListener(new java.awt.event.ActionListener() {
@@ -86,14 +88,29 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblReportes.setBounds(360, 80, 90, 18);
 
         btnGuardarLibros.setText("Libros");
+        btnGuardarLibros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarLibrosActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnGuardarLibros);
         btnGuardarLibros.setBounds(220, 460, 120, 40);
 
         btnGuardarEstudiantes.setText("Estudiantes");
+        btnGuardarEstudiantes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarEstudiantesActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnGuardarEstudiantes);
         btnGuardarEstudiantes.setBounds(340, 460, 120, 40);
 
         btnGuardarPrestamos.setText("Prestamos");
+        btnGuardarPrestamos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarPrestamosActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnGuardarPrestamos);
         btnGuardarPrestamos.setBounds(460, 460, 120, 40);
 
@@ -130,6 +147,31 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
         menuBar.add(menuRegistrar);
 
+        menuPrestamos.setText("Prestamos");
+        menuPrestamos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPrestamosActionPerformed(evt);
+            }
+        });
+
+        itemPrestarLibro.setText("Prestar Libro");
+        itemPrestarLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemPrestarLibroActionPerformed(evt);
+            }
+        });
+        menuPrestamos.add(itemPrestarLibro);
+
+        itemDevolverLibro.setText("Devolver Libro");
+        itemDevolverLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemDevolverLibroActionPerformed(evt);
+            }
+        });
+        menuPrestamos.add(itemDevolverLibro);
+
+        menuBar.add(menuPrestamos);
+
         menuAyuda.setText("Ayuda");
         menuAyuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,10 +206,14 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     private void itemRegistrarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRegistrarLibroActionPerformed
         // TODO add your handling code here:
+        RegistroLibro registrarLibro = new RegistroLibro(biblioteca);
+        registrarLibro.setVisible(true);
     }//GEN-LAST:event_itemRegistrarLibroActionPerformed
 
     private void itemRegistrarEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRegistrarEstudianteActionPerformed
         // TODO add your handling code here:
+        RegistroEstudiante registrarEstudiante = new RegistroEstudiante(biblioteca);
+        registrarEstudiante.setVisible(true);
     }//GEN-LAST:event_itemRegistrarEstudianteActionPerformed
 
     private void itemRegistrarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRegistrarPrestamoActionPerformed
@@ -182,21 +228,38 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuAcercaDeActionPerformed
 
-    private void btnImportarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportarDatosActionPerformed
-        // TODO add your handling code here:
-        btnImportarDatos.setVisible(false);
-        menuBar.setVisible(true);
-        lblReportes.setVisible(true);
-        lblAlmacenarInfo.setVisible(true);
-        comboBoxReportes.setVisible(true);
-        btnGuardarLibros.setVisible(true);
-        btnGuardarEstudiantes.setVisible(true);
-        btnGuardarPrestamos.setVisible(true);
-    }//GEN-LAST:event_btnImportarDatosActionPerformed
-
     private void comboBoxReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxReportesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxReportesActionPerformed
+
+    private void btnGuardarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLibrosActionPerformed
+        // TODO add your handling code here:
+        System.out.println(libros.toString());
+    }//GEN-LAST:event_btnGuardarLibrosActionPerformed
+
+    private void btnGuardarEstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEstudiantesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarEstudiantesActionPerformed
+
+    private void btnGuardarPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarPrestamosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarPrestamosActionPerformed
+
+    private void menuPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPrestamosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuPrestamosActionPerformed
+
+    private void itemPrestarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPrestarLibroActionPerformed
+        // TODO add your handling code here:
+        PrestamoLibro prestamo = new PrestamoLibro();
+        prestamo.setVisible(true);
+    }//GEN-LAST:event_itemPrestarLibroActionPerformed
+
+    private void itemDevolverLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemDevolverLibroActionPerformed
+        // TODO add your handling code here:
+        DevolucionLibro devolucion = new DevolucionLibro();
+        devolucion.setVisible(true);
+    }//GEN-LAST:event_itemDevolverLibroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,8 +300,9 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardarEstudiantes;
     private javax.swing.JButton btnGuardarLibros;
     private javax.swing.JButton btnGuardarPrestamos;
-    private javax.swing.JButton btnImportarDatos;
     private javax.swing.JComboBox<String> comboBoxReportes;
+    private javax.swing.JMenuItem itemDevolverLibro;
+    private javax.swing.JMenuItem itemPrestarLibro;
     private javax.swing.JMenuItem itemRegistrarEstudiante;
     private javax.swing.JMenuItem itemRegistrarLibro;
     private javax.swing.JMenuItem itemRegistrarPrestamo;
@@ -248,6 +312,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuAcercaDe;
     private javax.swing.JMenu menuAyuda;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu menuPrestamos;
     private javax.swing.JMenu menuRegistrar;
     private javax.swing.JPanel pnlFrame;
     // End of variables declaration//GEN-END:variables
