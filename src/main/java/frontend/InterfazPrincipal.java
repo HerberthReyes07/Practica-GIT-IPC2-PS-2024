@@ -5,6 +5,7 @@
 package frontend;
 
 import backend.Biblioteca;
+import backend.Bibliotecario;
 import backend.Libro;
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
     private ArrayList<Libro> libros;
+    private Bibliotecario bibliotecario;
 
     /**
      * Creates new form InterfazPrincipal
@@ -26,6 +28,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
         biblioteca = new Biblioteca();
         libros = biblioteca.getLibros();
+        bibliotecario = biblioteca.getBibliotecario();
         
         /*menuBar.setVisible(false);
         lblReportes.setVisible(false);
@@ -58,7 +61,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         menuRegistrar = new javax.swing.JMenu();
         itemRegistrarLibro = new javax.swing.JMenuItem();
         itemRegistrarEstudiante = new javax.swing.JMenuItem();
-        itemRegistrarPrestamo = new javax.swing.JMenuItem();
         menuPrestamos = new javax.swing.JMenu();
         itemPrestarLibro = new javax.swing.JMenuItem();
         itemDevolverLibro = new javax.swing.JMenuItem();
@@ -88,7 +90,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblReportes.setForeground(new java.awt.Color(0, 0, 0));
         lblReportes.setText("Reportes");
         pnlFrame.add(lblReportes);
-        lblReportes.setBounds(360, 80, 90, 22);
+        lblReportes.setBounds(360, 80, 90, 18);
 
         btnGuardarLibros.setText("Libros");
         btnGuardarLibros.addActionListener(new java.awt.event.ActionListener() {
@@ -120,7 +122,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblAlmacenarInfo.setForeground(new java.awt.Color(0, 0, 0));
         lblAlmacenarInfo.setText("Almacenar informacion");
         pnlFrame.add(lblAlmacenarInfo);
-        lblAlmacenarInfo.setBounds(330, 430, 150, 22);
+        lblAlmacenarInfo.setBounds(330, 430, 150, 18);
 
         menuRegistrar.setText("Registrar");
 
@@ -139,14 +141,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             }
         });
         menuRegistrar.add(itemRegistrarEstudiante);
-
-        itemRegistrarPrestamo.setText("Prestamo");
-        itemRegistrarPrestamo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemRegistrarPrestamoActionPerformed(evt);
-            }
-        });
-        menuRegistrar.add(itemRegistrarPrestamo);
 
         menuBar.add(menuRegistrar);
 
@@ -218,10 +212,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         RegistroEstudiante registrarEstudiante = new RegistroEstudiante(biblioteca);
         registrarEstudiante.setVisible(true);
     }//GEN-LAST:event_itemRegistrarEstudianteActionPerformed
-
-    private void itemRegistrarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemRegistrarPrestamoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_itemRegistrarPrestamoActionPerformed
 
     private void menuAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAyudaActionPerformed
         // TODO add your handling code here:
@@ -309,7 +299,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem itemPrestarLibro;
     private javax.swing.JMenuItem itemRegistrarEstudiante;
     private javax.swing.JMenuItem itemRegistrarLibro;
-    private javax.swing.JMenuItem itemRegistrarPrestamo;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel lblAlmacenarInfo;
     private javax.swing.JLabel lblReportes;

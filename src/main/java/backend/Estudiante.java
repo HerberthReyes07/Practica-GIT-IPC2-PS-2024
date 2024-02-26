@@ -13,7 +13,8 @@ public class Estudiante {
     private int carnet;
     private String nombre;
     private int codigoCarrera;
-    private String fechaNacimiento; 
+    private String fechaNacimiento;
+    private int numeroPrestamos;
 
     public Estudiante() {
     }
@@ -57,6 +58,15 @@ public class Estudiante {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    public int getNumeroPrestamos() {
+        return numeroPrestamos;
+    }
+
+    public void setNumeroPrestamos(int numeroPrestamos) {
+        this.numeroPrestamos = numeroPrestamos;
+    }
+
+    
     @Override
     public String toString() {
         return "Estudiante{" + "carnet=" + carnet + ", nombre=" + nombre + ", codigoCarrera=" + codigoCarrera + ", fechaNacimiento=" + fechaNacimiento + '}';
