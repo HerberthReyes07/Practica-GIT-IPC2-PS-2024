@@ -50,6 +50,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         btnRegistrar = new javax.swing.JButton();
         fieldFecha = new javax.swing.JTextField();
         btnListadoEstudiantes = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -120,15 +121,26 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         pnlFrame.add(btnListadoEstudiantes);
         btnListadoEstudiantes.setBounds(290, 350, 200, 30);
 
+        btnCancelar.setBackground(new java.awt.Color(255, 0, 51));
+        btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        pnlFrame.add(btnCancelar);
+        btnCancelar.setBounds(203, 390, 100, 30);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
+            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
         );
 
         pack();
@@ -152,7 +164,13 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         listadoEstudiantes.setVisible(true);
     }//GEN-LAST:event_btnListadoEstudiantesActionPerformed
 
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnListadoEstudiantes;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JTextField fieldCarnet;

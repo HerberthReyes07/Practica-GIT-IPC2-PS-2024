@@ -50,9 +50,11 @@ public class RegistroLibro extends javax.swing.JFrame {
         fieldEditorial = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
         btnListadoLibros = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(600, 540));
+        setSize(new java.awt.Dimension(6, 0));
 
         pnlFrame.setBackground(new java.awt.Color(153, 153, 0));
         pnlFrame.setLayout(null);
@@ -126,7 +128,7 @@ public class RegistroLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnRegistrar);
-        btnRegistrar.setBounds(60, 460, 180, 30);
+        btnRegistrar.setBounds(60, 450, 180, 30);
 
         btnListadoLibros.setBackground(new java.awt.Color(0, 255, 255));
         btnListadoLibros.setForeground(new java.awt.Color(0, 0, 255));
@@ -137,17 +139,28 @@ public class RegistroLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnListadoLibros);
-        btnListadoLibros.setBounds(320, 460, 240, 30);
+        btnListadoLibros.setBounds(330, 450, 240, 30);
+
+        btnCancelar.setBackground(new java.awt.Color(255, 0, 51));
+        btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        pnlFrame.add(btnCancelar);
+        btnCancelar.setBounds(220, 510, 130, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
         );
 
         pack();
@@ -172,7 +185,13 @@ public class RegistroLibro extends javax.swing.JFrame {
         listadoLibros.setVisible(true);
     }//GEN-LAST:event_btnListadoLibrosActionPerformed
 
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnListadoLibros;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JTextField fieldAutor;
