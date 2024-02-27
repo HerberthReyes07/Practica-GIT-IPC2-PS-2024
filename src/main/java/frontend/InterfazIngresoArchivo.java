@@ -18,7 +18,10 @@ import javax.swing.JFileChooser;
  */
 public class InterfazIngresoArchivo extends javax.swing.JFrame {
 
-    ArrayList<ErrorLecturaArchivo> erroresEntrada = new ArrayList();
+    private ArrayList<ErrorLecturaArchivo> erroresEntrada = new ArrayList();
+    private ArrayList<Libro> librosEntrada = new ArrayList();
+    private ArrayList<Estudiante> estudiantesEntrada = new ArrayList();
+    private ArrayList<Prestamo> prestamosEntrada = new ArrayList();
 
     /**
      * Creates new form InterfazIngresoArchivo
@@ -206,9 +209,9 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
             ArrayList<Prestamo> prestamosAnalizados, ArrayList<ErrorLecturaArchivo> erroresAnalizados) {
 
         jButton5.setVisible(true);
-        ArrayList<Libro> librosEntrada = librosAnalizados;
-        ArrayList<Estudiante> estudiantesEntrada = estudiantesAnalizados;
-        ArrayList<Prestamo> prestamosEntrada = prestamosAnalizados;
+        librosEntrada = librosAnalizados;
+        estudiantesEntrada = estudiantesAnalizados;
+        prestamosEntrada = prestamosAnalizados;
         erroresEntrada = erroresAnalizados;
 
         if (!erroresEntrada.isEmpty()) {
@@ -249,6 +252,30 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
         System.out.println(erroresEntrada);
     }
 
+    public ArrayList<Libro> getLibrosEntrada() {
+        return librosEntrada;
+    }
+
+    public void setLibrosEntrada(ArrayList<Libro> librosEntrada) {
+        this.librosEntrada = librosEntrada;
+    }
+
+    public ArrayList<Estudiante> getEstudiantesEntrada() {
+        return estudiantesEntrada;
+    }
+
+    public void setEstudiantesEntrada(ArrayList<Estudiante> estudiantesEntrada) {
+        this.estudiantesEntrada = estudiantesEntrada;
+    }
+
+    public ArrayList<Prestamo> getPrestamosEntrada() {
+        return prestamosEntrada;
+    }
+
+    public void setPrestamosEntrada(ArrayList<Prestamo> prestamosEntrada) {
+        this.prestamosEntrada = prestamosEntrada;
+    }
+    
     /**
      * @param args the command line arguments
      */
