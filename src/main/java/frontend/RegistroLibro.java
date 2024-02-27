@@ -7,24 +7,26 @@ package frontend;
 import backend.Biblioteca;
 import backend.Libro;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author ronyrojas
  */
 public class RegistroLibro extends javax.swing.JFrame {
-    
+
     private Biblioteca biblioteca;
     private ArrayList<Libro> libros;
-    
+
     /**
      * Creates new form RegistroLibro
      */
     public RegistroLibro(Biblioteca biblioteca) {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.biblioteca= biblioteca;
+        this.biblioteca = biblioteca;
         libros = biblioteca.getLibros();
     }
 
@@ -171,21 +173,41 @@ public class RegistroLibro extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
+
         String codigo = fieldCodigo.getText();
         String autor = fieldAutor.getText();
         String titulo = fieldTitulo.getText();
-        int cantidad = Integer.parseInt(fieldCopias.getText());
+        int cantidad = 0;
+
+        try {// que no manden texto
+            cantidad = Integer.parseInt(fieldCopias.getText());
+        } catch (NumberFormatException e) {
+            String mensaje = "En el campo: Cantidad de Copias,\nDebe ingresar un valor numerico entero positivo";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
         String fecha = fieldFecha.getText();
         String editorial = fieldEditorial.getText();
-        
-        libros.add(new Libro(titulo, autor, codigo, cantidad, fecha, editorial));
-        
-        fieldCodigo.setText("");
-        fieldAutor.setText("");
-        fieldTitulo.setText("");
-        fieldCopias.setText("");
-        fieldFecha.setText("");
-        fieldEditorial.setText("");
+
+        if (fieldTitulo.getText().isEmpty() || fieldAutor.getText().isEmpty() || fieldTitulo.getText().isEmpty()) {
+            String mensaje = "Complete los campos vacios";
+            System.out.println("mensaje = " + mensaje);
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+
+        } else if (cantidad == 0) {
+            cantidad = -1;
+            
+        } else {
+            libros.add(new Libro(titulo, autor, codigo, cantidad, fecha, editorial));
+
+            fieldCodigo.setText("");
+            fieldAutor.setText("");
+            fieldTitulo.setText("");
+            fieldCopias.setText("");
+            fieldFecha.setText("");
+            fieldEditorial.setText("");
+        }
+
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnListadoLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListadoLibrosActionPerformed

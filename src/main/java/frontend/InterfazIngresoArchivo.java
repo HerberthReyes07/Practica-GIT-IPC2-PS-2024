@@ -4,6 +4,7 @@
  */
 package frontend;
 
+import backend.Biblioteca;
 import backend.ErrorLecturaArchivo;
 import backend.Estudiante;
 import backend.LeerArchivo;
@@ -22,12 +23,14 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
     private ArrayList<Libro> librosEntrada = new ArrayList();
     private ArrayList<Estudiante> estudiantesEntrada = new ArrayList();
     private ArrayList<Prestamo> prestamosEntrada = new ArrayList();
+    private Biblioteca biblioteca;
 
     /**
      * Creates new form InterfazIngresoArchivo
      */
     public InterfazIngresoArchivo() {
         initComponents();
+        this.biblioteca = new Biblioteca();
         //this.setLocationRelativeTo(null);
         jLabel1.setVisible(false);
         jButton2.setVisible(false);
@@ -200,7 +203,7 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        InterfazPrincipal ip = new InterfazPrincipal();
+        InterfazPrincipal ip = new InterfazPrincipal(biblioteca);
         this.dispose();
         ip.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -250,6 +253,10 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
         System.out.println(prestamosEntrada);
         System.out.println("\n----- ERRORES -----");
         System.out.println(erroresEntrada);
+        
+        biblioteca.setLibros(librosEntrada);
+        biblioteca.setEstudiantes(estudiantesEntrada);
+        biblioteca.setPrestamos(prestamosEntrada);
     }
 
     public ArrayList<Libro> getLibrosEntrada() {

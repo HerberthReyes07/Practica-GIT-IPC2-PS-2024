@@ -5,14 +5,16 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author ronyrojas
  */
-public class Bibliotecario {
-
+public class Bibliotecario {    
+    
     public boolean isNumeric(String digitos) {
         return StringUtils.isNumeric(digitos);
     }
@@ -195,4 +197,16 @@ public class Bibliotecario {
             }
         }
     }
+    
+    public void ordenarLibros(ArrayList<Libro> libros){
+        System.out.println("ordenando libros");
+        
+        Collections.sort(libros, new Comparator<Libro>() {
+            @Override
+            public int compare(Libro libro1, Libro libro2) {
+                return libro1.getCodigo().compareTo(libro2.getCodigo());
+            }
+        });
+    }
+    
 }

@@ -5,6 +5,7 @@
 package frontend;
 
 import backend.Biblioteca;
+import backend.Bibliotecario;
 import backend.Libro;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -18,6 +19,7 @@ public class ListadoLibros extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
     private ArrayList<Libro> libros;
+    private Bibliotecario bibliotecario;
 
     /**
      * Creates new form ListadoLibros
@@ -26,10 +28,12 @@ public class ListadoLibros extends javax.swing.JFrame {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.biblioteca = biblioteca;
-        libros = biblioteca.getLibros();
+        this.bibliotecario = biblioteca.getBibliotecario();
+        this.libros = biblioteca.getLibros();
         
         DefaultTableModel modeloTabla = (DefaultTableModel) tblListado.getModel();
         
+        bibliotecario.ordenarLibros(libros);        
         for (Libro libro : libros) {
             modeloTabla.addRow(new Object[] {
             libro.getCodigo(),
@@ -75,7 +79,15 @@ public class ListadoLibros extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Autor", "Titulo", "Copias", "Fecha Publicacion", "Editorial"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblListado);
 
         pnlFrame.add(jScrollPane1);
