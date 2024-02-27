@@ -4,17 +4,42 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Libro;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ronyrojas
  */
 public class ListadoLibros extends javax.swing.JFrame {
 
+    private Biblioteca biblioteca;
+    private ArrayList<Libro> libros;
+
     /**
      * Creates new form ListadoLibros
      */
-    public ListadoLibros() {
+    public ListadoLibros(Biblioteca biblioteca) {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.biblioteca = biblioteca;
+        libros = biblioteca.getLibros();
+        
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblListado.getModel();
+        
+        for (Libro libro : libros) {
+            modeloTabla.addRow(new Object[] {
+            libro.getCodigo(),
+            libro.getAutor(),
+            libro.getTitulo(),
+            libro.getCantidad(),
+            libro.getFechaPublicacion(),
+            libro.getEditorial()
+            });
+        }
     }
 
     /**
@@ -35,7 +60,7 @@ public class ListadoLibros extends javax.swing.JFrame {
         fieldBusqueda = new javax.swing.JTextField();
         lblBusqueda = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
-        btnFiltrar = new javax.swing.JButton();
+        btnAplicarFiltro = new javax.swing.JButton();
         btnLimpiarFiltro = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -45,8 +70,7 @@ public class ListadoLibros extends javax.swing.JFrame {
 
         tblListado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Codigo", "Autor", "Titulo", "Copias", "Fecha Publicacion", "Editorial"
@@ -93,11 +117,21 @@ public class ListadoLibros extends javax.swing.JFrame {
         pnlFrame.add(btnCerrar);
         btnCerrar.setBounds(790, 590, 160, 40);
 
-        btnFiltrar.setText("Aplicar Filtro");
-        pnlFrame.add(btnFiltrar);
-        btnFiltrar.setBounds(140, 600, 140, 30);
+        btnAplicarFiltro.setText("Aplicar Filtro");
+        btnAplicarFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAplicarFiltroActionPerformed(evt);
+            }
+        });
+        pnlFrame.add(btnAplicarFiltro);
+        btnAplicarFiltro.setBounds(140, 600, 140, 30);
 
         btnLimpiarFiltro.setText("Limpiar Filtro");
+        btnLimpiarFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarFiltroActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnLimpiarFiltro);
         btnLimpiarFiltro.setBounds(330, 600, 130, 30);
 
@@ -121,12 +155,21 @@ public class ListadoLibros extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
+    private void btnAplicarFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarFiltroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAplicarFiltroActionPerformed
+
+    private void btnLimpiarFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarFiltroActionPerformed
+        // TODO add your handling code here:
+        fieldBusqueda.setText("");
+    }//GEN-LAST:event_btnLimpiarFiltroActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAplicarFiltro;
     private javax.swing.JButton btnCerrar;
-    private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnLimpiarFiltro;
     private javax.swing.JComboBox<String> comboBoxFiltros;
     private javax.swing.JTextField fieldBusqueda;

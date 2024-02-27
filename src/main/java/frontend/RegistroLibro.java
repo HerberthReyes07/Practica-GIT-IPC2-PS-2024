@@ -7,6 +7,7 @@ package frontend;
 import backend.Biblioteca;
 import backend.Libro;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 
 /**
  *
@@ -16,11 +17,13 @@ public class RegistroLibro extends javax.swing.JFrame {
     
     private Biblioteca biblioteca;
     private ArrayList<Libro> libros;
+    
     /**
      * Creates new form RegistroLibro
      */
     public RegistroLibro(Biblioteca biblioteca) {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.biblioteca= biblioteca;
         libros = biblioteca.getLibros();
     }
@@ -176,18 +179,24 @@ public class RegistroLibro extends javax.swing.JFrame {
         String editorial = fieldEditorial.getText();
         
         libros.add(new Libro(titulo, autor, codigo, cantidad, fecha, editorial));
-        this.setVisible(false);
+        
+        fieldCodigo.setText("");
+        fieldAutor.setText("");
+        fieldTitulo.setText("");
+        fieldCopias.setText("");
+        fieldFecha.setText("");
+        fieldEditorial.setText("");
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnListadoLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListadoLibrosActionPerformed
         // TODO add your handling code here:
-        ListadoLibros listadoLibros = new ListadoLibros();
+        ListadoLibros listadoLibros = new ListadoLibros(biblioteca);
         listadoLibros.setVisible(true);
     }//GEN-LAST:event_btnListadoLibrosActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
