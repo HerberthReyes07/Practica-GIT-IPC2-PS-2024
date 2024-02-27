@@ -31,8 +31,7 @@ public class ListadoLibros extends javax.swing.JFrame {
         this.bibliotecario = biblioteca.getBibliotecario();
         this.libros = biblioteca.getLibros();
         
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblListado.getModel();
-        
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblListado.getModel();        
         bibliotecario.ordenarLibros(libros);        
         for (Libro libro : libros) {
             modeloTabla.addRow(new Object[] {

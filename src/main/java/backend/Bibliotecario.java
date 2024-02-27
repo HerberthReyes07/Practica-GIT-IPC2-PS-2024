@@ -7,14 +7,16 @@ package backend;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author ronyrojas
  */
-public class Bibliotecario {    
-    
+public class Bibliotecario {
+
     public boolean isNumeric(String digitos) {
         return StringUtils.isNumeric(digitos);
     }
@@ -160,10 +162,11 @@ public class Bibliotecario {
         }
     }
 
-    public void verificarCodigoLibroRepetido(ArrayList<Libro> libros, ArrayList<ErrorLecturaArchivo> erroresLectura,
+    public boolean verificarCodigoLibroRepetido(ArrayList<Libro> libros, ArrayList<ErrorLecturaArchivo> erroresLectura,
             ArrayList<String> mensajeError) {
         int cantidadLibrosInicial = libros.size();
         int contEliminados = 0;
+        boolean numeroEliminado = false;
         for (int i = 0; i < libros.size(); i++) {
             for (int j = 0; j < cantidadLibrosInicial; j++) {
                 if ((j - contEliminados) > i) {
@@ -171,12 +174,17 @@ public class Bibliotecario {
                         mensajeError.add("CODIGO: '" + libros.get((j - contEliminados)).getCodigo() + "' ya existe en otro libro");
                         erroresLectura.add(new ErrorLecturaArchivo(1, libros.get(j - contEliminados), mensajeError));
                         libros.remove(j - contEliminados);
+                        numeroEliminado = true;
                         mensajeError = new ArrayList();
                         contEliminados++;
                     }
                 }
             }
         }
+        if (numeroEliminado) {
+            return true;
+        }
+        return false;
     }
 
     public void verificarCarnetEstudianteRepetido(ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura,
@@ -197,10 +205,10 @@ public class Bibliotecario {
             }
         }
     }
-    
-    public void ordenarLibros(ArrayList<Libro> libros){
-        System.out.println("ordenando libros");
-        
+
+    public void ordenarLibros(ArrayList<Libro> libros) {
+        System.out.println("ordenando libros...");
+
         Collections.sort(libros, new Comparator<Libro>() {
             @Override
             public int compare(Libro libro1, Libro libro2) {
@@ -208,5 +216,31 @@ public class Bibliotecario {
             }
         });
     }
-    
+
+    public boolean validarRegistroLibro(ArrayList<Libro> libros, ArrayList<ErrorLecturaArchivo> erroresLectura, ArrayList<String> mensajeError,
+            String titulo, String autor, String codigo, int cantidad, String fecha, String editorial) {
+
+        if (codigoLibroValido(codigo)) {
+            if (fechaValida(fecha)) {
+                Libro libroTmp = new Libro(titulo, autor, codigo, cantidad, fecha, editorial);
+                libros.add(libroTmp);
+                if (verificarCodigoLibroRepetido(libros, erroresLectura, mensajeError)) {
+
+                    String mensaje = "Codigo de libro repetido";
+                    JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                } else {
+                    String mensaje = "Libro registrado correctamente";
+                    JOptionPane.showMessageDialog(null, mensaje, "Registro Libro", JOptionPane.INFORMATION_MESSAGE);
+                    return true;
+                }
+            } else {
+                String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+        }
+        return false;
+    }
 }

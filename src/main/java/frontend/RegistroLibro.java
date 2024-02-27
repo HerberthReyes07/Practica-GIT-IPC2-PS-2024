@@ -5,9 +5,10 @@
 package frontend;
 
 import backend.Biblioteca;
+import backend.Bibliotecario;
+import backend.ErrorLecturaArchivo;
 import backend.Libro;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -18,7 +19,10 @@ import javax.swing.JOptionPane;
 public class RegistroLibro extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
+    private Bibliotecario bibliotecario;
     private ArrayList<Libro> libros;
+    private ArrayList<ErrorLecturaArchivo> erroresLectura = new ArrayList();
+    private ArrayList<String> mensajeError = new ArrayList();
 
     /**
      * Creates new form RegistroLibro
@@ -27,7 +31,8 @@ public class RegistroLibro extends javax.swing.JFrame {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.biblioteca = biblioteca;
-        libros = biblioteca.getLibros();
+        this.bibliotecario = biblioteca.getBibliotecario();
+        this.libros = biblioteca.getLibros();
     }
 
     /**
@@ -177,35 +182,35 @@ public class RegistroLibro extends javax.swing.JFrame {
         String codigo = fieldCodigo.getText();
         String autor = fieldAutor.getText();
         String titulo = fieldTitulo.getText();
-        int cantidad = 0;
-
-        try {// que no manden texto
-            cantidad = Integer.parseInt(fieldCopias.getText());
-        } catch (NumberFormatException e) {
-            String mensaje = "En el campo: Cantidad de Copias,\nDebe ingresar un valor numerico entero positivo";
-            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        int cantidadCopias = 0;
+        boolean datosValidos;
+        
+        if (!fieldCopias.getText().isEmpty()) {
+            try {
+                cantidadCopias = Integer.parseInt(fieldCopias.getText());
+            } catch (NumberFormatException e) {
+                String mensaje = "En el campo: Cantidad de Copias,\nDebe ingresar un valor numerico entero positivo";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
 
         String fecha = fieldFecha.getText();
         String editorial = fieldEditorial.getText();
 
-        if (fieldTitulo.getText().isEmpty() || fieldAutor.getText().isEmpty() || fieldTitulo.getText().isEmpty()) {
+        if (fieldTitulo.getText().isEmpty() || fieldAutor.getText().isEmpty() || fieldCopias.getText().isEmpty()) {
             String mensaje = "Complete los campos vacios";
-            System.out.println("mensaje = " + mensaje);
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
 
-        } else if (cantidad == 0) {
-            cantidad = -1;
-            
         } else {
-            libros.add(new Libro(titulo, autor, codigo, cantidad, fecha, editorial));
-
-            fieldCodigo.setText("");
-            fieldAutor.setText("");
-            fieldTitulo.setText("");
-            fieldCopias.setText("");
-            fieldFecha.setText("");
-            fieldEditorial.setText("");
+            datosValidos = bibliotecario.validarRegistroLibro(libros, erroresLectura, mensajeError, titulo, autor, codigo, cantidadCopias, fecha, editorial);
+            if (datosValidos) {
+                fieldCodigo.setText("");
+                fieldAutor.setText("");
+                fieldTitulo.setText("");
+                fieldCopias.setText("");
+                fieldFecha.setText("");
+                fieldEditorial.setText("");
+            }
         }
 
     }//GEN-LAST:event_btnRegistrarActionPerformed
