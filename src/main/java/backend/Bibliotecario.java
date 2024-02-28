@@ -187,10 +187,11 @@ public class Bibliotecario {
         return false;
     }
 
-    public void verificarCarnetEstudianteRepetido(ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura,
+    public boolean verificarCarnetEstudianteRepetido(ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura,
             ArrayList<String> mensajeError) {
         int cantidadEstudiantesInicial = estudiantes.size();
         int contEliminados = 0;
+        boolean contEliminado = false;
         for (int i = 0; i < estudiantes.size(); i++) {
             for (int j = 0; j < cantidadEstudiantesInicial; j++) {
                 if ((j - contEliminados) > i) {
@@ -198,12 +199,17 @@ public class Bibliotecario {
                         mensajeError.add("CARNET: '" + estudiantes.get(j - contEliminados).getCarnet() + "' ya existe en otro estudiante");
                         erroresLectura.add(new ErrorLecturaArchivo(2, estudiantes.get(j - contEliminados), mensajeError));
                         estudiantes.remove(j - contEliminados);
+                        contEliminado = true;
                         mensajeError = new ArrayList();
                         contEliminados++;
                     }
                 }
             }
         }
+        if (contEliminado) {
+            return true;
+        }
+        return false;
     }
 
     public void ordenarLibros(ArrayList<Libro> libros) {
@@ -239,8 +245,51 @@ public class Bibliotecario {
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-
         }
         return false;
+    }
+
+    public void ordenarEstudiantes(ArrayList<Estudiante> estudiantes) {
+        System.out.println("ordenando estudiantes...");
+
+        Collections.sort(estudiantes, new Comparator<Estudiante>() {
+            @Override
+            public int compare(Estudiante estudiante1, Estudiante estudiante2) {
+                return Integer.compare(estudiante1.getCarnet(), estudiante2.getCarnet());
+            }
+        });
+    }
+
+    public boolean validarRegistroEstudiante(ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura, ArrayList<String> mensajeError,
+            int carnet, String nombre, int codigoCarrera, String fechaNacimiento) {
+
+        String codigoCarreraStr = Integer.toString(codigoCarrera);
+        if (codigoCarreraValido(codigoCarreraStr)) {
+            if (fechaValida(fechaNacimiento)) {
+
+                Estudiante estudianteTmp = new Estudiante(carnet, nombre, codigoCarrera, fechaNacimiento);
+                estudiantes.add(estudianteTmp);
+                if (verificarCarnetEstudianteRepetido(estudiantes, erroresLectura, mensajeError)) {
+
+                    String mensaje = "Carnet de estudiante repetido";
+                    JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                } else {
+
+                    String mensaje = "Estudiante registrado correctamente";
+                    JOptionPane.showMessageDialog(null, mensaje, "Registro Estudiante", JOptionPane.INFORMATION_MESSAGE);
+                    return true;
+                }
+            } else {
+
+                String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } else {
+            String mensaje = "Codigo de carrera no valido (1-5)";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 }

@@ -4,17 +4,43 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Bibliotecario;
+import backend.Estudiante;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ronyrojas
  */
 public class ListadoEstudiantes extends javax.swing.JFrame {
 
+    private Biblioteca biblioteca;
+    private ArrayList<Estudiante> estudiantes;
+    private Bibliotecario bibliotecario;
+
     /**
      * Creates new form ListadoEstudiantes
      */
-    public ListadoEstudiantes() {
+    public ListadoEstudiantes(Biblioteca biblioteca) {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.biblioteca = biblioteca;
+        this.bibliotecario = biblioteca.getBibliotecario();
+        this.estudiantes = biblioteca.getEstudiantes();
+
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblListado.getModel();
+        bibliotecario.ordenarEstudiantes(estudiantes);
+        for (Estudiante estudiante : estudiantes) {
+            modeloTabla.addRow(new Object[]{
+                estudiante.getCarnet(),
+                estudiante.getNombre(),
+                estudiante.getCodigoCarrera(),
+                estudiante.getFechaNacimiento()
+            });
+        }
     }
 
     /**
@@ -51,15 +77,20 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
 
         tblListado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Carnet", "Nombre", "Codigo Carrera", "Fecha Nacimiento"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblListado);
 
         pnlFrame.add(jScrollPane1);
@@ -82,10 +113,20 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
         fieldBusqueda.setBounds(140, 550, 130, 24);
 
         btnFiltrar.setText("Aplicar Filtro");
+        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnFiltrar);
         btnFiltrar.setBounds(140, 600, 130, 24);
 
         btnLimpiarFiltro.setText("Limpiar Filtro");
+        btnLimpiarFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarFiltroActionPerformed(evt);
+            }
+        });
         pnlFrame.add(btnLimpiarFiltro);
         btnLimpiarFiltro.setBounds(310, 600, 130, 24);
 
@@ -114,8 +155,17 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
+
+    private void btnLimpiarFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarFiltroActionPerformed
+        // TODO add your handling code here:
+        fieldBusqueda.setText("");
+    }//GEN-LAST:event_btnLimpiarFiltroActionPerformed
+
+    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFiltrarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
