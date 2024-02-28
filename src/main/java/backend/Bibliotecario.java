@@ -292,4 +292,19 @@ public class Bibliotecario {
             return false;
         }
     }
+
+    public int verificarPrestamos(ArrayList<Estudiante> estudiantes, int carnet) {
+        int carnetBusqueda = carnet;
+
+        for (Estudiante estudiante : estudiantes) {
+            if (estudiante.getCarnet() == carnetBusqueda) {
+                return estudiante.getNumeroPrestamos();
+            } else {
+                String mensaje = "El estudiante con carnet: " + carnet + ", no existe";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                return -1;
+            }
+        }
+        return -2;
+    }
 }

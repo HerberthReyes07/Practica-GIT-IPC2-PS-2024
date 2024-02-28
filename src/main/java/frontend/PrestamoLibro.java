@@ -4,17 +4,35 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Bibliotecario;
+import backend.Estudiante;
+import backend.Libro;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ronyrojas
  */
 public class PrestamoLibro extends javax.swing.JFrame {
 
+    private Biblioteca biblioteca;
+    private Bibliotecario bibliotecario;
+    private ArrayList<Estudiante> estudiantes;
+    private ArrayList<Libro> libros;
+
     /**
      * Creates new form PrestamoLibro
      */
-    public PrestamoLibro() {
+    public PrestamoLibro(Biblioteca biblioteca) {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.biblioteca = biblioteca;
+        this.bibliotecario = biblioteca.getBibliotecario();
+        this.estudiantes = biblioteca.getEstudiantes();
+        this.libros = biblioteca.getLibros();
         btnVerificarDisponibilidad.setEnabled(false);
         btnRealizarPrestamo.setEnabled(false);
     }
@@ -128,7 +146,38 @@ public class PrestamoLibro extends javax.swing.JFrame {
 
     private void btnVerificarPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarPrestamosActionPerformed
         // TODO add your handling code here:
-        btnVerificarDisponibilidad.setEnabled(true);
+
+        int carnet = 0;
+        int prestamosDisponibles = -2;
+        if (!fieldCarnet.getText().isEmpty()) {
+            try {
+                carnet = Integer.parseInt(fieldCarnet.getText());
+            } catch (NumberFormatException e) {
+                String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        if (fieldCarnet.getText().isEmpty()) {
+
+            String mensaje = "Complete los campos vacios";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+
+            prestamosDisponibles = bibliotecario.verificarPrestamos(estudiantes, carnet);
+            System.out.println("prestamosDisponibles = " + prestamosDisponibles);
+            if (prestamosDisponibles > 0) {
+
+                btnVerificarDisponibilidad.setEnabled(true);
+                btnVerificarPrestamos.setEnabled(false);
+
+                String mensaje = "El estudiante tiene: " + prestamosDisponibles + ", prestamos disponibles";
+                JOptionPane.showMessageDialog(null, mensaje, "Verificar Prestamos", JOptionPane.INFORMATION_MESSAGE);
+            } else if (prestamosDisponibles == 0) {
+                String mensaje = "El estudiante no tiene prestamos disponibles";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
     }//GEN-LAST:event_btnVerificarPrestamosActionPerformed
 
     private void btnVerificarDisponibilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarDisponibilidadActionPerformed

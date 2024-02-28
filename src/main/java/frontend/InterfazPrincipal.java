@@ -245,7 +245,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     private void itemPrestarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPrestarLibroActionPerformed
         // TODO add your handling code here:
-        PrestamoLibro prestamo = new PrestamoLibro();
+        PrestamoLibro prestamo = new PrestamoLibro(biblioteca);
         prestamo.setVisible(true);
     }//GEN-LAST:event_itemPrestarLibroActionPerformed
 
