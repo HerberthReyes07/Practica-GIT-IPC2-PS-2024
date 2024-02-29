@@ -8,6 +8,7 @@ import backend.Biblioteca;
 import backend.Bibliotecario;
 import backend.Estudiante;
 import backend.Libro;
+import backend.Prestamo;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -22,6 +23,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
     private Bibliotecario bibliotecario;
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<Libro> libros;
+    private ArrayList<Prestamo> prestamos;
 
     /**
      * Creates new form PrestamoLibro
@@ -33,6 +35,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
         this.bibliotecario = biblioteca.getBibliotecario();
         this.estudiantes = biblioteca.getEstudiantes();
         this.libros = biblioteca.getLibros();
+        this.prestamos = biblioteca.getPrestamos();
         btnVerificarDisponibilidad.setEnabled(false);
         btnRealizarPrestamo.setEnabled(false);
     }
@@ -169,30 +172,62 @@ public class PrestamoLibro extends javax.swing.JFrame {
 
                 btnVerificarDisponibilidad.setEnabled(true);
                 btnVerificarPrestamos.setEnabled(false);
+                fieldCarnet.setEnabled(false);
 
-                String mensaje = "El estudiante tiene: " + prestamosDisponibles + ", prestamos disponibles";
+                String mensaje = "El estudiante tiene: " + prestamosDisponibles + " prestamos disponibles";
                 JOptionPane.showMessageDialog(null, mensaje, "Verificar Prestamos", JOptionPane.INFORMATION_MESSAGE);
-            } else if (prestamosDisponibles == 0) {
+            } else if (prestamosDisponibles <= 0) {
                 String mensaje = "El estudiante no tiene prestamos disponibles";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-
     }//GEN-LAST:event_btnVerificarPrestamosActionPerformed
 
     private void btnVerificarDisponibilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarDisponibilidadActionPerformed
         // TODO add your handling code here:
-        btnRealizarPrestamo.setEnabled(true);
+
+        String codigoLibro = fieldLibro.getText();
+        int copias;
+        if (fieldLibro.getText().isEmpty()) {
+
+            String mensaje = "Complete los campos vacios";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+
+            copias = bibliotecario.verificarCopias(libros, codigoLibro);
+            System.out.println("copias = " + copias);
+            if (copias > 0) {
+                btnRealizarPrestamo.setEnabled(true);
+                btnVerificarDisponibilidad.setEnabled(false);
+                fieldLibro.setEnabled(false);
+
+                String mensaje = "Hay: " + copias + " copias disponibles del libro";
+                JOptionPane.showMessageDialog(null, mensaje, "Verificar Copias", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                String mensaje = "No hay copias disponibles del libro solicitado";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnVerificarDisponibilidadActionPerformed
 
     private void btnRealizarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarPrestamoActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        String fecha = "2024-03-05";
+        bibliotecario.crearPrestamo(estudiantes, libros, prestamos, Integer.parseInt(fieldCarnet.getText()), fieldLibro.getText(), fecha);
+        String mensaje = "Prestamo creado correctamente";
+        JOptionPane.showMessageDialog(null, mensaje, "Crear prestamo", JOptionPane.INFORMATION_MESSAGE);
+        
+        fieldCarnet.setText("");
+        fieldLibro.setText("");
+        btnVerificarPrestamos.setEnabled(true);
+        fieldCarnet.setEnabled(true);
+        fieldLibro.setEnabled(true);
+        btnRealizarPrestamo.setEnabled(false);
     }//GEN-LAST:event_btnRealizarPrestamoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

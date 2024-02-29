@@ -16,19 +16,19 @@ import org.apache.commons.lang3.StringUtils;
  * @author ronyrojas
  */
 public class Bibliotecario {
-
+    
     public boolean isNumeric(String digitos) {
         return StringUtils.isNumeric(digitos);
     }
-
+    
     public boolean isAllUpperCase(String letras) {
         return StringUtils.isAllUpperCase(letras);
     }
-
+    
     public boolean isAllBlank(String dato) {
         return StringUtils.isAllBlank(dato);
     }
-
+    
     public boolean codigoLibroValido(String dato) {
         if (dato.contains("-")) {
             String[] codigo = dato.split("-");
@@ -42,7 +42,7 @@ public class Bibliotecario {
         }
         return false;
     }
-
+    
     public boolean codigoCarreraValido(String dato) {
         if (isNumeric(dato)) {
             int codigoCarrera = Integer.parseInt(dato);
@@ -52,7 +52,7 @@ public class Bibliotecario {
         }
         return false;
     }
-
+    
     public boolean fechaValida(String dato) {
         if (dato.contains("-")) {
             String[] fecha = dato.split("-");
@@ -70,7 +70,7 @@ public class Bibliotecario {
         }
         return false;
     }
-
+    
     public void nuevoLibroLeido(Libro lbr, ArrayList<Libro> libros, ArrayList<ErrorLecturaArchivo> erroresLectura,
             ArrayList<String> mensajeError) {
         if (!isAllBlank(lbr.getTitulo()) && !isAllBlank(lbr.getAutor())
@@ -92,7 +92,7 @@ public class Bibliotecario {
             erroresLectura.add(new ErrorLecturaArchivo(1, lbr, mensajeError));
         }
     }
-
+    
     public void nuevoEstudianteLeido(Estudiante est, ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura,
             ArrayList<String> mensajeError) {
         if (est.getCarnet() >= 0 && !isAllBlank(est.getNombre()) && est.getCodigoCarrera() >= 0) {
@@ -110,7 +110,7 @@ public class Bibliotecario {
             erroresLectura.add(new ErrorLecturaArchivo(2, est, mensajeError));
         }
     }
-
+    
     public void nuevoPrestamoLeido(Prestamo prt, ArrayList<Prestamo> prestamos, ArrayList<ErrorLecturaArchivo> erroresLectura,
             ArrayList<String> mensajeError) {
         if ((prt.getCodigoLibro() != null && !prt.getCodigoLibro().equals("CNV")) && prt.getCarnetEstudiante() >= 0
@@ -129,7 +129,7 @@ public class Bibliotecario {
             erroresLectura.add(new ErrorLecturaArchivo(3, prt, mensajeError));
         }
     }
-
+    
     public void verificarPrestamosLeidos(ArrayList<Libro> libros, ArrayList<Estudiante> estudiantes, ArrayList<Prestamo> prestamos,
             ArrayList<ErrorLecturaArchivo> erroresLectura, ArrayList<String> mensajeError) {
         int contEliminados = 0;
@@ -161,7 +161,7 @@ public class Bibliotecario {
             }
         }
     }
-
+    
     public boolean verificarCodigoLibroRepetido(ArrayList<Libro> libros, ArrayList<ErrorLecturaArchivo> erroresLectura,
             ArrayList<String> mensajeError) {
         int cantidadLibrosInicial = libros.size();
@@ -186,7 +186,7 @@ public class Bibliotecario {
         }
         return false;
     }
-
+    
     public boolean verificarCarnetEstudianteRepetido(ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura,
             ArrayList<String> mensajeError) {
         int cantidadEstudiantesInicial = estudiantes.size();
@@ -211,10 +211,10 @@ public class Bibliotecario {
         }
         return false;
     }
-
+    
     public void ordenarLibros(ArrayList<Libro> libros) {
         System.out.println("ordenando libros...");
-
+        
         Collections.sort(libros, new Comparator<Libro>() {
             @Override
             public int compare(Libro libro1, Libro libro2) {
@@ -222,20 +222,21 @@ public class Bibliotecario {
             }
         });
     }
-
+    
     public boolean validarRegistroLibro(ArrayList<Libro> libros, ArrayList<ErrorLecturaArchivo> erroresLectura, ArrayList<String> mensajeError,
             String titulo, String autor, String codigo, int cantidad, String fecha, String editorial) {
-
+        
         if (codigoLibroValido(codigo)) {
             if (fechaValida(fecha)) {
                 Libro libroTmp = new Libro(titulo, autor, codigo, cantidad, fecha, editorial);
                 libros.add(libroTmp);
                 if (verificarCodigoLibroRepetido(libros, erroresLectura, mensajeError)) {
-
+                    
                     String mensaje = "Codigo de libro repetido";
                     JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
                     return false;
                 } else {
+                    System.out.println(libroTmp.toString());
                     String mensaje = "Libro registrado correctamente";
                     JOptionPane.showMessageDialog(null, mensaje, "Registro Libro", JOptionPane.INFORMATION_MESSAGE);
                     return true;
@@ -248,10 +249,10 @@ public class Bibliotecario {
         }
         return false;
     }
-
+    
     public void ordenarEstudiantes(ArrayList<Estudiante> estudiantes) {
         System.out.println("ordenando estudiantes...");
-
+        
         Collections.sort(estudiantes, new Comparator<Estudiante>() {
             @Override
             public int compare(Estudiante estudiante1, Estudiante estudiante2) {
@@ -259,29 +260,29 @@ public class Bibliotecario {
             }
         });
     }
-
+    
     public boolean validarRegistroEstudiante(ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura, ArrayList<String> mensajeError,
             int carnet, String nombre, int codigoCarrera, String fechaNacimiento) {
-
+        
         String codigoCarreraStr = Integer.toString(codigoCarrera);
         if (codigoCarreraValido(codigoCarreraStr)) {
             if (fechaValida(fechaNacimiento)) {
-
+                
                 Estudiante estudianteTmp = new Estudiante(carnet, nombre, codigoCarrera, fechaNacimiento);
                 estudiantes.add(estudianteTmp);
                 if (verificarCarnetEstudianteRepetido(estudiantes, erroresLectura, mensajeError)) {
-
+                    
                     String mensaje = "Carnet de estudiante repetido";
                     JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
                     return false;
                 } else {
-
+                    System.out.println(estudianteTmp.toString());
                     String mensaje = "Estudiante registrado correctamente";
                     JOptionPane.showMessageDialog(null, mensaje, "Registro Estudiante", JOptionPane.INFORMATION_MESSAGE);
                     return true;
                 }
             } else {
-
+                
                 String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
@@ -292,10 +293,10 @@ public class Bibliotecario {
             return false;
         }
     }
-
+    
     public int verificarPrestamos(ArrayList<Estudiante> estudiantes, int carnet) {
         int carnetBusqueda = carnet;
-
+        
         for (Estudiante estudiante : estudiantes) {
             if (estudiante.getCarnet() == carnetBusqueda) {
                 return estudiante.getNumeroPrestamos();
@@ -306,5 +307,41 @@ public class Bibliotecario {
             }
         }
         return -2;
+    }
+    
+    public int verificarCopias(ArrayList<Libro> libros, String codigoLibro) {
+        String libroBusqueda = codigoLibro;
+        if (codigoLibroValido(libroBusqueda)) {
+            for (Libro libro : libros) {
+                if (libro.getCodigo().equals(codigoLibro)) {
+                    return libro.getCantidad();
+                } else {
+                    String mensaje = "El libro con codigo: " + libroBusqueda + ", no existe";
+                    JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
+            }
+        }
+        return -2;
+    }
+    
+    public void crearPrestamo(ArrayList<Estudiante> estudiantes, ArrayList<Libro> libros, ArrayList<Prestamo> prestamos, int carnet, String codigoLibro, String fecha) {
+        Prestamo prestamo = new Prestamo(codigoLibro, carnet, fecha);
+        prestamos.add(prestamo);
+        System.out.println(prestamo.toString());
+        
+        for (Estudiante estudiante : estudiantes) {
+            if (estudiante.getCarnet() == carnet) {
+                int numeroPrestamos = estudiante.getNumeroPrestamos();
+                estudiante.setNumeroPrestamos(numeroPrestamos - 1);
+            }
+        }
+        
+        for (Libro libro : libros) {
+            if (libro.getCodigo().equals(codigoLibro)) {
+                int copias = libro.getCantidad();
+                libro.setCantidad(copias - 1);
+            }
+        }
     }
 }
