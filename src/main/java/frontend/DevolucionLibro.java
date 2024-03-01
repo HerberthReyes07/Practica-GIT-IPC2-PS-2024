@@ -53,6 +53,8 @@ public class DevolucionLibro extends javax.swing.JFrame {
         fieldCodigoLibro = new javax.swing.JTextField();
         btnCalcularTotal = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        fieldFecha = new javax.swing.JTextField();
+        lblFecha = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,7 +92,7 @@ public class DevolucionLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnCalcularTotal);
-        btnCalcularTotal.setBounds(210, 250, 190, 24);
+        btnCalcularTotal.setBounds(210, 280, 190, 24);
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -99,7 +101,16 @@ public class DevolucionLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnCancelar);
-        btnCancelar.setBounds(20, 250, 140, 24);
+        btnCancelar.setBounds(20, 280, 140, 24);
+
+        fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
+        pnlFrame.add(fieldFecha);
+        fieldFecha.setBounds(20, 210, 180, 24);
+
+        lblFecha.setForeground(new java.awt.Color(0, 0, 255));
+        lblFecha.setText("Fecha de Devolucion:");
+        pnlFrame.add(lblFecha);
+        lblFecha.setBounds(20, 190, 150, 18);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -117,25 +128,31 @@ public class DevolucionLibro extends javax.swing.JFrame {
 
     private void btnCalcularTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularTotalActionPerformed
         // TODO add your handling code here:
+        String fecha = fieldFecha.getText();
         int carnetEstudiante = 0;
         String codigoLibro = fieldCodigoLibro.getText();
         int totalAPagar = 0;
 
         if (!fieldCarnetEstudiante.getText().isEmpty()) {
             try {
-                 carnetEstudiante = Integer.parseInt(fieldCarnetEstudiante.getText());
+                carnetEstudiante = Integer.parseInt(fieldCarnetEstudiante.getText());
             } catch (NumberFormatException e) {
                 String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-        
-        if (fieldCarnetEstudiante.getText().isEmpty()|| fieldCodigoLibro.getText().isEmpty()) {
+
+        if (fieldCarnetEstudiante.getText().isEmpty() || fieldCodigoLibro.getText().isEmpty() || fieldFecha.getText().isEmpty()) {
             String mensaje = "Complete los campos vacios";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-        } else{
-            totalAPagar = bibliotecario.devolverLibro(libros, estudiantes, prestamos, carnetEstudiante, codigoLibro);
-            
+        } else {
+            if (bibliotecario.fechaValida(fecha)) {
+                totalAPagar = bibliotecario.devolverLibro(libros, estudiantes, prestamos, carnetEstudiante, codigoLibro, fecha);
+            } else {
+                String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
         }
 
     }//GEN-LAST:event_btnCalcularTotalActionPerformed
@@ -150,9 +167,11 @@ public class DevolucionLibro extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JTextField fieldCarnetEstudiante;
     private javax.swing.JTextField fieldCodigoLibro;
+    private javax.swing.JTextField fieldFecha;
     private javax.swing.JLabel lblCarnetEstudiante;
     private javax.swing.JLabel lblCodigoLibro;
     private javax.swing.JLabel lblDevolucionLibro;
+    private javax.swing.JLabel lblFecha;
     private javax.swing.JPanel pnlFrame;
     // End of variables declaration//GEN-END:variables
 }
