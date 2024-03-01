@@ -8,8 +8,12 @@ import backend.Biblioteca;
 import backend.Bibliotecario;
 import backend.ErrorLecturaArchivo;
 import backend.Libro;
+import java.awt.Image;
 import java.util.ArrayList;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,6 +34,7 @@ public class RegistroLibro extends javax.swing.JFrame {
     public RegistroLibro(Biblioteca biblioteca) {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        SetImageLabel(icnLibro, "src/main/java/iconos/libro.png");
         this.biblioteca = biblioteca;
         this.bibliotecario = biblioteca.getBibliotecario();
         this.libros = biblioteca.getLibros();
@@ -61,9 +66,9 @@ public class RegistroLibro extends javax.swing.JFrame {
         btnRegistrar = new javax.swing.JButton();
         btnListadoLibros = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        icnLibro = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 540));
         setSize(new java.awt.Dimension(6, 0));
 
         pnlFrame.setBackground(new java.awt.Color(153, 153, 0));
@@ -78,56 +83,56 @@ public class RegistroLibro extends javax.swing.JFrame {
         lblCodigo.setForeground(new java.awt.Color(0, 0, 255));
         lblCodigo.setText("Codigo:");
         pnlFrame.add(lblCodigo);
-        lblCodigo.setBounds(60, 80, 60, 18);
+        lblCodigo.setBounds(60, 80, 60, 22);
 
         lblAutor.setForeground(new java.awt.Color(0, 0, 255));
         lblAutor.setText("Autor:");
         pnlFrame.add(lblAutor);
-        lblAutor.setBounds(60, 140, 60, 18);
+        lblAutor.setBounds(60, 140, 60, 22);
 
         lblTitulo.setForeground(new java.awt.Color(0, 0, 255));
         lblTitulo.setText("Titulo:");
         pnlFrame.add(lblTitulo);
-        lblTitulo.setBounds(60, 200, 50, 18);
+        lblTitulo.setBounds(60, 200, 50, 22);
 
         lblCopias.setForeground(new java.awt.Color(0, 0, 255));
         lblCopias.setText("Cantidad de Copias:");
         pnlFrame.add(lblCopias);
-        lblCopias.setBounds(60, 260, 140, 18);
+        lblCopias.setBounds(60, 260, 140, 22);
 
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Publicacion:");
         pnlFrame.add(lblFecha);
-        lblFecha.setBounds(60, 320, 160, 18);
+        lblFecha.setBounds(60, 320, 160, 22);
 
         lblEditorial.setForeground(new java.awt.Color(0, 0, 255));
         lblEditorial.setText("Editorial:");
         pnlFrame.add(lblEditorial);
-        lblEditorial.setBounds(60, 380, 70, 18);
+        lblEditorial.setBounds(60, 380, 70, 22);
 
         fieldCodigo.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCodigo);
-        fieldCodigo.setBounds(60, 100, 180, 24);
+        fieldCodigo.setBounds(60, 100, 180, 30);
 
         fieldAutor.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldAutor);
-        fieldAutor.setBounds(60, 160, 180, 24);
+        fieldAutor.setBounds(60, 160, 180, 30);
 
         fieldTitulo.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldTitulo);
-        fieldTitulo.setBounds(60, 220, 180, 24);
+        fieldTitulo.setBounds(60, 220, 180, 30);
 
         fieldCopias.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCopias);
-        fieldCopias.setBounds(60, 280, 180, 24);
+        fieldCopias.setBounds(60, 280, 180, 30);
 
         fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldFecha);
-        fieldFecha.setBounds(60, 340, 180, 24);
+        fieldFecha.setBounds(60, 340, 180, 30);
 
         fieldEditorial.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldEditorial);
-        fieldEditorial.setBounds(60, 400, 180, 24);
+        fieldEditorial.setBounds(60, 400, 180, 30);
 
         btnRegistrar.setBackground(new java.awt.Color(0, 255, 255));
         btnRegistrar.setForeground(new java.awt.Color(0, 0, 255));
@@ -161,6 +166,8 @@ public class RegistroLibro extends javax.swing.JFrame {
         });
         pnlFrame.add(btnCancelar);
         btnCancelar.setBounds(220, 510, 130, 30);
+        pnlFrame.add(icnLibro);
+        icnLibro.setBounds(340, 160, 220, 190);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -226,6 +233,12 @@ public class RegistroLibro extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void SetImageLabel(JLabel nombreLabel, String ruta) {
+        ImageIcon imagen = new ImageIcon(ruta);
+        Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(nombreLabel.getWidth(), nombreLabel.getHeight(), Image.SCALE_DEFAULT));
+        nombreLabel.setIcon(icono);
+        this.repaint();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnListadoLibros;
@@ -236,6 +249,7 @@ public class RegistroLibro extends javax.swing.JFrame {
     private javax.swing.JTextField fieldEditorial;
     private javax.swing.JTextField fieldFecha;
     private javax.swing.JTextField fieldTitulo;
+    private javax.swing.JLabel icnLibro;
     private javax.swing.JLabel lblAutor;
     private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblCopias;

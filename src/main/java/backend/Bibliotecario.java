@@ -229,7 +229,27 @@ public class Bibliotecario {
             String titulo, String autor, String codigo, int cantidad, String fecha, String editorial) {
 
         if (codigoLibroValido(codigo)) {
-            if (fechaValida(fecha)) {
+
+            if (!isAllBlank(fecha) && !fechaValida(fecha)) {
+                String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            Libro libroTmp = new Libro(titulo, autor, codigo, cantidad, fecha, editorial);
+            libros.add(libroTmp);
+            if (verificarCodigoLibroRepetido(libros, erroresLectura, mensajeError)) {
+
+                String mensaje = "Codigo de libro repetido";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            } else {
+                String mensaje = "Libro registrado correctamente";
+                JOptionPane.showMessageDialog(null, mensaje, "Registro Libro", JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            }
+
+            /*if (fechaValida(fecha)) {
                 Libro libroTmp = new Libro(titulo, autor, codigo, cantidad, fecha, editorial);
                 libros.add(libroTmp);
                 if (verificarCodigoLibroRepetido(libros, erroresLectura, mensajeError)) {
@@ -247,8 +267,10 @@ public class Bibliotecario {
                 String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
-            }
+            }*/
         }
+        String mensaje = "Codigo de libro no valido";
+        JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         return false;
     }
 
@@ -269,7 +291,6 @@ public class Bibliotecario {
         String codigoCarreraStr = Integer.toString(codigoCarrera);
         if (codigoCarreraValido(codigoCarreraStr)) {
             if (!isAllBlank(fechaNacimiento) && !fechaValida(fechaNacimiento)) {
-                //System.out.println("NO VALIDO FECHA");
                 String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
                 return false;

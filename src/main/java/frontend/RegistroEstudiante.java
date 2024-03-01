@@ -8,8 +8,12 @@ import backend.Biblioteca;
 import backend.Bibliotecario;
 import backend.ErrorLecturaArchivo;
 import backend.Estudiante;
+import java.awt.Image;
 import java.util.ArrayList;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,6 +34,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
     public RegistroEstudiante(Biblioteca biblioteca) {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        SetImageLabel(icnEstudiante, "src/main/java/iconos/estudiante.png");
         this.biblioteca = biblioteca;
         this.bibliotecario = biblioteca.getBibliotecario();
         this.estudiantes = biblioteca.getEstudiantes();
@@ -58,6 +63,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         fieldFecha = new javax.swing.JTextField();
         btnListadoEstudiantes = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        icnEstudiante = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,22 +79,22 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         lblCarnet.setForeground(new java.awt.Color(0, 0, 255));
         lblCarnet.setText("Carnet:");
         pnlFrame.add(lblCarnet);
-        lblCarnet.setBounds(50, 90, 60, 18);
+        lblCarnet.setBounds(50, 90, 60, 22);
 
         lblNombre.setForeground(new java.awt.Color(0, 0, 255));
         lblNombre.setText("Nombre:");
         pnlFrame.add(lblNombre);
-        lblNombre.setBounds(50, 150, 60, 18);
+        lblNombre.setBounds(50, 150, 60, 22);
 
         lblCarrera.setForeground(new java.awt.Color(0, 0, 255));
         lblCarrera.setText("Codigo de Carrera:");
         pnlFrame.add(lblCarrera);
-        lblCarrera.setBounds(50, 210, 130, 18);
+        lblCarrera.setBounds(50, 210, 130, 22);
 
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Nacimiento:");
         pnlFrame.add(lblFecha);
-        lblFecha.setBounds(50, 270, 150, 18);
+        lblFecha.setBounds(50, 270, 150, 22);
 
         fieldCarnet.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCarnet);
@@ -138,6 +144,8 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         });
         pnlFrame.add(btnCancelar);
         btnCancelar.setBounds(203, 390, 100, 30);
+        pnlFrame.add(icnEstudiante);
+        icnEstudiante.setBounds(290, 130, 190, 170);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -206,6 +214,12 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void SetImageLabel(JLabel nombreLabel, String ruta) {
+        ImageIcon imagen = new ImageIcon(ruta);
+        Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(nombreLabel.getWidth(), nombreLabel.getHeight(), Image.SCALE_DEFAULT));
+        nombreLabel.setIcon(icono);
+        this.repaint();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnListadoEstudiantes;
@@ -214,6 +228,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
     private javax.swing.JTextField fieldCodigoCarrera;
     private javax.swing.JTextField fieldFecha;
     private javax.swing.JTextField fieldNombre;
+    private javax.swing.JLabel icnEstudiante;
     private javax.swing.JLabel lblCarnet;
     private javax.swing.JLabel lblCarrera;
     private javax.swing.JLabel lblFecha;

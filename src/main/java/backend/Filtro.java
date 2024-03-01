@@ -13,14 +13,81 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Filtro {
 
+    private ArrayList<Libro> librosTemp = new ArrayList();
     private ArrayList<Estudiante> estudiantesTemp = new ArrayList();
     private Bibliotecario bibliotecario = new Bibliotecario();
 
-    public void filtroEstudiantes(int contadorBorrarEnviado, int carnet, String nombre, int codigoCarrera, DefaultTableModel modeloEstudiantes, ArrayList<Estudiante> estudiantes) {
+    public void filtroLibros(int contadorBorrado, String codigo, String autor, String titulo, DefaultTableModel modeloLibros, ArrayList<Libro> libros) {
+        for (int j = 0; j < contadorBorrado; j++) {
+            modeloLibros.removeRow(0);
+        }
+        
+        for (int i = 0; i < libros.size(); i++) {
+            if (codigo.equals("") && autor.equals("") && titulo.equals("")) {//1
+                librosTemp.add(libros.get(i));
+            } else {
+                if (!codigo.equals("") && autor.equals("") && titulo.equals("")) {//2
+                    if (libros.get(i).getCodigo().contains(codigo)) {
+                        librosTemp.add(libros.get(i));
+                    }
+                } else {
+                    if (!codigo.equals("") && !autor.equals("") && titulo.equals("")) {//3
+                        if (libros.get(i).getCodigo().contains(codigo) && libros.get(i).getAutor().contains(autor)) {
+                            librosTemp.add(libros.get(i));
+                        }
+                    } else {
+                        if (!codigo.equals("") && autor.equals("") && !titulo.equals("")) {//4
+                            if (libros.get(i).getCodigo().contains(codigo) && libros.get(i).getTitulo().contains(titulo)) {
+                                librosTemp.add(libros.get(i));
+                            }
+                        } else {
+                            if (codigo.equals("") && !autor.equals("") && titulo.equals("")) {//5
+                                if (libros.get(i).getAutor().contains(autor)) {
+                                    librosTemp.add(libros.get(i));
+                                }
+                            } else {
+                                if (codigo.equals("") && !autor.equals("") && !titulo.equals("")) {//6
+                                    if (libros.get(i).getAutor().contains(autor) && libros.get(i).getTitulo().contains(titulo)) {
+                                        librosTemp.add(libros.get(i));
+                                    }
+                                } else {
+                                    if (codigo.equals("") && autor.equals("") && !titulo.equals("")) {//7
+                                        if (libros.get(i).getTitulo().contains(titulo)) {
+                                            librosTemp.add(libros.get(i));
+                                        }
+                                    } else {
+                                        if (!codigo.equals("") && !autor.equals("") && !titulo.equals("")) {//8
+                                            if (libros.get(i).getCodigo().contains(codigo) && libros.get(i).getAutor().contains(autor) 
+                                                    && libros.get(i).getTitulo().contains(titulo)) {
+                                                librosTemp.add(libros.get(i));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        bibliotecario.ordenarLibros(librosTemp);        
+        for (Libro libro : librosTemp) {
+            modeloLibros.addRow(new Object[] {
+            libro.getCodigo(),
+            libro.getAutor(),
+            libro.getTitulo(),
+            libro.getCantidad(),
+            libro.getFechaPublicacion(),
+            libro.getEditorial()
+            });
+        }
+    }
+
+    public void filtroEstudiantes(int contadorBorrado, int carnet, String nombre, int codigoCarrera, DefaultTableModel modeloEstudiantes, ArrayList<Estudiante> estudiantes) {
 
         String carnetFiltro = Integer.toString(carnet);
 
-        for (int j = 0; j < contadorBorrarEnviado; j++) {
+        for (int j = 0; j < contadorBorrado; j++) {
             modeloEstudiantes.removeRow(0);
         }
 
