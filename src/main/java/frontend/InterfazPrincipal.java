@@ -25,18 +25,9 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     public InterfazPrincipal(Biblioteca biblioteca) {
         initComponents();
         //this.setLocationRelativeTo(null);
-
         this.biblioteca = biblioteca;
         libros = biblioteca.getLibros();
         bibliotecario = biblioteca.getBibliotecario();
-
-        /*menuBar.setVisible(false);
-        lblReportes.setVisible(false);
-        lblAlmacenarInfo.setVisible(false);
-        comboBoxReportes.setVisible(false);
-        btnGuardarLibros.setVisible(false);
-        btnGuardarEstudiantes.setVisible(false);
-        btnGuardarPrestamos.setVisible(false);*/
     }
 
     /**
@@ -53,9 +44,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblTitulo = new javax.swing.JLabel();
         comboBoxReportes = new javax.swing.JComboBox<>();
         lblReportes = new javax.swing.JLabel();
-        btnGuardarLibros = new javax.swing.JButton();
-        btnGuardarEstudiantes = new javax.swing.JButton();
-        btnGuardarPrestamos = new javax.swing.JButton();
+        btnGuardarInformacion = new javax.swing.JButton();
         lblAlmacenarInfo = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuRegistrar = new javax.swing.JMenu();
@@ -78,7 +67,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         pnlFrame.add(lblTitulo);
         lblTitulo.setBounds(290, 20, 220, 50);
 
-        comboBoxReportes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Prestamos de libros a entregar hoy", "Prestamos de libros con mora", "Dinero recaudado en intervalo de tiempo", "Todos los prestamos hechos a un estudiante", "Prestamos actuales a un estudiante", "Prestamos hechos a cada carrera en intervalo de tiempo" }));
+        comboBoxReportes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1. Prestamos de libros a entregar hoy", "2. Prestamos de libros con demora", "3. Dinero recaudado en intervalo de tiempo", "4. Todos los prestamos hechos a un estudiante", "5. Prestamos actuales a un estudiante", "6. Prestamos hechos a cada carrera en intervalo de tiempo" }));
         comboBoxReportes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxReportesActionPerformed(evt);
@@ -90,39 +79,21 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblReportes.setForeground(new java.awt.Color(0, 0, 0));
         lblReportes.setText("Reportes");
         pnlFrame.add(lblReportes);
-        lblReportes.setBounds(360, 80, 90, 18);
+        lblReportes.setBounds(360, 80, 90, 22);
 
-        btnGuardarLibros.setText("Libros");
-        btnGuardarLibros.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardarInformacion.setText("Guardar");
+        btnGuardarInformacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarLibrosActionPerformed(evt);
+                btnGuardarInformacionActionPerformed(evt);
             }
         });
-        pnlFrame.add(btnGuardarLibros);
-        btnGuardarLibros.setBounds(220, 460, 120, 40);
-
-        btnGuardarEstudiantes.setText("Estudiantes");
-        btnGuardarEstudiantes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarEstudiantesActionPerformed(evt);
-            }
-        });
-        pnlFrame.add(btnGuardarEstudiantes);
-        btnGuardarEstudiantes.setBounds(340, 460, 120, 40);
-
-        btnGuardarPrestamos.setText("Prestamos");
-        btnGuardarPrestamos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarPrestamosActionPerformed(evt);
-            }
-        });
-        pnlFrame.add(btnGuardarPrestamos);
-        btnGuardarPrestamos.setBounds(460, 460, 120, 40);
+        pnlFrame.add(btnGuardarInformacion);
+        btnGuardarInformacion.setBounds(320, 470, 120, 40);
 
         lblAlmacenarInfo.setForeground(new java.awt.Color(0, 0, 0));
         lblAlmacenarInfo.setText("Almacenar informacion");
         pnlFrame.add(lblAlmacenarInfo);
-        lblAlmacenarInfo.setBounds(330, 430, 150, 18);
+        lblAlmacenarInfo.setBounds(290, 430, 181, 22);
 
         menuRegistrar.setText("Registrar");
 
@@ -226,18 +197,10 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_comboBoxReportesActionPerformed
 
 
-    private void btnGuardarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLibrosActionPerformed
+    private void btnGuardarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarInformacionActionPerformed
         // TODO add your handling code here:
         System.out.println(libros.toString());
-    }//GEN-LAST:event_btnGuardarLibrosActionPerformed
-
-    private void btnGuardarEstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEstudiantesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGuardarEstudiantesActionPerformed
-
-    private void btnGuardarPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarPrestamosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGuardarPrestamosActionPerformed
+    }//GEN-LAST:event_btnGuardarInformacionActionPerformed
 
     private void menuPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPrestamosActionPerformed
         // TODO add your handling code here:
@@ -256,9 +219,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_itemDevolverLibroActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGuardarEstudiantes;
-    private javax.swing.JButton btnGuardarLibros;
-    private javax.swing.JButton btnGuardarPrestamos;
+    private javax.swing.JButton btnGuardarInformacion;
     private javax.swing.JComboBox<String> comboBoxReportes;
     private javax.swing.JMenuItem itemDevolverLibro;
     private javax.swing.JMenuItem itemPrestarLibro;
