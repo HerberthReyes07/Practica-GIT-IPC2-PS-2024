@@ -4,17 +4,36 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Bibliotecario;
+import backend.Estudiante;
+import backend.Libro;
+import backend.Prestamo;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ronyrojas
  */
 public class DevolucionLibro extends javax.swing.JFrame {
 
+    private Biblioteca biblioteca;
+    private Bibliotecario bibliotecario;
+    private ArrayList<Estudiante> estudiantes;
+    private ArrayList<Libro> libros;
+    private ArrayList<Prestamo> prestamos;
+
     /**
      * Creates new form DevolucionLibro
      */
-    public DevolucionLibro() {
+    public DevolucionLibro(Biblioteca biblioteca) {
         initComponents();
+        this.biblioteca = biblioteca;
+        this.bibliotecario = biblioteca.getBibliotecario();
+        this.estudiantes = biblioteca.getEstudiantes();
+        this.libros = biblioteca.getLibros();
+        this.prestamos = biblioteca.getPrestamos();
     }
 
     /**
@@ -98,11 +117,32 @@ public class DevolucionLibro extends javax.swing.JFrame {
 
     private void btnCalcularTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularTotalActionPerformed
         // TODO add your handling code here:
+        int carnetEstudiante = 0;
+        String codigoLibro = fieldCodigoLibro.getText();
+        int totalAPagar = 0;
+
+        if (!fieldCarnetEstudiante.getText().isEmpty()) {
+            try {
+                 carnetEstudiante = Integer.parseInt(fieldCarnetEstudiante.getText());
+            } catch (NumberFormatException e) {
+                String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        if (fieldCarnetEstudiante.getText().isEmpty()|| fieldCodigoLibro.getText().isEmpty()) {
+            String mensaje = "Complete los campos vacios";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        } else{
+            totalAPagar = bibliotecario.devolverLibro(libros, estudiantes, prestamos, carnetEstudiante, codigoLibro);
+            
+        }
+
     }//GEN-LAST:event_btnCalcularTotalActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

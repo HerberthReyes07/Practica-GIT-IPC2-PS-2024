@@ -29,7 +29,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         this.biblioteca = biblioteca;
         libros = biblioteca.getLibros();
         bibliotecario = biblioteca.getBibliotecario();
-        
+
         /*menuBar.setVisible(false);
         lblReportes.setVisible(false);
         lblAlmacenarInfo.setVisible(false);
@@ -251,7 +251,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     private void itemDevolverLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemDevolverLibroActionPerformed
         // TODO add your handling code here:
-        DevolucionLibro devolucion = new DevolucionLibro();
+        DevolucionLibro devolucion = new DevolucionLibro(biblioteca);
         devolucion.setVisible(true);
     }//GEN-LAST:event_itemDevolverLibroActionPerformed
 

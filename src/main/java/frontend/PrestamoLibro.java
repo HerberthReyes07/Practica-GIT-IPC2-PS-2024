@@ -166,7 +166,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
 
-            prestamosDisponibles = bibliotecario.verificarPrestamos(estudiantes, carnet);
+            prestamosDisponibles = bibliotecario.verificarPrestamosEstudiante(estudiantes, carnet);
             System.out.println("prestamosDisponibles = " + prestamosDisponibles);
             if (prestamosDisponibles > 0) {
 
