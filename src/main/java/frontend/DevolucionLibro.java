@@ -4,17 +4,36 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Bibliotecario;
+import backend.Estudiante;
+import backend.Libro;
+import backend.Prestamo;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ronyrojas
  */
 public class DevolucionLibro extends javax.swing.JFrame {
 
+    private Biblioteca biblioteca;
+    private Bibliotecario bibliotecario;
+    private ArrayList<Estudiante> estudiantes;
+    private ArrayList<Libro> libros;
+    private ArrayList<Prestamo> prestamos;
+
     /**
      * Creates new form DevolucionLibro
      */
-    public DevolucionLibro() {
+    public DevolucionLibro(Biblioteca biblioteca) {
         initComponents();
+        this.biblioteca = biblioteca;
+        this.bibliotecario = biblioteca.getBibliotecario();
+        this.estudiantes = biblioteca.getEstudiantes();
+        this.libros = biblioteca.getLibros();
+        this.prestamos = biblioteca.getPrestamos();
     }
 
     /**
@@ -34,8 +53,10 @@ public class DevolucionLibro extends javax.swing.JFrame {
         fieldCodigoLibro = new javax.swing.JTextField();
         btnCalcularTotal = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        fieldFecha = new javax.swing.JTextField();
+        lblFecha = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         pnlFrame.setBackground(new java.awt.Color(0, 153, 0));
         pnlFrame.setLayout(null);
@@ -49,20 +70,20 @@ public class DevolucionLibro extends javax.swing.JFrame {
         lblCarnetEstudiante.setForeground(new java.awt.Color(0, 0, 255));
         lblCarnetEstudiante.setText("Carnet Estudiante:");
         pnlFrame.add(lblCarnetEstudiante);
-        lblCarnetEstudiante.setBounds(20, 70, 130, 18);
+        lblCarnetEstudiante.setBounds(20, 70, 130, 22);
 
         fieldCarnetEstudiante.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCarnetEstudiante);
-        fieldCarnetEstudiante.setBounds(20, 90, 180, 24);
+        fieldCarnetEstudiante.setBounds(20, 90, 180, 30);
 
         lblCodigoLibro.setForeground(new java.awt.Color(0, 0, 255));
         lblCodigoLibro.setText("Codigo de Libro a Devolver:");
         pnlFrame.add(lblCodigoLibro);
-        lblCodigoLibro.setBounds(20, 130, 190, 18);
+        lblCodigoLibro.setBounds(20, 130, 190, 22);
 
         fieldCodigoLibro.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCodigoLibro);
-        fieldCodigoLibro.setBounds(20, 150, 180, 24);
+        fieldCodigoLibro.setBounds(20, 150, 180, 30);
 
         btnCalcularTotal.setText("Calcular Total a Pagar");
         btnCalcularTotal.addActionListener(new java.awt.event.ActionListener() {
@@ -71,7 +92,7 @@ public class DevolucionLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnCalcularTotal);
-        btnCalcularTotal.setBounds(210, 250, 190, 24);
+        btnCalcularTotal.setBounds(210, 280, 190, 30);
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -80,7 +101,16 @@ public class DevolucionLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnCancelar);
-        btnCancelar.setBounds(20, 250, 140, 24);
+        btnCancelar.setBounds(20, 280, 140, 30);
+
+        fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
+        pnlFrame.add(fieldFecha);
+        fieldFecha.setBounds(20, 210, 180, 30);
+
+        lblFecha.setForeground(new java.awt.Color(0, 0, 255));
+        lblFecha.setText("Fecha de Devolucion:");
+        pnlFrame.add(lblFecha);
+        lblFecha.setBounds(20, 190, 150, 22);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,11 +128,38 @@ public class DevolucionLibro extends javax.swing.JFrame {
 
     private void btnCalcularTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularTotalActionPerformed
         // TODO add your handling code here:
+        String fecha = fieldFecha.getText();
+        int carnetEstudiante = 0;
+        String codigoLibro = fieldCodigoLibro.getText();
+        //int totalAPagar = 0;
+
+        if (!fieldCarnetEstudiante.getText().isEmpty()) {
+            try {
+                carnetEstudiante = Integer.parseInt(fieldCarnetEstudiante.getText());
+            } catch (NumberFormatException e) {
+                String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        if (fieldCarnetEstudiante.getText().isEmpty() || fieldCodigoLibro.getText().isEmpty() || fieldFecha.getText().isEmpty()) {
+            String mensaje = "Complete los campos vacios";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            if (bibliotecario.fechaValida(fecha)) {
+                bibliotecario.devolverLibro(libros, estudiantes, prestamos, carnetEstudiante, codigoLibro, fecha);
+            } else {
+                String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+
     }//GEN-LAST:event_btnCalcularTotalActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -110,9 +167,11 @@ public class DevolucionLibro extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JTextField fieldCarnetEstudiante;
     private javax.swing.JTextField fieldCodigoLibro;
+    private javax.swing.JTextField fieldFecha;
     private javax.swing.JLabel lblCarnetEstudiante;
     private javax.swing.JLabel lblCodigoLibro;
     private javax.swing.JLabel lblDevolucionLibro;
+    private javax.swing.JLabel lblFecha;
     private javax.swing.JPanel pnlFrame;
     // End of variables declaration//GEN-END:variables
 }

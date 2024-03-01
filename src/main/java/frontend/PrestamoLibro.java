@@ -4,19 +4,41 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Bibliotecario;
+import backend.Estudiante;
+import backend.Libro;
+import backend.Prestamo;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ronyrojas
  */
 public class PrestamoLibro extends javax.swing.JFrame {
 
+    private Biblioteca biblioteca;
+    private Bibliotecario bibliotecario;
+    private ArrayList<Estudiante> estudiantes;
+    private ArrayList<Libro> libros;
+    private ArrayList<Prestamo> prestamos;
+
     /**
      * Creates new form PrestamoLibro
      */
-    public PrestamoLibro() {
+    public PrestamoLibro(Biblioteca biblioteca) {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.biblioteca = biblioteca;
+        this.bibliotecario = biblioteca.getBibliotecario();
+        this.estudiantes = biblioteca.getEstudiantes();
+        this.libros = biblioteca.getLibros();
+        this.prestamos = biblioteca.getPrestamos();
         btnVerificarDisponibilidad.setEnabled(false);
         btnRealizarPrestamo.setEnabled(false);
+        fieldFecha.setEnabled(false);
     }
 
     /**
@@ -38,6 +60,8 @@ public class PrestamoLibro extends javax.swing.JFrame {
         btnVerificarDisponibilidad = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnRealizarPrestamo = new javax.swing.JButton();
+        fieldFecha = new javax.swing.JTextField();
+        lblFecha = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -112,6 +136,15 @@ public class PrestamoLibro extends javax.swing.JFrame {
         pnlFrame.add(btnRealizarPrestamo);
         btnRealizarPrestamo.setBounds(210, 390, 170, 24);
 
+        fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
+        pnlFrame.add(fieldFecha);
+        fieldFecha.setBounds(10, 220, 170, 24);
+
+        lblFecha.setForeground(new java.awt.Color(0, 0, 255));
+        lblFecha.setText("Fecha de Prestamo:");
+        pnlFrame.add(lblFecha);
+        lblFecha.setBounds(10, 200, 150, 18);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,22 +161,99 @@ public class PrestamoLibro extends javax.swing.JFrame {
 
     private void btnVerificarPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarPrestamosActionPerformed
         // TODO add your handling code here:
-        btnVerificarDisponibilidad.setEnabled(true);
+
+        int carnet = 0;
+        int prestamosDisponibles = -2;
+        if (!fieldCarnet.getText().isEmpty()) {
+            try {
+                carnet = Integer.parseInt(fieldCarnet.getText());
+            } catch (NumberFormatException e) {
+                String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        if (fieldCarnet.getText().isEmpty()) {
+
+            String mensaje = "Complete los campos vacios";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+
+            prestamosDisponibles = bibliotecario.verificarPrestamosEstudiante(estudiantes, carnet);
+            System.out.println("prestamosDisponibles = " + prestamosDisponibles);
+            if (prestamosDisponibles > 0) {
+
+                btnVerificarDisponibilidad.setEnabled(true);
+                btnVerificarPrestamos.setEnabled(false);
+                fieldCarnet.setEnabled(false);
+
+                String mensaje = "El estudiante tiene: " + prestamosDisponibles + " prestamos disponibles";
+                JOptionPane.showMessageDialog(null, mensaje, "Verificar Prestamos", JOptionPane.INFORMATION_MESSAGE);
+            } else if (prestamosDisponibles <= 0) {
+                String mensaje = "El estudiante no tiene prestamos disponibles";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnVerificarPrestamosActionPerformed
 
     private void btnVerificarDisponibilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarDisponibilidadActionPerformed
         // TODO add your handling code here:
-        btnRealizarPrestamo.setEnabled(true);
+
+        String codigoLibro = fieldLibro.getText();
+        int copias;
+        if (fieldLibro.getText().isEmpty()) {
+
+            String mensaje = "Complete los campos vacios";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+
+            copias = bibliotecario.verificarCopias(libros, codigoLibro);
+            System.out.println("copias = " + copias);
+            if (copias > 0) {
+                btnRealizarPrestamo.setEnabled(true);
+                btnVerificarDisponibilidad.setEnabled(false);
+                fieldLibro.setEnabled(false);
+                fieldFecha.setEnabled(true);
+
+                String mensaje = "Hay: " + copias + " copias disponibles del libro";
+                JOptionPane.showMessageDialog(null, mensaje, "Verificar Copias", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                String mensaje = "No hay copias disponibles del libro solicitado";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnVerificarDisponibilidadActionPerformed
 
     private void btnRealizarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarPrestamoActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        String fecha = fieldFecha.getText();
+
+        if (fieldFecha.getText().isEmpty()) {
+            String mensaje = "Ingrese la fecha del prestamo";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            if (bibliotecario.fechaValida(fecha)) {
+                bibliotecario.crearPrestamo(estudiantes, libros, prestamos, Integer.parseInt(fieldCarnet.getText()), fieldLibro.getText(), fecha);
+                String mensaje = "Prestamo creado correctamente";
+                JOptionPane.showMessageDialog(null, mensaje, "Crear prestamo", JOptionPane.INFORMATION_MESSAGE);
+
+                fieldCarnet.setText("");
+                fieldLibro.setText("");
+                fieldFecha.setText("");
+                btnVerificarPrestamos.setEnabled(true);
+                fieldCarnet.setEnabled(true);
+                fieldLibro.setEnabled(true);
+                btnRealizarPrestamo.setEnabled(false);
+            } else {
+                String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
     }//GEN-LAST:event_btnRealizarPrestamoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -152,8 +262,10 @@ public class PrestamoLibro extends javax.swing.JFrame {
     private javax.swing.JButton btnVerificarDisponibilidad;
     private javax.swing.JButton btnVerificarPrestamos;
     private javax.swing.JTextField fieldCarnet;
+    private javax.swing.JTextField fieldFecha;
     private javax.swing.JTextField fieldLibro;
     private javax.swing.JLabel lblCarnet;
+    private javax.swing.JLabel lblFecha;
     private javax.swing.JLabel lblLibro;
     private javax.swing.JLabel lblPrestamo;
     private javax.swing.JPanel pnlFrame;

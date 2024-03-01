@@ -14,7 +14,7 @@ public class Estudiante {
     private String nombre;
     private int codigoCarrera;
     private String fechaNacimiento;
-    private int numeroPrestamos;
+    private int numeroPrestamos = 3;
 
     public Estudiante() {
     }
@@ -66,12 +66,9 @@ public class Estudiante {
         this.numeroPrestamos = numeroPrestamos;
     }
 
-    
     @Override
     public String toString() {
-        return "Estudiante{" + "carnet=" + carnet + ", nombre=" + nombre + ", codigoCarrera=" + codigoCarrera + ", fechaNacimiento=" + fechaNacimiento + '}';
+        return "Estudiante{" + "carnet=" + carnet + ", nombre=" + nombre + ", codigoCarrera=" + codigoCarrera + ", fechaNacimiento=" + fechaNacimiento + ", numeroPrestamos=" + numeroPrestamos + '}';
     }
-    
-    
-    
+
 }
