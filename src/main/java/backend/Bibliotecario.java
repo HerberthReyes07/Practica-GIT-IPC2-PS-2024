@@ -373,55 +373,68 @@ public class Bibliotecario {
         }
     }
 
-    public int devolverLibro(ArrayList<Libro> libros, ArrayList<Estudiante> estudiantes, ArrayList<Prestamo> prestamos,
+    public void devolverLibro(ArrayList<Libro> libros, ArrayList<Estudiante> estudiantes, ArrayList<Prestamo> prestamos,
             int carnetEstudiante, String codigoLibro, String fechaDevolucion) {
         if (buscarEstudiante(estudiantes, carnetEstudiante)) {
             if (buscarLibro(libros, codigoLibro)) {
                 int numeroPrestamo = buscarPrestamo(prestamos, carnetEstudiante, codigoLibro);
                 if (numeroPrestamo != -1) {
-                    
-                    for (Estudiante estudiante : estudiantes) {
-                        if (estudiante.getCarnet() == carnetEstudiante) {
-                            int numeroPrestamos = estudiante.getNumeroPrestamos();
-                            estudiante.setNumeroPrestamos(numeroPrestamos + 1);
-                        }
-                    }
-                    for (Libro libro : libros) {
-                        if (libro.getCodigo().equals(codigoLibro)) {
-                            int copias = libro.getCantidad();
-                            libro.setCantidad(copias + 1);
-                        }
-                    }
-                    System.out.println("libro devuelto");
-                    
-                    //calcular el total a pagar  
-                    
-                    
+
                     String fechaPrestamo = prestamos.get(numeroPrestamo).getFecha();
                     LocalDate ldFechaPrestamo = LocalDate.parse(fechaPrestamo);
                     LocalDate ldFechaDevolucion = LocalDate.parse(fechaDevolucion);
                     long diferenciaDias = calcularDiferenciaDias(ldFechaPrestamo, ldFechaDevolucion);
-                    //si la diferencia es un numero negativo, mostrar un JOptionPane de devolucion invalida
                     System.out.println("La diferencia de días entre las fechas es: " + diferenciaDias + " días.");
-                    
-                    
+
+                    if (diferenciaDias >= 0) {
+                        for (Estudiante estudiante : estudiantes) {
+                            if (estudiante.getCarnet() == carnetEstudiante) {
+                                int numeroPrestamos = estudiante.getNumeroPrestamos();
+                                estudiante.setNumeroPrestamos(numeroPrestamos + 1);
+                            }
+                        }
+                        for (Libro libro : libros) {
+                            if (libro.getCodigo().equals(codigoLibro)) {
+                                int copias = libro.getCantidad();
+                                libro.setCantidad(copias + 1);
+                            }
+                        }
+
+                        //calcular el total a pagar
+                        int totalPagar = 0;
+                        String mensajePago = "";
+                        if (diferenciaDias > 3) {
+                            totalPagar += 15 + ((diferenciaDias - 3) * 10);
+                            mensajePago = "3 días reglamentarios: Q15.00\n"
+                                    + (diferenciaDias - 3) + " día(s) de atraso: Q" + ((diferenciaDias - 3) * 10) + ".00\n"
+                                    + "Total a pagar: Q" + totalPagar + ".00";
+                        } else {
+                            totalPagar += diferenciaDias * 5;
+                            mensajePago = diferenciaDias + " día(s) reglamentario(s): Q" + (diferenciaDias * 5) + ".00\n"
+                                    + "Total a pagar: Q" + totalPagar + ".00";
+                        }
+
+                        JOptionPane.showMessageDialog(null, mensajePago, "Pago", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "El libro se ha devuelto exitosamente", "Devolución", JOptionPane.INFORMATION_MESSAGE);
+
+                    } else {
+                        String mensaje = "El libro no se puede devolver porque la fecha de devolución es menor a la del prestamo";
+                        JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
                 } else {
                     String mensaje = "El estudiante: " + carnetEstudiante + ", no tiene prestado el libro: " + codigoLibro;
                     JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-                    return -1;
                 }
             } else {
                 String mensaje = "El libro con codigo: " + codigoLibro + ", no existe";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-                return -1;
             }
         } else {
             String mensaje = "El estudiante con carnet: " + carnetEstudiante + ", no existe";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-            return -1;
         }
 
-        return 0;
     }
 
     private int buscarPrestamo(ArrayList<Prestamo> prestamos, int carnetEstudiante, String codigoLibro) {
@@ -434,7 +447,7 @@ public class Bibliotecario {
         }
         return encontrado;
     }
-    
+
     private long calcularDiferenciaDias(LocalDate fecha1, LocalDate fecha2) {
         // Calcular la diferencia de días usando ChronoUnit
         return ChronoUnit.DAYS.between(fecha1, fecha2);
