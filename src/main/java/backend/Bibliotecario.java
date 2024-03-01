@@ -140,11 +140,13 @@ public class Bibliotecario {
             for (int j = 0; j < libros.size(); j++) {
                 if (prestamos.get(i - contEliminados).getCodigoLibro().equals(libros.get(j).getCodigo())) {
                     codigoLibroEncontrado = true;
+                    // Se podria restar una copia del libro ya que esta prestado
                 }
             }
             for (int j = 0; j < estudiantes.size(); j++) {
                 if (prestamos.get(i - contEliminados).getCarnetEstudiante() == estudiantes.get(j).getCarnet()) {
                     carnetEstudianteEncontrado = true;
+                    // Se podría añadir un prestamo a la cantidad de prestamos
                 }
             }
             if (!codigoLibroEncontrado || !carnetEstudianteEncontrado) {
@@ -262,11 +264,30 @@ public class Bibliotecario {
     }
 
     public boolean validarRegistroEstudiante(ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura, ArrayList<String> mensajeError,
-            int carnet, String nombre, int codigoCarrera, String fechaNacimiento) {
+            int carnet, String nombre, int codigoCarrera, String fechaNacimiento/*, boolean existeFechaNacimiento*/) {
 
         String codigoCarreraStr = Integer.toString(codigoCarrera);
         if (codigoCarreraValido(codigoCarreraStr)) {
-            if (fechaValida(fechaNacimiento)) {
+            if (!isAllBlank(fechaNacimiento) && !fechaValida(fechaNacimiento)) {
+                //System.out.println("NO VALIDO FECHA");
+                String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            Estudiante estudianteTmp = new Estudiante(carnet, nombre, codigoCarrera, fechaNacimiento);
+            estudiantes.add(estudianteTmp);
+            if (verificarCarnetEstudianteRepetido(estudiantes, erroresLectura, mensajeError)) {
+
+                String mensaje = "Carnet de estudiante repetido";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            } else {
+
+                String mensaje = "Estudiante registrado correctamente";
+                JOptionPane.showMessageDialog(null, mensaje, "Registro Estudiante", JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            }
+            /*if (fechaValida(fechaNacimiento)) {
 
                 Estudiante estudianteTmp = new Estudiante(carnet, nombre, codigoCarrera, fechaNacimiento);
                 estudiantes.add(estudianteTmp);
@@ -286,7 +307,7 @@ public class Bibliotecario {
                 String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
-            }
+            }*/
         } else {
             String mensaje = "Codigo de carrera no valido (1-5)";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);

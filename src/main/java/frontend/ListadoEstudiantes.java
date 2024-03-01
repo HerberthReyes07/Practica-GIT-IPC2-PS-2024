@@ -7,6 +7,7 @@ package frontend;
 import backend.Biblioteca;
 import backend.Bibliotecario;
 import backend.Estudiante;
+import backend.Filtro;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
@@ -20,6 +21,8 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
     private Biblioteca biblioteca;
     private ArrayList<Estudiante> estudiantes;
     private Bibliotecario bibliotecario;
+    private DefaultTableModel modeloTabla;
+    //private int contadorBorrar = 0;
 
     /**
      * Creates new form ListadoEstudiantes
@@ -31,7 +34,8 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
         this.bibliotecario = biblioteca.getBibliotecario();
         this.estudiantes = biblioteca.getEstudiantes();
 
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblListado.getModel();
+        //DefaultTableModel modeloTabla = (DefaultTableModel) tblListado.getModel();
+        modeloTabla = (DefaultTableModel) tblListado.getModel();
         bibliotecario.ordenarEstudiantes(estudiantes);
         for (Estudiante estudiante : estudiantes) {
             modeloTabla.addRow(new Object[]{
@@ -41,6 +45,7 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
                 estudiante.getFechaNacimiento()
             });
         }
+        //contadorBorrar = estudiantes.size();
     }
 
     /**
@@ -57,12 +62,13 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblListado = new javax.swing.JTable();
         lblFiltrar = new javax.swing.JLabel();
-        comboBoxFiltros = new javax.swing.JComboBox<>();
-        lblBusqueda = new javax.swing.JLabel();
-        fieldBusqueda = new javax.swing.JTextField();
-        btnFiltrar = new javax.swing.JButton();
-        btnLimpiarFiltro = new javax.swing.JButton();
+        lblCarnet = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
+        fieldCarnet = new javax.swing.JTextField();
+        fieldNombre = new javax.swing.JTextField();
+        comboBoxCodigoCarrera = new javax.swing.JComboBox<>();
+        lblNombre = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,36 +105,12 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
         lblFiltrar.setForeground(new java.awt.Color(0, 0, 0));
         lblFiltrar.setText("Filtrar por:");
         pnlFrame.add(lblFiltrar);
-        lblFiltrar.setBounds(30, 500, 70, 20);
+        lblFiltrar.setBounds(30, 500, 100, 20);
 
-        comboBoxFiltros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Carnet", "Nombre", "Codigo de Carrera" }));
-        pnlFrame.add(comboBoxFiltros);
-        comboBoxFiltros.setBounds(140, 500, 130, 24);
-
-        lblBusqueda.setForeground(new java.awt.Color(0, 0, 0));
-        lblBusqueda.setText("Item a buscar:");
-        pnlFrame.add(lblBusqueda);
-        lblBusqueda.setBounds(30, 550, 100, 18);
-        pnlFrame.add(fieldBusqueda);
-        fieldBusqueda.setBounds(140, 550, 130, 24);
-
-        btnFiltrar.setText("Aplicar Filtro");
-        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFiltrarActionPerformed(evt);
-            }
-        });
-        pnlFrame.add(btnFiltrar);
-        btnFiltrar.setBounds(140, 600, 130, 24);
-
-        btnLimpiarFiltro.setText("Limpiar Filtro");
-        btnLimpiarFiltro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarFiltroActionPerformed(evt);
-            }
-        });
-        pnlFrame.add(btnLimpiarFiltro);
-        btnLimpiarFiltro.setBounds(310, 600, 130, 24);
+        lblCarnet.setForeground(new java.awt.Color(0, 0, 0));
+        lblCarnet.setText("Carnet:");
+        pnlFrame.add(lblCarnet);
+        lblCarnet.setBounds(30, 550, 70, 30);
 
         btnCerrar.setText("Cerrar Listado");
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
@@ -138,6 +120,41 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
         });
         pnlFrame.add(btnCerrar);
         btnCerrar.setBounds(830, 590, 140, 40);
+
+        fieldCarnet.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                fieldCarnetKeyReleased(evt);
+            }
+        });
+        pnlFrame.add(fieldCarnet);
+        fieldCarnet.setBounds(100, 550, 140, 30);
+
+        fieldNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                fieldNombreKeyReleased(evt);
+            }
+        });
+        pnlFrame.add(fieldNombre);
+        fieldNombre.setBounds(340, 550, 160, 30);
+
+        comboBoxCodigoCarrera.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "1", "2", "3", "4", "5" }));
+        comboBoxCodigoCarrera.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxCodigoCarreraActionPerformed(evt);
+            }
+        });
+        pnlFrame.add(comboBoxCodigoCarrera);
+        comboBoxCodigoCarrera.setBounds(680, 550, 97, 30);
+
+        lblNombre.setForeground(new java.awt.Color(0, 0, 0));
+        lblNombre.setText("Nombre:");
+        pnlFrame.add(lblNombre);
+        lblNombre.setBounds(260, 550, 80, 30);
+
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Codigo de Carrera:");
+        pnlFrame.add(jLabel1);
+        jLabel1.setBounds(520, 550, 160, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -158,25 +175,40 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void btnLimpiarFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarFiltroActionPerformed
+    private void fieldCarnetKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldCarnetKeyReleased
         // TODO add your handling code here:
-        fieldBusqueda.setText("");
-    }//GEN-LAST:event_btnLimpiarFiltroActionPerformed
+        filtrar();
+    }//GEN-LAST:event_fieldCarnetKeyReleased
 
-    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+    private void fieldNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldNombreKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnFiltrarActionPerformed
+        filtrar();
+    }//GEN-LAST:event_fieldNombreKeyReleased
 
+    private void comboBoxCodigoCarreraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxCodigoCarreraActionPerformed
+        // TODO add your handling code here:
+        filtrar();
+    }//GEN-LAST:event_comboBoxCodigoCarreraActionPerformed
+
+    private void filtrar() {
+        Filtro filtro = new Filtro();
+        int carnetFiltro = -1;
+        if (bibliotecario.isNumeric(fieldCarnet.getText())) {
+            carnetFiltro = Integer.parseInt(fieldCarnet.getText());
+        }
+        filtro.filtroEstudiantes(tblListado.getRowCount(), carnetFiltro, fieldNombre.getText(), comboBoxCodigoCarrera.getSelectedIndex(), modeloTabla, estudiantes);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
-    private javax.swing.JButton btnFiltrar;
-    private javax.swing.JButton btnLimpiarFiltro;
-    private javax.swing.JComboBox<String> comboBoxFiltros;
-    private javax.swing.JTextField fieldBusqueda;
+    private javax.swing.JComboBox<String> comboBoxCodigoCarrera;
+    private javax.swing.JTextField fieldCarnet;
+    private javax.swing.JTextField fieldNombre;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblBusqueda;
+    private javax.swing.JLabel lblCarnet;
     private javax.swing.JLabel lblFiltrar;
     private javax.swing.JLabel lblListadoEstudiantes;
+    private javax.swing.JLabel lblNombre;
     private javax.swing.JPanel pnlFrame;
     private javax.swing.JTable tblListado;
     // End of variables declaration//GEN-END:variables
