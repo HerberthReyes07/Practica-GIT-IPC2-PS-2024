@@ -4,6 +4,7 @@
  */
 package backend;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,6 +12,7 @@ import javax.swing.JOptionPane;
 import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -112,11 +114,14 @@ public class Bibliotecario {
         }
     }
 
-    public void nuevoPrestamoLeido(Prestamo prt, ArrayList<Prestamo> prestamos, ArrayList<ErrorLecturaArchivo> erroresLectura,
+    public void nuevoPrestamoLeido(Prestamo prt, ArrayList<Prestamo> prestamos, ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura,
             ArrayList<String> mensajeError) {
         if ((prt.getCodigoLibro() != null && !prt.getCodigoLibro().equals("CNV")) && prt.getCarnetEstudiante() >= 0
                 && (!isAllBlank(prt.getFecha()) && !prt.getFecha().equals("FNV"))) {
+            int numeroEstudiante = buscarEstudiante(estudiantes, prt.getCarnetEstudiante());
+            prt.setCarreraEstudiante(estudiantes.get(numeroEstudiante).getCodigoCarrera());
             prestamos.add(prt);
+
         } else {
             if (prt.getCodigoLibro() == null) {
                 mensajeError.add("CODIGO_LIBRO: ausente");
@@ -300,11 +305,12 @@ public class Bibliotecario {
         }
     }
 
-    private boolean buscarEstudiante(ArrayList<Estudiante> estudiantes, int carnet) {
-        boolean encontrado = false;
-        for (Estudiante estudiante : estudiantes) {
-            if (estudiante.getCarnet() == carnet) {
-                encontrado = true;
+    private int buscarEstudiante(ArrayList<Estudiante> estudiantes, int carnet) {
+        //boolean encontrado = false;
+        int encontrado = -1;
+        for (int i = 0; i < estudiantes.size(); i++) {
+            if (estudiantes.get(i).getCarnet() == carnet) {
+                encontrado = i;
             }
         }
         return encontrado;
@@ -312,7 +318,7 @@ public class Bibliotecario {
 
     public int verificarPrestamosEstudiante(ArrayList<Estudiante> estudiantes, int carnet) {
 
-        if (buscarEstudiante(estudiantes, carnet)) {
+        if (buscarEstudiante(estudiantes, carnet) > 0) {
             for (Estudiante estudiante : estudiantes) {
                 if (estudiante.getCarnet() == carnet) {
                     return estudiante.getNumeroPrestamos();
@@ -357,12 +363,11 @@ public class Bibliotecario {
             int carnetEstudiante, String codigoLibro, String fecha) {
         Prestamo prestamo = new Prestamo(codigoLibro, carnetEstudiante, fecha);
         prestamos.add(prestamo);
-        System.out.println(prestamo.toString());
-
         for (Estudiante estudiante : estudiantes) {
             if (estudiante.getCarnet() == carnetEstudiante) {
                 int numeroPrestamos = estudiante.getNumeroPrestamos();
                 estudiante.setNumeroPrestamos(numeroPrestamos - 1);
+                prestamo.setCarreraEstudiante(estudiante.getCodigoCarrera());//pasando codigoCarrera estudiante a prestamo
             }
         }
         for (Libro libro : libros) {
@@ -371,11 +376,12 @@ public class Bibliotecario {
                 libro.setCantidad(copias - 1);
             }
         }
+        System.out.println(prestamo.toString());
     }
 
     public void devolverLibro(ArrayList<Libro> libros, ArrayList<Estudiante> estudiantes, ArrayList<Prestamo> prestamos,
             int carnetEstudiante, String codigoLibro, String fechaDevolucion) {
-        if (buscarEstudiante(estudiantes, carnetEstudiante)) {
+        if (buscarEstudiante(estudiantes, carnetEstudiante) > 0) {
             if (buscarLibro(libros, codigoLibro)) {
                 int numeroPrestamo = buscarPrestamo(prestamos, carnetEstudiante, codigoLibro);
                 if (numeroPrestamo != -1) {
@@ -416,7 +422,11 @@ public class Bibliotecario {
 
                         JOptionPane.showMessageDialog(null, mensajePago, "Pago", JOptionPane.INFORMATION_MESSAGE);
                         JOptionPane.showMessageDialog(null, "El libro se ha devuelto exitosamente", "Devolución", JOptionPane.INFORMATION_MESSAGE);
-
+                        for (Prestamo prestamo : prestamos) {
+                            if (prestamo.getCarnetEstudiante() == carnetEstudiante || prestamo.getCodigoLibro().equals(codigoLibro)) {
+                                prestamo.setActivo(false);
+                            }
+                        }
                     } else {
                         String mensaje = "El libro no se puede devolver porque la fecha de devolución es menor a la del prestamo";
                         JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
@@ -451,6 +461,49 @@ public class Bibliotecario {
     private long calcularDiferenciaDias(LocalDate fecha1, LocalDate fecha2) {
         // Calcular la diferencia de días usando ChronoUnit
         return ChronoUnit.DAYS.between(fecha1, fecha2);
+    }
+
+    public void filtrarPrestamosRango(String fechaInicio, String fechaFin, ArrayList<Prestamo> prestamos, ArrayList<Estudiante> estudiantes,
+            DefaultTableModel modelo, int carrera) throws ParseException {
+
+        if (fechaValida(fechaInicio) && fechaValida(fechaFin)) {
+            LocalDate fechaInicial = LocalDate.parse(fechaInicio);
+            LocalDate fechaFinal = LocalDate.parse(fechaFin);
+
+            long diferenciaDias = calcularDiferenciaDias(fechaInicial, fechaFinal);
+            if (diferenciaDias >= 0) {
+
+                for (Prestamo prestamo : prestamos) {
+                    LocalDate fechaPrestamo = LocalDate.parse(prestamo.getFecha());
+                    if (fechaPrestamo.isAfter(fechaInicial) && fechaPrestamo.isBefore(fechaFinal)
+                            || prestamo.getFecha().equals(fechaFinal)
+                            || prestamo.getFecha().equals(fechaInicio)
+                            && carrera == 0) {
+                        modelo.addRow(new Object[]{
+                            prestamo.getCarnetEstudiante(),
+                            prestamo.getCodigoLibro()
+                        });
+                    } else if (fechaPrestamo.isAfter(fechaInicial) && fechaPrestamo.isBefore(fechaFinal)
+                            || prestamo.getFecha().equals(fechaInicio)
+                            || prestamo.getFecha().equals(fechaInicio)
+                            && prestamo.getCarreraEstudiante() == carrera) {
+                        modelo.addRow(new Object[]{
+                            prestamo.getCarnetEstudiante(),
+                            prestamo.getCodigoLibro()
+                        });
+                    }
+                }
+
+            } else {
+                String mensaje = "La fecha incial no puede ser despues de la fecha final...";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else {
+            String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
 }

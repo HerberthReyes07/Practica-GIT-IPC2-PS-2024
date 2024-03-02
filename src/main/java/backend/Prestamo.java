@@ -13,6 +13,8 @@ public class Prestamo {
     private String codigoLibro;
     private int carnetEstudiante;
     private String fecha;
+    private boolean activo = true;
+    private int carreraEstudiante;
 
     public Prestamo() {
     }
@@ -47,8 +49,24 @@ public class Prestamo {
         this.fecha = fecha;
     }
 
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public int getCarreraEstudiante() {
+        return carreraEstudiante;
+    }
+
+    public void setCarreraEstudiante(int carreraEstudiante) {
+        this.carreraEstudiante = carreraEstudiante;
+    }
+
     @Override
     public String toString() {
-        return "Prestamo{" + "codigoLibro=" + codigoLibro + ", carnetEstudiante=" + carnetEstudiante + ", fecha=" + fecha + '}';
+        return "Prestamo{" + "codigoLibro=" + codigoLibro + ", carnetEstudiante=" + carnetEstudiante + ", fecha=" + fecha + ", activo=" + activo + ", carreraEstudiante=" + carreraEstudiante + '}';
     }
 }

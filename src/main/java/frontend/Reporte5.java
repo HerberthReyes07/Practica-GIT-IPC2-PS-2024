@@ -6,6 +6,11 @@ package frontend;
 
 import backend.Biblioteca;
 import backend.Bibliotecario;
+import backend.Estudiante;
+import backend.Libro;
+import backend.Prestamo;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,7 +20,11 @@ public class Reporte5 extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
     private Bibliotecario bibliotecario;
-    
+    private ArrayList<Prestamo> prestamos;
+    private ArrayList<Estudiante> estudiantes;
+    private ArrayList<Libro> libros;
+    private DefaultTableModel modeloTabla;
+
     /**
      * Creates new form Reporte5
      */
@@ -23,6 +32,22 @@ public class Reporte5 extends javax.swing.JFrame {
         initComponents();
         this.biblioteca = biblioteca;
         this.bibliotecario = biblioteca.getBibliotecario();
+        this.prestamos = biblioteca.getPrestamos();
+        this.estudiantes = biblioteca.getEstudiantes();
+        this.libros = biblioteca.getLibros();
+
+        this.modeloTabla = (DefaultTableModel) tblPrestamos.getModel();
+
+        for (Prestamo prestamo : prestamos) {
+            if (prestamo.isActivo()) {
+                modeloTabla.addRow(new Object[]{
+                    prestamo.getCarnetEstudiante(),
+                    prestamo.getCodigoLibro(),
+                    prestamo.getFecha()
+                });
+            }
+
+        }
         System.out.println("5");
     }
 
@@ -35,26 +60,94 @@ public class Reporte5 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnlFrame = new javax.swing.JPanel();
+        lblPretamos = new javax.swing.JLabel();
+        lblCarnetEstudiante = new javax.swing.JLabel();
+        fieldCarnetEstudiante = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblPrestamos = new javax.swing.JTable();
+        btnRegresar = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        pnlFrame.setBackground(new java.awt.Color(0, 204, 102));
+        pnlFrame.setLayout(null);
+
+        lblPretamos.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        lblPretamos.setForeground(new java.awt.Color(0, 0, 0));
+        lblPretamos.setText("Prestamos Actuales De Un Estudiante");
+        pnlFrame.add(lblPretamos);
+        lblPretamos.setBounds(220, 30, 340, 30);
+
+        lblCarnetEstudiante.setForeground(new java.awt.Color(0, 0, 255));
+        lblCarnetEstudiante.setText("Carnet del estudiante: ");
+        pnlFrame.add(lblCarnetEstudiante);
+        lblCarnetEstudiante.setBounds(10, 70, 150, 20);
+        pnlFrame.add(fieldCarnetEstudiante);
+        fieldCarnetEstudiante.setBounds(160, 70, 120, 24);
+
+        tblPrestamos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Carnet Estudiante", "Codigo Libro", "Fecha Prestamo"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblPrestamos);
+
+        pnlFrame.add(jScrollPane1);
+        jScrollPane1.setBounds(160, 110, 452, 402);
+
+        btnRegresar.setBackground(new java.awt.Color(255, 0, 51));
+        btnRegresar.setForeground(new java.awt.Color(0, 0, 0));
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+        pnlFrame.add(btnRegresar);
+        btnRegresar.setBounds(340, 520, 120, 24);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegresar;
+    private javax.swing.JTextField fieldCarnetEstudiante;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCarnetEstudiante;
+    private javax.swing.JLabel lblPretamos;
+    private javax.swing.JPanel pnlFrame;
+    private javax.swing.JTable tblPrestamos;
     // End of variables declaration//GEN-END:variables
 }
