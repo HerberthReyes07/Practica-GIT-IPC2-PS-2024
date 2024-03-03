@@ -7,6 +7,7 @@ package frontend;
 import backend.Biblioteca;
 import backend.Bibliotecario;
 import backend.Estudiante;
+import backend.Filtro;
 import backend.Libro;
 import backend.Prestamo;
 import java.util.ArrayList;
@@ -83,8 +84,14 @@ public class Reporte5 extends javax.swing.JFrame {
         lblCarnetEstudiante.setText("Carnet del estudiante: ");
         pnlFrame.add(lblCarnetEstudiante);
         lblCarnetEstudiante.setBounds(10, 70, 150, 20);
+
+        fieldCarnetEstudiante.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                fieldCarnetEstudianteKeyReleased(evt);
+            }
+        });
         pnlFrame.add(fieldCarnetEstudiante);
-        fieldCarnetEstudiante.setBounds(160, 70, 120, 24);
+        fieldCarnetEstudiante.setBounds(160, 70, 120, 30);
 
         tblPrestamos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -116,7 +123,7 @@ public class Reporte5 extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnRegresar);
-        btnRegresar.setBounds(340, 520, 120, 24);
+        btnRegresar.setBounds(340, 520, 120, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -136,6 +143,17 @@ public class Reporte5 extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void fieldCarnetEstudianteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldCarnetEstudianteKeyReleased
+        // TODO add your handling code here:
+        Filtro filtro = new Filtro();
+        int carnetFiltro = -1;
+        if (bibliotecario.isNumeric(fieldCarnetEstudiante.getText())) {
+            carnetFiltro = Integer.parseInt(fieldCarnetEstudiante.getText());
+        }
+        filtro.filtroPrestamos(tblPrestamos.getRowCount(), carnetFiltro, modeloTabla, prestamos);
+
+    }//GEN-LAST:event_fieldCarnetEstudianteKeyReleased
 
     /**
      * @param args the command line arguments

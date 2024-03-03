@@ -21,7 +21,7 @@ public class Filtro {
         for (int j = 0; j < contadorBorrado; j++) {
             modeloLibros.removeRow(0);
         }
-        
+
         for (int i = 0; i < libros.size(); i++) {
             if (codigo.equals("") && autor.equals("") && titulo.equals("")) {//1
                 librosTemp.add(libros.get(i));
@@ -57,7 +57,7 @@ public class Filtro {
                                         }
                                     } else {
                                         if (!codigo.equals("") && !autor.equals("") && !titulo.equals("")) {//8
-                                            if (libros.get(i).getCodigo().contains(codigo) && libros.get(i).getAutor().contains(autor) 
+                                            if (libros.get(i).getCodigo().contains(codigo) && libros.get(i).getAutor().contains(autor)
                                                     && libros.get(i).getTitulo().contains(titulo)) {
                                                 librosTemp.add(libros.get(i));
                                             }
@@ -70,15 +70,15 @@ public class Filtro {
                 }
             }
         }
-        bibliotecario.ordenarLibros(librosTemp);        
+        bibliotecario.ordenarLibros(librosTemp);
         for (Libro libro : librosTemp) {
-            modeloLibros.addRow(new Object[] {
-            libro.getCodigo(),
-            libro.getAutor(),
-            libro.getTitulo(),
-            libro.getCantidad(),
-            libro.getFechaPublicacion(),
-            libro.getEditorial()
+            modeloLibros.addRow(new Object[]{
+                libro.getCodigo(),
+                libro.getAutor(),
+                libro.getTitulo(),
+                libro.getCantidad(),
+                libro.getFechaPublicacion(),
+                libro.getEditorial()
             });
         }
     }
@@ -147,6 +147,33 @@ public class Filtro {
                 estudiante.getCodigoCarrera(),
                 estudiante.getFechaNacimiento()
             });
+        }
+    }
+
+    public void filtroPrestamos(int contadorBorrado, int carnet, DefaultTableModel modeloPrestamos, ArrayList<Prestamo> prestamos) {
+        
+        String carnetFiltro = Integer.toString(carnet);
+        
+        for (int j = 0; j < contadorBorrado; j++) {
+            modeloPrestamos.removeRow(0);
+        }
+        
+        for (int i = 0; i < prestamos.size(); i++) {
+            if (carnet == -1) {
+                modeloPrestamos.addRow(new Object[]{
+                    prestamos.get(i).getCarnetEstudiante(),
+                    prestamos.get(i).getCodigoLibro(),
+                    prestamos.get(i).getFecha()
+                });
+            } else {
+                if (Integer.toString(prestamos.get(i).getCarnetEstudiante()).contains(carnetFiltro)) {
+                    modeloPrestamos.addRow(new Object[]{
+                    prestamos.get(i).getCarnetEstudiante(),
+                    prestamos.get(i).getCodigoLibro(),
+                    prestamos.get(i).getFecha()
+                });
+                }
+            }
         }
     }
 

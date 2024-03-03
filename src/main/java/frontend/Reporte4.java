@@ -143,6 +143,12 @@ public class Reporte4 extends javax.swing.JFrame {
 
     private void fieldCarnetEstudianteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldCarnetEstudianteKeyReleased
         // TODO add your handling code here:
+        Filtro filtro = new Filtro();
+        int carnetFiltro = -1;
+        if (bibliotecario.isNumeric(fieldCarnetEstudiante.getText())) {
+            carnetFiltro = Integer.parseInt(fieldCarnetEstudiante.getText());
+        }
+        filtro.filtroPrestamos(tblPrestamos.getRowCount(), carnetFiltro, modeloTabla, prestamos);
     }//GEN-LAST:event_fieldCarnetEstudianteKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
