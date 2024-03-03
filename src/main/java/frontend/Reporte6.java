@@ -7,6 +7,7 @@ package frontend;
 import backend.Biblioteca;
 import backend.Bibliotecario;
 import backend.Estudiante;
+import backend.Filtro;
 import backend.Libro;
 import backend.Prestamo;
 import java.text.ParseException;
@@ -181,7 +182,8 @@ public class Reporte6 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             try {
-                bibliotecario.filtrarPrestamosRango(fechaInicio, fechaFin, prestamos, estudiantes, modeloTabla, carrera);
+                Filtro filtro = new Filtro();
+                filtro.filtrarPrestamosRango(fechaInicio, fechaFin, prestamos, estudiantes, modeloTabla, carrera);
             } catch (ParseException ex) {
                 Logger.getLogger(Reporte6.class.getName()).log(Level.SEVERE, null, ex);
             }

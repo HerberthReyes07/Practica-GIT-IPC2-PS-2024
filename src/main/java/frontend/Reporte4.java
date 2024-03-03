@@ -109,7 +109,7 @@ public class Reporte4 extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(fieldCarnetEstudiante);
-        fieldCarnetEstudiante.setBounds(160, 60, 110, 24);
+        fieldCarnetEstudiante.setBounds(160, 60, 110, 30);
 
         btnRegresar.setBackground(new java.awt.Color(255, 0, 0));
         btnRegresar.setForeground(new java.awt.Color(0, 0, 0));
@@ -120,7 +120,7 @@ public class Reporte4 extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnRegresar);
-        btnRegresar.setBounds(340, 520, 130, 24);
+        btnRegresar.setBounds(340, 520, 130, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

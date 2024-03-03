@@ -4,7 +4,11 @@
  */
 package backend;
 
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,9 +22,7 @@ public class Filtro {
     private Bibliotecario bibliotecario = new Bibliotecario();
 
     public void filtroLibros(int contadorBorrado, String codigo, String autor, String titulo, DefaultTableModel modeloLibros, ArrayList<Libro> libros) {
-        for (int j = 0; j < contadorBorrado; j++) {
-            modeloLibros.removeRow(0);
-        }
+        borrarFilas(contadorBorrado, modeloLibros);
 
         for (int i = 0; i < libros.size(); i++) {
             if (codigo.equals("") && autor.equals("") && titulo.equals("")) {//1
@@ -86,10 +88,7 @@ public class Filtro {
     public void filtroEstudiantes(int contadorBorrado, int carnet, String nombre, int codigoCarrera, DefaultTableModel modeloEstudiantes, ArrayList<Estudiante> estudiantes) {
 
         String carnetFiltro = Integer.toString(carnet);
-
-        for (int j = 0; j < contadorBorrado; j++) {
-            modeloEstudiantes.removeRow(0);
-        }
+        borrarFilas(contadorBorrado, modeloEstudiantes);
 
         for (int i = 0; i < estudiantes.size(); i++) {
             if (carnet == -1 && nombre.equals("") && codigoCarrera == 0) {//1
@@ -151,29 +150,150 @@ public class Filtro {
     }
 
     public void filtroPrestamos(int contadorBorrado, int carnet, DefaultTableModel modeloPrestamos, ArrayList<Prestamo> prestamos) {
-        
+
         String carnetFiltro = Integer.toString(carnet);
-        
-        for (int j = 0; j < contadorBorrado; j++) {
-            modeloPrestamos.removeRow(0);
-        }
-        
+        borrarFilas(contadorBorrado, modeloPrestamos);
+
         for (int i = 0; i < prestamos.size(); i++) {
             if (carnet == -1) {
-                modeloPrestamos.addRow(new Object[]{
-                    prestamos.get(i).getCarnetEstudiante(),
-                    prestamos.get(i).getCodigoLibro(),
-                    prestamos.get(i).getFecha()
-                });
+                agregarPrestamosTabla(i, modeloPrestamos, prestamos);
             } else {
                 if (Integer.toString(prestamos.get(i).getCarnetEstudiante()).contains(carnetFiltro)) {
-                    modeloPrestamos.addRow(new Object[]{
-                    prestamos.get(i).getCarnetEstudiante(),
-                    prestamos.get(i).getCodigoLibro(),
-                    prestamos.get(i).getFecha()
-                });
+                    agregarPrestamosTabla(i, modeloPrestamos, prestamos);
                 }
             }
+        }
+    }
+
+    public boolean filtroPrestamoFecha(int numeroReporte, int contadorBorrado, String fechaActual, DefaultTableModel modeloPrestamos, ArrayList<Prestamo> prestamos) {
+
+        boolean prestamoEncontrado = false;
+        borrarFilas(contadorBorrado, modeloPrestamos);
+
+        for (int i = 0; i < prestamos.size(); i++) {
+            if (prestamos.get(i).isActivo()) {
+                LocalDate ldFechaPrestamo = LocalDate.parse(prestamos.get(i).getFecha());
+                LocalDate ldFechaActual = LocalDate.parse(fechaActual);
+                long diferenciaDias = bibliotecario.calcularDiferenciaDias(ldFechaPrestamo, ldFechaActual);
+
+                if ((diferenciaDias == 3 && numeroReporte == 1) || (diferenciaDias > 3 && numeroReporte == 2)) {
+                    agregarPrestamosTabla(i, modeloPrestamos, prestamos);
+                    prestamoEncontrado = true;
+                }
+            }
+        }
+        return prestamoEncontrado;
+    }
+
+    public boolean filtroPrestamoIntervaloFecha(int contadorBorrado, boolean mostrarTodos, String fechaInicio, String fechaFin, DefaultTableModel modeloPrestamos, ArrayList<Prestamo> prestamos,
+            JLabel lblDemora, JLabel lblNormal, JLabel lblTotal) {
+
+        boolean prestamoEncontrado = false;
+        int totalPagoNormal = 0;
+        int totalPagoDemora = 0;
+        borrarFilas(contadorBorrado, modeloPrestamos);
+
+        for (int i = 0; i < prestamos.size(); i++) {
+
+            if (!prestamos.get(i).isActivo()) {
+
+                if (!mostrarTodos) {
+                    LocalDate ldFechaInicial = LocalDate.parse(fechaInicio);
+                    LocalDate ldFechaFinal = LocalDate.parse(fechaFin);
+                    LocalDate ldFechaPrestamo = LocalDate.parse(prestamos.get(i).getFecha());
+
+                    long diferenciaDias = bibliotecario.calcularDiferenciaDias(ldFechaInicial, ldFechaFinal);
+
+                    if (diferenciaDias >= 0) {
+                        if ((ldFechaPrestamo.isAfter(ldFechaInicial) && ldFechaPrestamo.isBefore(ldFechaFinal))
+                                || prestamos.get(i).getFecha().equals(fechaInicio)
+                                || prestamos.get(i).getFecha().equals(fechaFin)) {
+                            agregarPrestamosTabla(i, modeloPrestamos, prestamos);
+                            totalPagoNormal += prestamos.get(i).getPagoNormal();
+                            totalPagoDemora += prestamos.get(i).getPagoDemora();
+                            prestamoEncontrado = true;
+                        }
+                    } else {
+                        String mensaje = "La fecha incial no puede ser mayor a la fecha final";
+                        JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    agregarPrestamosTabla(i, modeloPrestamos, prestamos);
+                    totalPagoNormal += prestamos.get(i).getPagoNormal();
+                    totalPagoDemora += prestamos.get(i).getPagoDemora();
+                    prestamoEncontrado = true;
+                }
+            }
+        }
+
+        if (prestamoEncontrado) {
+            lblNormal.setText("Dinero por prestamo normal: Q" + totalPagoNormal + ".00");
+            lblDemora.setText("Dinero por demora: Q" + totalPagoDemora + ".00");
+            lblTotal.setText("Total de dinero recaudado: Q" + (totalPagoNormal + totalPagoDemora) + ".00");
+        } else {
+            lblNormal.setText("Dinero por prestamo normal:");
+            lblDemora.setText("Dinero por demora:");
+            lblTotal.setText("Total de dinero recaudado:");
+        }
+
+        return prestamoEncontrado;
+    }
+
+    public void filtrarPrestamosRango(String fechaInicio, String fechaFin, ArrayList<Prestamo> prestamos, ArrayList<Estudiante> estudiantes,
+            DefaultTableModel modelo, int carrera) throws ParseException {
+
+        if (bibliotecario.fechaValida(fechaInicio) && bibliotecario.fechaValida(fechaFin)) {
+            LocalDate fechaInicial = LocalDate.parse(fechaInicio);
+            LocalDate fechaFinal = LocalDate.parse(fechaFin);
+
+            long diferenciaDias = bibliotecario.calcularDiferenciaDias(fechaInicial, fechaFinal);
+            if (diferenciaDias >= 0) {
+
+                for (Prestamo prestamo : prestamos) {
+                    LocalDate fechaPrestamo = LocalDate.parse(prestamo.getFecha());
+
+                    if (fechaPrestamo.isAfter(fechaInicial) && fechaPrestamo.isBefore(fechaFinal)
+                            || prestamo.getFecha().equals(fechaFinal)
+                            || prestamo.getFecha().equals(fechaInicio)
+                            && carrera == 0) {
+                        modelo.addRow(new Object[]{
+                            prestamo.getCarnetEstudiante(),
+                            prestamo.getCodigoLibro()
+                        });
+                    } else if (fechaPrestamo.isAfter(fechaInicial) && fechaPrestamo.isBefore(fechaFinal)
+                            || prestamo.getFecha().equals(fechaInicio)
+                            || prestamo.getFecha().equals(fechaInicio)
+                            && prestamo.getCarreraEstudiante() == carrera) {
+                        modelo.addRow(new Object[]{
+                            prestamo.getCarnetEstudiante(),
+                            prestamo.getCodigoLibro()
+                        });
+                    }
+                }
+
+            } else {
+                String mensaje = "La fecha incial no puede ser despues de la fecha final...";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else {
+            String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    private void agregarPrestamosTabla(int index, DefaultTableModel modeloPrestamos, ArrayList<Prestamo> prestamos) {
+        modeloPrestamos.addRow(new Object[]{
+            prestamos.get(index).getCarnetEstudiante(),
+            prestamos.get(index).getCodigoLibro(),
+            prestamos.get(index).getFecha()
+        });
+    }
+
+    private void borrarFilas(int contadorBorrado, DefaultTableModel modelo) {
+        for (int j = 0; j < contadorBorrado; j++) {
+            modelo.removeRow(0);
         }
     }
 
