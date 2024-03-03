@@ -472,25 +472,74 @@ public class Bibliotecario {
 
             long diferenciaDias = calcularDiferenciaDias(fechaInicial, fechaFinal);
             if (diferenciaDias >= 0) {
-
+                System.out.println("carrera a buscar = " + carrera);
                 for (Prestamo prestamo : prestamos) {
                     LocalDate fechaPrestamo = LocalDate.parse(prestamo.getFecha());
                     if (fechaPrestamo.isAfter(fechaInicial) && fechaPrestamo.isBefore(fechaFinal)
                             || prestamo.getFecha().equals(fechaFinal)
-                            || prestamo.getFecha().equals(fechaInicio)
-                            && carrera == 0) {
-                        modelo.addRow(new Object[]{
-                            prestamo.getCarnetEstudiante(),
-                            prestamo.getCodigoLibro()
-                        });
+                            || prestamo.getFecha().equals(fechaInicio)) {
+
+                        if (carrera == 0) {
+                            modelo.addRow(new Object[]{
+                                prestamo.getCarnetEstudiante(),
+                                prestamo.getCodigoLibro()
+                            });
+                        } else if (carrera == 1) {
+                            if (carrera == prestamo.getCarreraEstudiante()) {
+                                modelo.addRow(new Object[]{
+                                    prestamo.getCarnetEstudiante(),
+                                    prestamo.getCodigoLibro()
+                                });
+                            }
+                        } else if (carrera == 2) {
+                            if (carrera == prestamo.getCarreraEstudiante()) {
+                                modelo.addRow(new Object[]{
+                                    prestamo.getCarnetEstudiante(),
+                                    prestamo.getCodigoLibro()
+                                });
+                            }
+                        } else if (carrera == 3) {
+                            if (carrera == prestamo.getCarreraEstudiante()) {
+                                modelo.addRow(new Object[]{
+                                    prestamo.getCarnetEstudiante(),
+                                    prestamo.getCodigoLibro()
+                                });
+                            }
+                        } else if (carrera == 4) {
+                            if (carrera == prestamo.getCarreraEstudiante()) {
+                                modelo.addRow(new Object[]{
+                                    prestamo.getCarnetEstudiante(),
+                                    prestamo.getCodigoLibro()
+                                });
+                            }
+                        } else if (carrera == 5) {
+                            if (carrera == prestamo.getCarreraEstudiante()) {
+                                modelo.addRow(new Object[]{
+                                    prestamo.getCarnetEstudiante(),
+                                    prestamo.getCodigoLibro()
+                                });
+                            }
+                        } else if (carrera == 6) {
+                            if (carrera == prestamo.getCarreraEstudiante()) {
+                                modelo.addRow(new Object[]{
+                                    prestamo.getCarnetEstudiante(),
+                                    prestamo.getCodigoLibro()
+                                });
+                            }
+                        }
+
                     } else if (fechaPrestamo.isAfter(fechaInicial) && fechaPrestamo.isBefore(fechaFinal)
                             || prestamo.getFecha().equals(fechaInicio)
                             || prestamo.getFecha().equals(fechaInicio)
-                            && prestamo.getCarreraEstudiante() == carrera) {
-                        modelo.addRow(new Object[]{
-                            prestamo.getCarnetEstudiante(),
-                            prestamo.getCodigoLibro()
-                        });
+                            && carrera != 0) {
+
+                        if (prestamo.getCarreraEstudiante() == carrera) {
+                            System.out.println("estudiante con carrera: " + carrera + " encontrado");
+                            modelo.addRow(new Object[]{
+                                prestamo.getCarnetEstudiante(),
+                                prestamo.getCodigoLibro()
+                            });
+                        }
                     }
                 }
 
@@ -503,7 +552,5 @@ public class Bibliotecario {
             String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         }
-
     }
-
 }
