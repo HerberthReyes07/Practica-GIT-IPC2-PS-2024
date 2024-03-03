@@ -38,18 +38,14 @@ public class Reporte5 extends javax.swing.JFrame {
         this.libros = biblioteca.getLibros();
 
         this.modeloTabla = (DefaultTableModel) tblPrestamos.getModel();
-
-        for (Prestamo prestamo : prestamos) {
-            if (prestamo.isActivo()) {
-                modeloTabla.addRow(new Object[]{
-                    prestamo.getCarnetEstudiante(),
-                    prestamo.getCodigoLibro(),
-                    prestamo.getFecha()
-                });
-            }
-
+        filtro();
+        /*Filtro filtro = new Filtro();
+        int carnetFiltro = -1;
+        if (bibliotecario.isNumeric(fieldCarnetEstudiante.getText())) {
+            carnetFiltro = Integer.parseInt(fieldCarnetEstudiante.getText());
         }
-        System.out.println("5");
+        filtro.filtroPrestamoLibro(tblPrestamos.getRowCount(), carnetFiltro, modeloTabla, prestamos, libros, estudiantes);
+        */
     }
 
     /**
@@ -76,14 +72,14 @@ public class Reporte5 extends javax.swing.JFrame {
 
         lblPretamos.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         lblPretamos.setForeground(new java.awt.Color(0, 0, 0));
-        lblPretamos.setText("Prestamos Actuales De Un Estudiante");
+        lblPretamos.setText("Libros prestados actualmente a un estudiante");
         pnlFrame.add(lblPretamos);
-        lblPretamos.setBounds(220, 30, 340, 30);
+        lblPretamos.setBounds(260, 30, 399, 30);
 
         lblCarnetEstudiante.setForeground(new java.awt.Color(0, 0, 255));
         lblCarnetEstudiante.setText("Carnet del estudiante: ");
         pnlFrame.add(lblCarnetEstudiante);
-        lblCarnetEstudiante.setBounds(10, 70, 150, 20);
+        lblCarnetEstudiante.setBounds(20, 80, 150, 30);
 
         fieldCarnetEstudiante.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -91,18 +87,18 @@ public class Reporte5 extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(fieldCarnetEstudiante);
-        fieldCarnetEstudiante.setBounds(160, 70, 120, 30);
+        fieldCarnetEstudiante.setBounds(200, 80, 120, 30);
 
         tblPrestamos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Carnet Estudiante", "Codigo Libro", "Fecha Prestamo"
+                "Carnet Estudiante", "Nombre", "Codigo Libro", "Titulo", "Autor", "Cantidad Copias"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -112,7 +108,7 @@ public class Reporte5 extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblPrestamos);
 
         pnlFrame.add(jScrollPane1);
-        jScrollPane1.setBounds(160, 110, 452, 402);
+        jScrollPane1.setBounds(50, 130, 800, 402);
 
         btnRegresar.setBackground(new java.awt.Color(255, 0, 51));
         btnRegresar.setForeground(new java.awt.Color(0, 0, 0));
@@ -123,17 +119,19 @@ public class Reporte5 extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnRegresar);
-        btnRegresar.setBounds(340, 520, 120, 30);
+        btnRegresar.setBounds(300, 550, 120, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
+            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 899, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -146,15 +144,23 @@ public class Reporte5 extends javax.swing.JFrame {
 
     private void fieldCarnetEstudianteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldCarnetEstudianteKeyReleased
         // TODO add your handling code here:
+        /*Filtro filtro = new Filtro();
+        int carnetFiltro = -1;
+        if (bibliotecario.isNumeric(fieldCarnetEstudiante.getText())) {
+            carnetFiltro = Integer.parseInt(fieldCarnetEstudiante.getText());
+        }
+        filtro.filtroPrestamoLibro(tblPrestamos.getRowCount(), carnetFiltro, modeloTabla, prestamos, libros, estudiantes);*/
+        filtro();
+    }//GEN-LAST:event_fieldCarnetEstudianteKeyReleased
+
+    private void filtro(){
         Filtro filtro = new Filtro();
         int carnetFiltro = -1;
         if (bibliotecario.isNumeric(fieldCarnetEstudiante.getText())) {
             carnetFiltro = Integer.parseInt(fieldCarnetEstudiante.getText());
         }
-        filtro.filtroPrestamos(tblPrestamos.getRowCount(), carnetFiltro, modeloTabla, prestamos);
-
-    }//GEN-LAST:event_fieldCarnetEstudianteKeyReleased
-
+        filtro.filtroPrestamoLibro(tblPrestamos.getRowCount(), carnetFiltro, modeloTabla, prestamos, libros, estudiantes);
+    }
     /**
      * @param args the command line arguments
      */

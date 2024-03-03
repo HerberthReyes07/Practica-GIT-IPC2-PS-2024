@@ -67,7 +67,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         pnlFrame.add(lblTitulo);
         lblTitulo.setBounds(290, 20, 220, 50);
 
-        comboBoxReportes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1. Prestamos de libros a entregar hoy", "2. Prestamos de libros con demora", "3. Dinero recaudado en intervalo de tiempo", "4. Todos los prestamos hechos a un estudiante", "5. Prestamos actuales a un estudiante", "6. Prestamos hechos a cada carrera en intervalo de tiempo" }));
+        comboBoxReportes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1. Prestamos de libros a entregar hoy", "2. Prestamos de libros con demora", "3. Dinero recaudado en intervalo de tiempo", "4. Todos los prestamos hechos a un estudiante", "5. Libros prestados actualmente a un estudiante", "6. Prestamos hechos a cada carrera en intervalo de tiempo" }));
         comboBoxReportes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxReportesActionPerformed(evt);

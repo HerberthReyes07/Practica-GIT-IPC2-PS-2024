@@ -165,6 +165,42 @@ public class Filtro {
         }
     }
 
+    public void filtroPrestamoLibro(int contadorBorrado, int carnet, DefaultTableModel modeloPrestamos, ArrayList<Prestamo> prestamos, ArrayList<Libro> libros, ArrayList<Estudiante> estudiantes) {
+
+        String carnetFiltro = Integer.toString(carnet);
+        borrarFilas(contadorBorrado, modeloPrestamos);
+
+        for (int i = 0; i < prestamos.size(); i++) {
+            if (prestamos.get(i).isActivo()) {
+                int indexLibro = bibliotecario.buscarLibro(libros, prestamos.get(i).getCodigoLibro());
+                int indexEstudiante = bibliotecario.buscarEstudiante(estudiantes, prestamos.get(i).getCarnetEstudiante());
+                
+                if (carnet == -1) {
+                    modeloPrestamos.addRow(new Object[]{
+                        prestamos.get(i).getCarnetEstudiante(),
+                        estudiantes.get(indexEstudiante).getNombre(),
+                        prestamos.get(i).getCodigoLibro(),
+                        libros.get(indexLibro).getTitulo(),
+                        libros.get(indexLibro).getAutor(),
+                        libros.get(indexLibro).getCantidad()
+                    });
+                } else {
+                    if (Integer.toString(prestamos.get(i).getCarnetEstudiante()).contains(carnetFiltro)) {
+                        modeloPrestamos.addRow(new Object[]{
+                            prestamos.get(i).getCarnetEstudiante(),
+                            estudiantes.get(indexEstudiante).getNombre(),
+                            prestamos.get(i).getCodigoLibro(),
+                            libros.get(indexLibro).getTitulo(),
+                            libros.get(indexLibro).getAutor(),
+                            libros.get(indexLibro).getCantidad()
+                        });
+                    }
+                }
+            }
+        }
+
+    }
+
     public boolean filtroPrestamoFecha(int numeroReporte, int contadorBorrado, String fechaActual, DefaultTableModel modeloPrestamos, ArrayList<Prestamo> prestamos) {
 
         boolean prestamoEncontrado = false;

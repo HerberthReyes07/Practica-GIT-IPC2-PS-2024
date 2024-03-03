@@ -303,7 +303,7 @@ public class Bibliotecario {
         }
     }
 
-    private int buscarEstudiante(ArrayList<Estudiante> estudiantes, int carnet) {
+    public int buscarEstudiante(ArrayList<Estudiante> estudiantes, int carnet) {
         //boolean encontrado = false;
         int encontrado = -1;
         for (int i = 0; i < estudiantes.size(); i++) {
@@ -330,20 +330,21 @@ public class Bibliotecario {
         return -2;
     }
 
-    private boolean buscarLibro(ArrayList<Libro> libros, String codigoLibro) {
+    public int buscarLibro(ArrayList<Libro> libros, String codigoLibro) {
 
-        boolean encontrado = false;
-        for (Libro libro : libros) {
-            if (libro.getCodigo().equals(codigoLibro)) {
-                encontrado = true;
+        int encontrado = -1;
+        for (int i = 0; i < libros.size(); i++) {
+            if (libros.get(i).getCodigo().equals(codigoLibro)) {
+                encontrado = i;
             }
+            
         }
         return encontrado;
     }
 
     public int verificarCopias(ArrayList<Libro> libros, String codigoLibro) {
 
-        if (buscarLibro(libros, codigoLibro)) {
+        if (buscarLibro(libros, codigoLibro) >= 0) {
             for (Libro libro : libros) {
                 if (libro.getCodigo().equals(codigoLibro)) {
                     return libro.getCantidad();
@@ -380,7 +381,7 @@ public class Bibliotecario {
     public boolean devolverLibro(ArrayList<Libro> libros, ArrayList<Estudiante> estudiantes, ArrayList<Prestamo> prestamos,
             int carnetEstudiante, String codigoLibro, String fechaDevolucion) {
         if (buscarEstudiante(estudiantes, carnetEstudiante) >= 0) {
-            if (buscarLibro(libros, codigoLibro)) {
+            if (buscarLibro(libros, codigoLibro) >= 0) {
                 int numeroPrestamo = buscarPrestamo(prestamos, carnetEstudiante, codigoLibro);
                 if (numeroPrestamo != -1) {
 
