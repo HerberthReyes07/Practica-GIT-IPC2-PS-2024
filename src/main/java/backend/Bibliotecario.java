@@ -274,16 +274,35 @@ public class Bibliotecario {
     }
 
     public boolean validarRegistroEstudiante(ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura, ArrayList<String> mensajeError,
-            int carnet, String nombre, int codigoCarrera, String fechaNacimiento/*, boolean existeFechaNacimiento*/) {
+            String carnetEstudiante, String nombre, String codigoCarrera, String fechaNacimiento/*, boolean existeFechaNacimiento*/) {
 
-        String codigoCarreraStr = Integer.toString(codigoCarrera);
+        String codigoCarreraStr = codigoCarrera;
+
+        int carnet;
+        int carrera;
+        try {
+            carnet = Integer.parseInt(carnetEstudiante);
+        } catch (NumberFormatException e) {
+            String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try {
+            carrera = Integer.parseInt(codigoCarrera);
+        } catch (NumberFormatException e) {
+            String mensaje = "En el campo: Codigo Carrera,\nDebe ingresar un valor numerico entero positivo";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
         if (codigoCarreraValido(codigoCarreraStr)) {
             if (!isAllBlank(fechaNacimiento) && !fechaValida(fechaNacimiento)) {
                 String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            Estudiante estudianteTmp = new Estudiante(carnet, nombre, codigoCarrera, fechaNacimiento);
+            Estudiante estudianteTmp = new Estudiante(carnet, nombre, carrera, fechaNacimiento);
             estudiantes.add(estudianteTmp);
             if (verificarCarnetEstudianteRepetido(estudiantes, erroresLectura, mensajeError)) {
 
@@ -337,7 +356,7 @@ public class Bibliotecario {
             if (libros.get(i).getCodigo().equals(codigoLibro)) {
                 encontrado = i;
             }
-            
+
         }
         return encontrado;
     }
@@ -446,7 +465,7 @@ public class Bibliotecario {
             String mensaje = "El estudiante con carnet: " + carnetEstudiante + ", no existe";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         return false;
     }
 
