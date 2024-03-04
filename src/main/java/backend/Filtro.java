@@ -174,7 +174,7 @@ public class Filtro {
             if (prestamos.get(i).isActivo()) {
                 int indexLibro = bibliotecario.buscarLibro(libros, prestamos.get(i).getCodigoLibro());
                 int indexEstudiante = bibliotecario.buscarEstudiante(estudiantes, prestamos.get(i).getCarnetEstudiante());
-                
+
                 if (carnet == -1) {
                     modeloPrestamos.addRow(new Object[]{
                         prestamos.get(i).getCarnetEstudiante(),
@@ -278,7 +278,24 @@ public class Filtro {
     public void filtrarPrestamosRango(String fechaInicio, String fechaFin, ArrayList<Prestamo> prestamos, ArrayList<Estudiante> estudiantes,
             DefaultTableModel modelo, int carrera) throws ParseException {
 
-        if (bibliotecario.fechaValida(fechaInicio) && bibliotecario.fechaValida(fechaFin)) {
+        if (fechaInicio.equals("todos") && fechaFin.equals("todos")) {
+
+            for (Prestamo prestamo : prestamos) {
+                if (carrera == 0) {
+                    modelo.addRow(new Object[]{
+                        prestamo.getCarnetEstudiante(),
+                        prestamo.getCodigoLibro()
+                    });
+                } else {
+                    if (carrera == prestamo.getCarreraEstudiante()) {
+                        modelo.addRow(new Object[]{
+                            prestamo.getCarnetEstudiante(),
+                            prestamo.getCodigoLibro()
+                        });
+                    }
+                }
+            }
+        } else if (bibliotecario.fechaValida(fechaInicio) && bibliotecario.fechaValida(fechaFin)) {
             LocalDate fechaInicial = LocalDate.parse(fechaInicio);
             LocalDate fechaFinal = LocalDate.parse(fechaFin);
 
@@ -296,42 +313,7 @@ public class Filtro {
                                 prestamo.getCarnetEstudiante(),
                                 prestamo.getCodigoLibro()
                             });
-                        } else if (carrera == 1) {
-                            if (carrera == prestamo.getCarreraEstudiante()) {
-                                modelo.addRow(new Object[]{
-                                    prestamo.getCarnetEstudiante(),
-                                    prestamo.getCodigoLibro()
-                                });
-                            }
-                        } else if (carrera == 2) {
-                            if (carrera == prestamo.getCarreraEstudiante()) {
-                                modelo.addRow(new Object[]{
-                                    prestamo.getCarnetEstudiante(),
-                                    prestamo.getCodigoLibro()
-                                });
-                            }
-                        } else if (carrera == 3) {
-                            if (carrera == prestamo.getCarreraEstudiante()) {
-                                modelo.addRow(new Object[]{
-                                    prestamo.getCarnetEstudiante(),
-                                    prestamo.getCodigoLibro()
-                                });
-                            }
-                        } else if (carrera == 4) {
-                            if (carrera == prestamo.getCarreraEstudiante()) {
-                                modelo.addRow(new Object[]{
-                                    prestamo.getCarnetEstudiante(),
-                                    prestamo.getCodigoLibro()
-                                });
-                            }
-                        } else if (carrera == 5) {
-                            if (carrera == prestamo.getCarreraEstudiante()) {
-                                modelo.addRow(new Object[]{
-                                    prestamo.getCarnetEstudiante(),
-                                    prestamo.getCodigoLibro()
-                                });
-                            }
-                        } else if (carrera == 6) {
+                        } else {
                             if (carrera == prestamo.getCarreraEstudiante()) {
                                 modelo.addRow(new Object[]{
                                     prestamo.getCarnetEstudiante(),
@@ -339,27 +321,12 @@ public class Filtro {
                                 });
                             }
                         }
-
-                    } else if (fechaPrestamo.isAfter(fechaInicial) && fechaPrestamo.isBefore(fechaFinal)
-                            || prestamo.getFecha().equals(fechaInicio)
-                            || prestamo.getFecha().equals(fechaInicio)
-                            && carrera != 0) {
-
-                        if (prestamo.getCarreraEstudiante() == carrera) {
-                            System.out.println("estudiante con carrera: " + carrera + " encontrado");
-                            modelo.addRow(new Object[]{
-                                prestamo.getCarnetEstudiante(),
-                                prestamo.getCodigoLibro()
-                            });
-                        }
-                    }
+                    } 
                 }
-
             } else {
                 String mensaje = "La fecha incial no puede ser despues de la fecha final...";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
             }
-
         } else {
             String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
@@ -379,5 +346,4 @@ public class Filtro {
             modelo.removeRow(0);
         }
     }
-
 }

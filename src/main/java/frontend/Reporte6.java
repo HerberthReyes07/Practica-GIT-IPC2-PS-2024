@@ -177,9 +177,20 @@ public class Reporte6 extends javax.swing.JFrame {
         while (modeloTabla.getRowCount() > 0) {
             modeloTabla.removeRow(0);
         }
-        if (fieldFechaInicio.getText().isEmpty() || fieldFechaFin.getText().isEmpty()) {
-            String mensaje = "Ingrese la fecha del prestamo";
+
+        if (fieldFechaInicio.getText().isEmpty() && !fieldFechaFin.getText().isEmpty()
+                || !fieldFechaInicio.getText().isEmpty() && fieldFechaFin.getText().isEmpty()) {
+            String mensaje = "Ingrese la fecha del prestamo faltante";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (fieldFechaInicio.getText().isEmpty() || fieldFechaFin.getText().isEmpty()) {
+            fechaInicio = "todos";
+            fechaFin = "todos";
+            try {
+                Filtro filtro = new Filtro();
+                filtro.filtrarPrestamosRango(fechaInicio, fechaFin, prestamos, estudiantes, modeloTabla, carrera);
+            } catch (ParseException ex) {
+                Logger.getLogger(Reporte6.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             try {
                 Filtro filtro = new Filtro();
