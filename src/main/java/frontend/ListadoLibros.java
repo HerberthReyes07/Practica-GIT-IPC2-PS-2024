@@ -20,7 +20,7 @@ public class ListadoLibros extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
     private ArrayList<Libro> libros;
-    private Bibliotecario bibliotecario;
+    private Bibliotecario bibliotecario = new Bibliotecario();
     private DefaultTableModel modeloTabla;
 
     /**
@@ -30,7 +30,6 @@ public class ListadoLibros extends javax.swing.JFrame {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.biblioteca = biblioteca;
-        this.bibliotecario = biblioteca.getBibliotecario();
         this.libros = biblioteca.getLibros();
         
         modeloTabla = (DefaultTableModel) tblListado.getModel();        

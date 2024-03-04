@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 public class Reporte4 extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
-    private Bibliotecario bibliotecario;
+    private Bibliotecario bibliotecario = new Bibliotecario();
     private ArrayList<Prestamo> prestamos;
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<Libro> libros;
@@ -32,7 +32,6 @@ public class Reporte4 extends javax.swing.JFrame {
     public Reporte4(Biblioteca biblioteca) {
         initComponents();
         this.biblioteca = biblioteca;
-        this.bibliotecario = biblioteca.getBibliotecario();
         this.prestamos = biblioteca.getPrestamos();
         this.estudiantes = biblioteca.getEstudiantes();
         this.libros = biblioteca.getLibros();
@@ -46,7 +45,6 @@ public class Reporte4 extends javax.swing.JFrame {
                 prestamo.getFecha()
             });
         }
-        System.out.println("4");
     }
 
     /**

@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 public class Reporte6 extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
-    private Bibliotecario bibliotecario;
+    private Bibliotecario bibliotecario = new Bibliotecario();
     private ArrayList<Prestamo> prestamos;
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<Libro> libros;
@@ -36,11 +36,9 @@ public class Reporte6 extends javax.swing.JFrame {
     public Reporte6(Biblioteca biblioteca) {
         initComponents();
         this.biblioteca = biblioteca;
-        this.bibliotecario = biblioteca.getBibliotecario();
         this.prestamos = biblioteca.getPrestamos();
         this.estudiantes = biblioteca.getEstudiantes();
         this.libros = biblioteca.getLibros();
-        System.out.println("6");
         this.modeloTabla = (DefaultTableModel) tblPrestamos.getModel();
 
         for (Prestamo prestamo : prestamos) {

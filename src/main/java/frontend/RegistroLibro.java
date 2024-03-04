@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
 public class RegistroLibro extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
-    private Bibliotecario bibliotecario;
+    private Bibliotecario bibliotecario = new Bibliotecario();
     private ArrayList<Libro> libros;
     private ArrayList<ErrorLecturaArchivo> erroresLectura = new ArrayList();
     private ArrayList<String> mensajeError = new ArrayList();
@@ -36,7 +36,6 @@ public class RegistroLibro extends javax.swing.JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         SetImageLabel(icnLibro, "src/main/java/iconos/libro.png");
         this.biblioteca = biblioteca;
-        this.bibliotecario = biblioteca.getBibliotecario();
         this.libros = biblioteca.getLibros();
     }
 
