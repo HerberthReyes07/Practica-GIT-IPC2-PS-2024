@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -25,6 +24,8 @@ public class LeerArchivo extends Thread {
     private File archivoEntrada;
     private InterfazIngresoArchivo iia;
     private JLabel lblCarga;
+
+    Bibliotecario bto = new Bibliotecario();
 
     private Libro lbr = new Libro();
     private ArrayList<Libro> libros = new ArrayList();
@@ -51,13 +52,13 @@ public class LeerArchivo extends Thread {
         BufferedReader brp = null;
         try {
             brp = new BufferedReader(new FileReader(archivoEntrada));
-            int linea = 1;
-            int lineaError = 1;
+            //int linea = 1;
+            //int lineaError = 1;
             try {
                 String cadena = brp.readLine();
                 while (cadena != null) {
                     //System.out.println("Cadena: " + cadena);
-                    linea++;
+                    //linea++;
                     switch (cadena) {
                         case "LIBRO":
                             nuevoRegistroLeido();
@@ -93,7 +94,7 @@ public class LeerArchivo extends Thread {
                                                 lbr.setAutor(dato);
                                                 break;
                                             case "CODIGO":
-                                                if (codigoLibroValido(dato)) {
+                                                if (bto.codigoLibroValido(dato)) {
                                                     lbr.setCodigo(dato);
                                                 } else {
                                                     mensajeError.add("CODIGO: '" + dato + "' no valido");
@@ -101,7 +102,7 @@ public class LeerArchivo extends Thread {
                                                 }
                                                 break;
                                             case "CANTIDAD":
-                                                if (isNumeric(dato)) {
+                                                if (bto.isNumeric(dato)) {
                                                     lbr.setCantidad(Integer.parseInt(dato));
                                                 } else {
                                                     mensajeError.add("CANTIDAD: '" + dato + "' no valida");
@@ -116,7 +117,7 @@ public class LeerArchivo extends Thread {
                                     if (enEstudiante) {
                                         switch (tipoDato) {
                                             case "CARNET":
-                                                if (isNumeric(dato)) {
+                                                if (bto.isNumeric(dato)) {
                                                     est.setCarnet(Integer.parseInt(dato));
                                                 } else {
                                                     mensajeError.add("CARNET: '" + dato + "' no valido");
@@ -127,15 +128,9 @@ public class LeerArchivo extends Thread {
                                                 est.setNombre(dato);
                                                 break;
                                             case "CARRERA":
-                                                boolean carreraCorrecta = false;
-                                                if (isNumeric(dato)) {
-                                                    int codigoCarrera = Integer.parseInt(dato);
-                                                    if (codigoCarrera > 0 && codigoCarrera < 6) {
-                                                        est.setCodigoCarrera(codigoCarrera);
-                                                        carreraCorrecta = true;
-                                                    }
-                                                }
-                                                if (!carreraCorrecta) {
+                                                if (bto.codigoCarreraValido(dato)) {
+                                                    est.setCodigoCarrera(Integer.parseInt(dato));
+                                                } else {
                                                     mensajeError.add("CARRERA: '" + dato + "' no valida (1-5)");
                                                     est.setCodigoCarrera(-2);
                                                 }
@@ -148,7 +143,7 @@ public class LeerArchivo extends Thread {
                                     if (enPrestamo) {
                                         switch (tipoDato) {
                                             case "CODIGOLIBRO":
-                                                if (codigoLibroValido(dato)) {
+                                                if (bto.codigoLibroValido(dato)) {
                                                     prt.setCodigoLibro(dato);
                                                 } else {
                                                     mensajeError.add("CODIGO_LIBRO: '" + dato + "' no valido");
@@ -156,7 +151,7 @@ public class LeerArchivo extends Thread {
                                                 }
                                                 break;
                                             case "CARNET":
-                                                if (isNumeric(dato)) {
+                                                if (bto.isNumeric(dato)) {
                                                     prt.setCarnetEstudiante(Integer.parseInt(dato));
                                                 } else {
                                                     mensajeError.add("CARNET_ESTUDIANTE: '" + dato + "' no valido");
@@ -164,23 +159,9 @@ public class LeerArchivo extends Thread {
                                                 }
                                                 break;
                                             case "FECHA":
-                                                boolean formatoCorrecto = false;
-                                                if (dato.contains("-")) {
-                                                    String[] fecha = dato.split("-");
-                                                    if (fecha.length == 3) {
-                                                        String yyyy = fecha[0];
-                                                        String mm = fecha[1];
-                                                        String dd = fecha[2];
-                                                        if (yyyy.length() == 4 && mm.length() == 2 && dd.length() == 2
-                                                                && isNumeric(yyyy) && isNumeric(mm) && isNumeric(dd)) {
-                                                            if (Integer.parseInt(mm) < 13 && Integer.parseInt(dd) < 32) {
-                                                                prt.setFecha(dato);
-                                                                formatoCorrecto = true;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                if (!formatoCorrecto) {
+                                                if (bto.fechaValida(dato)) {
+                                                    prt.setFecha(dato);
+                                                } else {
                                                     mensajeError.add("FECHA: '" + dato + "' no valida");
                                                     prt.setFecha("FNV");
                                                 }
@@ -202,78 +183,11 @@ public class LeerArchivo extends Thread {
                 Logger.getLogger(LeerArchivo.class.getName()).log(Level.SEVERE, null, ex);
             }
             // Verificar errores luego de la lectura en caso de que sea un solo archivo de entrada
-            int contEliminados = 0;
-            int cantidadPrestamos = prestamos.size();
-            for (int i = 0; i < cantidadPrestamos; i++) {
-                boolean codigoLibroEncontrado = false;
-                boolean carnetEstudianteEncontrado = false;
-                for (int j = 0; j < libros.size(); j++) {
-                    if (prestamos.get(i - contEliminados).getCodigoLibro().equals(libros.get(j).getCodigo())) {
-                        codigoLibroEncontrado = true;
-                    }
-                }
-                for (int j = 0; j < estudiantes.size(); j++) {
-                    if (prestamos.get(i - contEliminados).getCarnetEstudiante() == estudiantes.get(j).getCarnet()) {
-                        carnetEstudianteEncontrado = true;
-                    }
-                }
-                if (!codigoLibroEncontrado || !carnetEstudianteEncontrado) {
-                    if (!codigoLibroEncontrado) {
-                        mensajeError.add("CODIGO_LIBRO: '" + prestamos.get(i - contEliminados).getCodigoLibro() + "' no existe");
-                    }
-                    if (!carnetEstudianteEncontrado) {
-                        mensajeError.add("CARNET_ESTUDIANTE: '" + prestamos.get(i - contEliminados).getCarnetEstudiante() + "' no exite");
-                    }
-                    erroresLectura.add(new ErrorLecturaArchivo(3, prestamos.get(i - contEliminados), mensajeError));
-                    prestamos.remove(i - contEliminados);
-                    mensajeError = new ArrayList();
-                    contEliminados++;
-                }
-            }
+            bto.verificarPrestamosLeidos(libros, estudiantes, prestamos, erroresLectura, mensajeError);
             // Verificar que no se repite alguna llave primaria en el archivo de entrada
-            int contLibrosVerificados = 0;
-            while (true) {
-                int cantidadLibros = libros.size();
-                for (int j = 0; j < cantidadLibros; j++) {
-                    if (j < libros.size()) {
-                        if ((libros.get(contLibrosVerificados).getCodigo().equals(libros.get(j).getCodigo()))
-                                && (contLibrosVerificados) != j) {
-                            mensajeError.add("CODIGO: '" + libros.get(j).getCodigo() + "' ya existente en otro libro");
-                            erroresLectura.add(new ErrorLecturaArchivo(1, libros.get(j), mensajeError));
-                            libros.remove(j);
-                            mensajeError = new ArrayList();
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                contLibrosVerificados++;
-                if (contLibrosVerificados == libros.size()) {
-                    break;
-                }
-            }
-            int contEstudiantesVerificados = 0;
-            while (true) {
-                int cantidadEstudiantes = estudiantes.size();
-                for (int j = 0; j < cantidadEstudiantes; j++) {
-                    if (j < estudiantes.size()) {
-                        if ((estudiantes.get(contEstudiantesVerificados).getCarnet() == estudiantes.get(j).getCarnet())
-                                && (contEstudiantesVerificados) != j) {
-                            mensajeError.add("CARNET: '" + estudiantes.get(j).getCarnet() + "' ya existente en otro estudiante");
-                            erroresLectura.add(new ErrorLecturaArchivo(2, estudiantes.get(j), mensajeError));
-                            estudiantes.remove(j);
-                            mensajeError = new ArrayList();
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                contEstudiantesVerificados++;
-                if (contEstudiantesVerificados == estudiantes.size()) {
-                    break;
-                }
-            }
-            
+            bto.verificarCodigoLibroRepetido(libros, erroresLectura, mensajeError);
+            bto.verificarCarnetEstudianteRepetido(estudiantes, erroresLectura, mensajeError);
+
             Thread.sleep(3000);
             bc.setExecute(false);
             iia.verErrores(libros, estudiantes, prestamos, erroresLectura);
@@ -291,74 +205,16 @@ public class LeerArchivo extends Thread {
 
     private void nuevoRegistroLeido() {
         if (enLibro) {
-            if (!isAllBlank(lbr.getTitulo()) && !isAllBlank(lbr.getAutor())
-                    && (lbr.getCodigo() != null && !lbr.getCodigo().equals("CNV")) && lbr.getCantidad() >= 0) {
-                libros.add(lbr);
-            } else {
-                if (isAllBlank(lbr.getTitulo())) {
-                    mensajeError.add("TITULO: ausente");
-                }
-                if (isAllBlank(lbr.getAutor())) {
-                    mensajeError.add("AUTOR: ausente");
-                }
-                if (lbr.getCodigo() == null) {
-                    mensajeError.add("CODIGO: ausente");
-                }
-                if (lbr.getCantidad() == -1) {
-                    mensajeError.add("CANTIDAD: ausente");
-                }
-                erroresLectura.add(new ErrorLecturaArchivo(1, lbr, mensajeError));
-            }
+            bto.nuevoLibroLeido(lbr, libros, erroresLectura, mensajeError);
             enLibro = false;
         } else if (enEstudiante) {
-            if (est.getCarnet() >= 0 && !isAllBlank(est.getNombre()) && est.getCodigoCarrera() >= 0) {
-                estudiantes.add(est);
-            } else {
-                if (est.getCarnet() == -1) {
-                    mensajeError.add("CARNET: ausente");
-                }
-                if (isAllBlank(est.getNombre())) {
-                    mensajeError.add("NOMBRE: ausente");
-                }
-                if (est.getCodigoCarrera() == -1) {
-                    mensajeError.add("CARRERA: ausente");
-                }
-                erroresLectura.add(new ErrorLecturaArchivo(2, est, mensajeError));
-            }
+            bto.nuevoEstudianteLeido(est, estudiantes, erroresLectura, mensajeError);
             enEstudiante = false;
         } else if (enPrestamo) {
-            if ((prt.getCodigoLibro() != null && !prt.getCodigoLibro().equals("CNV")) && prt.getCarnetEstudiante() >= 0
-                    && (!isAllBlank(prt.getFecha()) && !prt.getFecha().equals("FNV"))) {
-                prestamos.add(prt);
-            } else {
-                if (prt.getCodigoLibro() == null) {
-                    mensajeError.add("CODIGO_LIBRO: ausente");
-                }
-                if (prt.getCarnetEstudiante() == -1) {
-                    mensajeError.add("CARNET_ESTUDIANTE: ausente");
-                }
-                if (isAllBlank(prt.getFecha())) {
-                    mensajeError.add("FECHA: ausente");
-                }
-                erroresLectura.add(new ErrorLecturaArchivo(3, prt, mensajeError));
-            }
+            bto.nuevoPrestamoLeido(prt, prestamos, erroresLectura, mensajeError);
             enPrestamo = false;
         }
         mensajeError = new ArrayList();
-    }
-
-    private boolean codigoLibroValido(String dato) {
-        if (dato.contains("-")) {
-            String[] codigo = dato.split("-");
-            if (codigo.length == 2) {
-                String digitos = codigo[0];
-                String letras = codigo[1];
-                if (digitos.length() == 3 && letras.length() == 3 && isNumeric(digitos) && isAllUpperCase(letras)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public File getArchivoEntrada() {
@@ -411,17 +267,5 @@ public class LeerArchivo extends Thread {
 
     public void setErroresLectura(ArrayList<ErrorLecturaArchivo> erroresLectura) {
         this.erroresLectura = erroresLectura;
-    }
-
-    private boolean isNumeric(String digitos) {
-        return StringUtils.isNumeric(digitos);
-    }
-
-    private boolean isAllUpperCase(String letras) {
-        return StringUtils.isAllUpperCase(letras);
-    }
-
-    private static boolean isAllBlank(String dato) {
-        return StringUtils.isAllBlank(dato);
     }
 }

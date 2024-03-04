@@ -4,17 +4,47 @@
  */
 package frontend;
 
+import backend.Biblioteca;
+import backend.Bibliotecario;
+import backend.Filtro;
+import backend.Libro;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ronyrojas
  */
 public class ListadoLibros extends javax.swing.JFrame {
 
+    private Biblioteca biblioteca;
+    private ArrayList<Libro> libros;
+    private Bibliotecario bibliotecario;
+    private DefaultTableModel modeloTabla;
+
     /**
      * Creates new form ListadoLibros
      */
-    public ListadoLibros() {
+    public ListadoLibros(Biblioteca biblioteca) {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.biblioteca = biblioteca;
+        this.bibliotecario = biblioteca.getBibliotecario();
+        this.libros = biblioteca.getLibros();
+        
+        modeloTabla = (DefaultTableModel) tblListado.getModel();        
+        bibliotecario.ordenarLibros(libros);        
+        for (Libro libro : libros) {
+            modeloTabla.addRow(new Object[] {
+            libro.getCodigo(),
+            libro.getAutor(),
+            libro.getTitulo(),
+            libro.getCantidad(),
+            libro.getFechaPublicacion(),
+            libro.getEditorial()
+            });
+        }
     }
 
     /**
@@ -31,12 +61,13 @@ public class ListadoLibros extends javax.swing.JFrame {
         tblListado = new javax.swing.JTable();
         lblListadoLibros = new javax.swing.JLabel();
         lblFiltrar = new javax.swing.JLabel();
-        comboBoxFiltros = new javax.swing.JComboBox<>();
-        fieldBusqueda = new javax.swing.JTextField();
-        lblBusqueda = new javax.swing.JLabel();
+        lblCodigo = new javax.swing.JLabel();
         btnCerrar = new javax.swing.JButton();
-        btnFiltrar = new javax.swing.JButton();
-        btnLimpiarFiltro = new javax.swing.JButton();
+        fieldCodigo = new javax.swing.JTextField();
+        lblAutor = new javax.swing.JLabel();
+        fieldAutor = new javax.swing.JTextField();
+        lblTitulo = new javax.swing.JLabel();
+        fieldTitulo = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,13 +76,20 @@ public class ListadoLibros extends javax.swing.JFrame {
 
         tblListado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Codigo", "Autor", "Titulo", "Copias", "Fecha Publicacion", "Editorial"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblListado);
 
         pnlFrame.add(jScrollPane1);
@@ -66,23 +104,12 @@ public class ListadoLibros extends javax.swing.JFrame {
         lblFiltrar.setForeground(new java.awt.Color(0, 0, 0));
         lblFiltrar.setText("Filtrar por:");
         pnlFrame.add(lblFiltrar);
-        lblFiltrar.setBounds(40, 520, 80, 20);
+        lblFiltrar.setBounds(40, 520, 90, 20);
 
-        comboBoxFiltros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Codigo", "Nombre", "Autor" }));
-        comboBoxFiltros.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxFiltrosActionPerformed(evt);
-            }
-        });
-        pnlFrame.add(comboBoxFiltros);
-        comboBoxFiltros.setBounds(140, 520, 140, 24);
-        pnlFrame.add(fieldBusqueda);
-        fieldBusqueda.setBounds(140, 560, 140, 24);
-
-        lblBusqueda.setForeground(new java.awt.Color(0, 0, 0));
-        lblBusqueda.setText("Item a buscar:");
-        pnlFrame.add(lblBusqueda);
-        lblBusqueda.setBounds(40, 560, 93, 20);
+        lblCodigo.setForeground(new java.awt.Color(0, 0, 0));
+        lblCodigo.setText("Código:");
+        pnlFrame.add(lblCodigo);
+        lblCodigo.setBounds(40, 570, 70, 30);
 
         btnCerrar.setText("Cerrar Listado");
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
@@ -93,13 +120,39 @@ public class ListadoLibros extends javax.swing.JFrame {
         pnlFrame.add(btnCerrar);
         btnCerrar.setBounds(790, 590, 160, 40);
 
-        btnFiltrar.setText("Aplicar Filtro");
-        pnlFrame.add(btnFiltrar);
-        btnFiltrar.setBounds(140, 600, 140, 30);
+        fieldCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                fieldCodigoKeyReleased(evt);
+            }
+        });
+        pnlFrame.add(fieldCodigo);
+        fieldCodigo.setBounds(130, 570, 130, 30);
 
-        btnLimpiarFiltro.setText("Limpiar Filtro");
-        pnlFrame.add(btnLimpiarFiltro);
-        btnLimpiarFiltro.setBounds(330, 600, 130, 30);
+        lblAutor.setForeground(new java.awt.Color(0, 0, 0));
+        lblAutor.setText("Autor:");
+        pnlFrame.add(lblAutor);
+        lblAutor.setBounds(290, 570, 47, 30);
+
+        fieldAutor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                fieldAutorKeyReleased(evt);
+            }
+        });
+        pnlFrame.add(fieldAutor);
+        fieldAutor.setBounds(350, 570, 140, 30);
+
+        lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
+        lblTitulo.setText("Título:");
+        pnlFrame.add(lblTitulo);
+        lblTitulo.setBounds(530, 570, 58, 30);
+
+        fieldTitulo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                fieldTituloKeyReleased(evt);
+            }
+        });
+        pnlFrame.add(fieldTitulo);
+        fieldTitulo.setBounds(600, 570, 150, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -115,25 +168,42 @@ public class ListadoLibros extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void comboBoxFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxFiltrosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxFiltrosActionPerformed
-
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
+    private void fieldCodigoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldCodigoKeyReleased
+        // TODO add your handling code here:
+        filtrar();
+    }//GEN-LAST:event_fieldCodigoKeyReleased
+
+    private void fieldAutorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldAutorKeyReleased
+        // TODO add your handling code here:
+        filtrar();
+    }//GEN-LAST:event_fieldAutorKeyReleased
+
+    private void fieldTituloKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldTituloKeyReleased
+        // TODO add your handling code here:
+        filtrar();
+    }//GEN-LAST:event_fieldTituloKeyReleased
+
+    private void filtrar(){
+        Filtro filtro = new Filtro();
+        filtro.filtroLibros(tblListado.getRowCount(), fieldCodigo.getText(), fieldAutor.getText(), fieldTitulo.getText(), modeloTabla, libros);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
-    private javax.swing.JButton btnFiltrar;
-    private javax.swing.JButton btnLimpiarFiltro;
-    private javax.swing.JComboBox<String> comboBoxFiltros;
-    private javax.swing.JTextField fieldBusqueda;
+    private javax.swing.JTextField fieldAutor;
+    private javax.swing.JTextField fieldCodigo;
+    private javax.swing.JTextField fieldTitulo;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblBusqueda;
+    private javax.swing.JLabel lblAutor;
+    private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblFiltrar;
     private javax.swing.JLabel lblListadoLibros;
+    private javax.swing.JLabel lblTitulo;
     private javax.swing.JPanel pnlFrame;
     private javax.swing.JTable tblListado;
     // End of variables declaration//GEN-END:variables

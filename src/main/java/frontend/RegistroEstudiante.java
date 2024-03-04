@@ -5,8 +5,16 @@
 package frontend;
 
 import backend.Biblioteca;
+import backend.Bibliotecario;
+import backend.ErrorLecturaArchivo;
 import backend.Estudiante;
+import java.awt.Image;
 import java.util.ArrayList;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,16 +25,20 @@ public class RegistroEstudiante extends javax.swing.JFrame {
     /**
      * Creates new form RegistrarEstudiante
      */
-    
     private Biblioteca biblioteca;
+    private Bibliotecario bibliotecario;
     private ArrayList<Estudiante> estudiantes;
-    
+    private ArrayList<ErrorLecturaArchivo> erroresLectura = new ArrayList();
+    private ArrayList<String> mensajeError = new ArrayList();
+
     public RegistroEstudiante(Biblioteca biblioteca) {
         initComponents();
-        
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        SetImageLabel(icnEstudiante, "src/main/java/iconos/estudiante.png");
         this.biblioteca = biblioteca;
-        estudiantes = biblioteca.getEstudiantes();
-        
+        this.bibliotecario = biblioteca.getBibliotecario();
+        this.estudiantes = biblioteca.getEstudiantes();
+
     }
 
     /**
@@ -51,6 +63,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         fieldFecha = new javax.swing.JTextField();
         btnListadoEstudiantes = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        icnEstudiante = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,34 +79,34 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         lblCarnet.setForeground(new java.awt.Color(0, 0, 255));
         lblCarnet.setText("Carnet:");
         pnlFrame.add(lblCarnet);
-        lblCarnet.setBounds(50, 90, 60, 18);
+        lblCarnet.setBounds(50, 90, 60, 22);
 
         lblNombre.setForeground(new java.awt.Color(0, 0, 255));
         lblNombre.setText("Nombre:");
         pnlFrame.add(lblNombre);
-        lblNombre.setBounds(50, 150, 60, 18);
+        lblNombre.setBounds(50, 150, 60, 22);
 
         lblCarrera.setForeground(new java.awt.Color(0, 0, 255));
         lblCarrera.setText("Codigo de Carrera:");
         pnlFrame.add(lblCarrera);
-        lblCarrera.setBounds(50, 210, 130, 18);
+        lblCarrera.setBounds(50, 210, 130, 22);
 
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Nacimiento:");
         pnlFrame.add(lblFecha);
-        lblFecha.setBounds(50, 270, 150, 18);
+        lblFecha.setBounds(50, 270, 150, 22);
 
         fieldCarnet.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCarnet);
-        fieldCarnet.setBounds(50, 110, 150, 24);
+        fieldCarnet.setBounds(50, 110, 150, 30);
 
         fieldNombre.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldNombre);
-        fieldNombre.setBounds(50, 170, 150, 24);
+        fieldNombre.setBounds(50, 170, 150, 30);
 
         fieldCodigoCarrera.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCodigoCarrera);
-        fieldCodigoCarrera.setBounds(50, 230, 150, 24);
+        fieldCodigoCarrera.setBounds(50, 230, 150, 30);
 
         btnRegistrar.setBackground(new java.awt.Color(0, 204, 204));
         btnRegistrar.setForeground(new java.awt.Color(0, 0, 255));
@@ -108,7 +121,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
 
         fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldFecha);
-        fieldFecha.setBounds(50, 300, 150, 24);
+        fieldFecha.setBounds(50, 290, 150, 30);
 
         btnListadoEstudiantes.setBackground(new java.awt.Color(0, 204, 204));
         btnListadoEstudiantes.setForeground(new java.awt.Color(0, 0, 255));
@@ -131,6 +144,8 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         });
         pnlFrame.add(btnCancelar);
         btnCancelar.setBounds(203, 390, 100, 30);
+        pnlFrame.add(icnEstudiante);
+        icnEstudiante.setBounds(290, 130, 190, 170);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -148,19 +163,49 @@ public class RegistroEstudiante extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        int carnet = Integer.parseInt(fieldCarnet.getText());
+
+        int carnet = 0;
+        int codigoCarrera = 0;
         String nombre = fieldNombre.getText();
-        int codigoCarrera = Integer.parseInt(fieldCodigoCarrera.getText());
         String fechaNacimiento = fieldFecha.getText();
-        
-        estudiantes.add(new Estudiante(carnet, nombre, codigoCarrera, fechaNacimiento));
-        this.setVisible(false);
+        boolean datosValidos;
+
+        if (!fieldCarnet.getText().isEmpty()) {
+            try {
+                carnet = Integer.parseInt(fieldCarnet.getText());
+            } catch (NumberFormatException e) {
+                String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        if (!fieldCodigoCarrera.getText().isEmpty()) {
+            try {
+                codigoCarrera = Integer.parseInt(fieldCodigoCarrera.getText());
+            } catch (NumberFormatException e) {
+                String mensaje = "En el campo: Codigo Carrera,\nDebe ingresar un valor numerico entero positivo";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        if (fieldCarnet.getText().isEmpty() || fieldCodigoCarrera.getText().isEmpty() || fieldNombre.getText().isEmpty()) {
+            String mensaje = "Complete los campos vacios";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            datosValidos = bibliotecario.validarRegistroEstudiante(estudiantes, erroresLectura, mensajeError, carnet, nombre, codigoCarrera, fechaNacimiento);
+            if (datosValidos) {
+                fieldCarnet.setText("");
+                fieldCodigoCarrera.setText("");
+                fieldFecha.setText("");
+                fieldNombre.setText("");
+            }
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnListadoEstudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListadoEstudiantesActionPerformed
         // TODO add your handling code here:
         System.out.println("boton registrar");
-        ListadoEstudiantes listadoEstudiantes = new ListadoEstudiantes();
+        ListadoEstudiantes listadoEstudiantes = new ListadoEstudiantes(biblioteca);
         listadoEstudiantes.setVisible(true);
     }//GEN-LAST:event_btnListadoEstudiantesActionPerformed
 
@@ -169,6 +214,12 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void SetImageLabel(JLabel nombreLabel, String ruta) {
+        ImageIcon imagen = new ImageIcon(ruta);
+        Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(nombreLabel.getWidth(), nombreLabel.getHeight(), Image.SCALE_DEFAULT));
+        nombreLabel.setIcon(icono);
+        this.repaint();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnListadoEstudiantes;
@@ -177,6 +228,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
     private javax.swing.JTextField fieldCodigoCarrera;
     private javax.swing.JTextField fieldFecha;
     private javax.swing.JTextField fieldNombre;
+    private javax.swing.JLabel icnEstudiante;
     private javax.swing.JLabel lblCarnet;
     private javax.swing.JLabel lblCarrera;
     private javax.swing.JLabel lblFecha;

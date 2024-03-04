@@ -15,11 +15,13 @@ public class Biblioteca {
     private ArrayList<Libro> libros;
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<Prestamo> prestamos;
+    private Bibliotecario bibliotecario;
 
     public Biblioteca() {
         libros = new ArrayList<Libro>();
         estudiantes = new ArrayList<Estudiante>();
         prestamos = new ArrayList<Prestamo>();
+        bibliotecario = new Bibliotecario();
         
     }
 
@@ -46,5 +48,15 @@ public class Biblioteca {
     public void setPrestamos(ArrayList<Prestamo> prestamos) {
         this.prestamos = prestamos;
     }
+
+    public Bibliotecario getBibliotecario() {
+        return bibliotecario;
+    }
+
+    public void setBibliotecario(Bibliotecario bibliotecario) {
+        this.bibliotecario = bibliotecario;
+    }
+    
+    
     
 }
