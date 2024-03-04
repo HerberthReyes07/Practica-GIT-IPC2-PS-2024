@@ -131,7 +131,6 @@ public class DevolucionLibro extends javax.swing.JFrame {
         String fecha = fieldFecha.getText();
         int carnetEstudiante = 0;
         String codigoLibro = fieldCodigoLibro.getText();
-        //int totalAPagar = 0;
 
         if (!fieldCarnetEstudiante.getText().isEmpty()) {
             try {
@@ -147,7 +146,12 @@ public class DevolucionLibro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             if (bibliotecario.fechaValida(fecha)) {
-                bibliotecario.devolverLibro(libros, estudiantes, prestamos, carnetEstudiante, codigoLibro, fecha);
+                if (bibliotecario.devolverLibro(libros, estudiantes, prestamos, carnetEstudiante, codigoLibro, fecha)) {
+                    fieldCarnetEstudiante.setText("");
+                    fieldCodigoLibro.setText("");
+                    fieldFecha.setText("");
+                }
+                
             } else {
                 String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);

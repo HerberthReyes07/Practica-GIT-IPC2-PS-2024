@@ -4,6 +4,7 @@
  */
 package backend;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,6 +12,7 @@ import javax.swing.JOptionPane;
 import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -112,11 +114,14 @@ public class Bibliotecario {
         }
     }
 
-    public void nuevoPrestamoLeido(Prestamo prt, ArrayList<Prestamo> prestamos, ArrayList<ErrorLecturaArchivo> erroresLectura,
+    public void nuevoPrestamoLeido(Prestamo prt, ArrayList<Prestamo> prestamos, ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura,
             ArrayList<String> mensajeError) {
         if ((prt.getCodigoLibro() != null && !prt.getCodigoLibro().equals("CNV")) && prt.getCarnetEstudiante() >= 0
                 && (!isAllBlank(prt.getFecha()) && !prt.getFecha().equals("FNV"))) {
+            int numeroEstudiante = buscarEstudiante(estudiantes, prt.getCarnetEstudiante());
+            prt.setCarreraEstudiante(estudiantes.get(numeroEstudiante).getCodigoCarrera());
             prestamos.add(prt);
+
         } else {
             if (prt.getCodigoLibro() == null) {
                 mensajeError.add("CODIGO_LIBRO: ausente");
@@ -143,7 +148,6 @@ public class Bibliotecario {
                     codigoLibroEncontrado = true;
                     int numeroCopias = libros.get(j).getCantidad();
                     libros.get(j).setCantidad(numeroCopias - 1);
-                    // Se podria restar una copia del libro ya que esta prestado
                 }
             }
             for (int j = 0; j < estudiantes.size(); j++) {
@@ -151,7 +155,6 @@ public class Bibliotecario {
                     carnetEstudianteEncontrado = true;
                     int numeroPrestamos = estudiantes.get(j).getNumeroPrestamos();
                     estudiantes.get(j).setNumeroPrestamos(numeroPrestamos - 1);
-                    // Se podría añadir un prestamo a la cantidad de prestamos
                 }
             }
             if (!codigoLibroEncontrado || !carnetEstudianteEncontrado) {
@@ -271,16 +274,35 @@ public class Bibliotecario {
     }
 
     public boolean validarRegistroEstudiante(ArrayList<Estudiante> estudiantes, ArrayList<ErrorLecturaArchivo> erroresLectura, ArrayList<String> mensajeError,
-            int carnet, String nombre, int codigoCarrera, String fechaNacimiento/*, boolean existeFechaNacimiento*/) {
+            String carnetEstudiante, String nombre, String codigoCarrera, String fechaNacimiento/*, boolean existeFechaNacimiento*/) {
 
-        String codigoCarreraStr = Integer.toString(codigoCarrera);
+        String codigoCarreraStr = codigoCarrera;
+
+        int carnet;
+        int carrera;
+        try {
+            carnet = Integer.parseInt(carnetEstudiante);
+        } catch (NumberFormatException e) {
+            String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try {
+            carrera = Integer.parseInt(codigoCarrera);
+        } catch (NumberFormatException e) {
+            String mensaje = "En el campo: Codigo Carrera,\nDebe ingresar un valor numerico entero positivo";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
         if (codigoCarreraValido(codigoCarreraStr)) {
             if (!isAllBlank(fechaNacimiento) && !fechaValida(fechaNacimiento)) {
                 String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            Estudiante estudianteTmp = new Estudiante(carnet, nombre, codigoCarrera, fechaNacimiento);
+            Estudiante estudianteTmp = new Estudiante(carnet, nombre, carrera, fechaNacimiento);
             estudiantes.add(estudianteTmp);
             if (verificarCarnetEstudianteRepetido(estudiantes, erroresLectura, mensajeError)) {
 
@@ -300,11 +322,12 @@ public class Bibliotecario {
         }
     }
 
-    private boolean buscarEstudiante(ArrayList<Estudiante> estudiantes, int carnet) {
-        boolean encontrado = false;
-        for (Estudiante estudiante : estudiantes) {
-            if (estudiante.getCarnet() == carnet) {
-                encontrado = true;
+    public int buscarEstudiante(ArrayList<Estudiante> estudiantes, int carnet) {
+        //boolean encontrado = false;
+        int encontrado = -1;
+        for (int i = 0; i < estudiantes.size(); i++) {
+            if (estudiantes.get(i).getCarnet() == carnet) {
+                encontrado = i;
             }
         }
         return encontrado;
@@ -312,7 +335,7 @@ public class Bibliotecario {
 
     public int verificarPrestamosEstudiante(ArrayList<Estudiante> estudiantes, int carnet) {
 
-        if (buscarEstudiante(estudiantes, carnet)) {
+        if (buscarEstudiante(estudiantes, carnet) >= 0) {
             for (Estudiante estudiante : estudiantes) {
                 if (estudiante.getCarnet() == carnet) {
                     return estudiante.getNumeroPrestamos();
@@ -326,20 +349,21 @@ public class Bibliotecario {
         return -2;
     }
 
-    private boolean buscarLibro(ArrayList<Libro> libros, String codigoLibro) {
+    public int buscarLibro(ArrayList<Libro> libros, String codigoLibro) {
 
-        boolean encontrado = false;
-        for (Libro libro : libros) {
-            if (libro.getCodigo().equals(codigoLibro)) {
-                encontrado = true;
+        int encontrado = -1;
+        for (int i = 0; i < libros.size(); i++) {
+            if (libros.get(i).getCodigo().equals(codigoLibro)) {
+                encontrado = i;
             }
+
         }
         return encontrado;
     }
 
     public int verificarCopias(ArrayList<Libro> libros, String codigoLibro) {
 
-        if (buscarLibro(libros, codigoLibro)) {
+        if (buscarLibro(libros, codigoLibro) >= 0) {
             for (Libro libro : libros) {
                 if (libro.getCodigo().equals(codigoLibro)) {
                     return libro.getCantidad();
@@ -357,12 +381,11 @@ public class Bibliotecario {
             int carnetEstudiante, String codigoLibro, String fecha) {
         Prestamo prestamo = new Prestamo(codigoLibro, carnetEstudiante, fecha);
         prestamos.add(prestamo);
-        System.out.println(prestamo.toString());
-
         for (Estudiante estudiante : estudiantes) {
             if (estudiante.getCarnet() == carnetEstudiante) {
                 int numeroPrestamos = estudiante.getNumeroPrestamos();
                 estudiante.setNumeroPrestamos(numeroPrestamos - 1);
+                prestamo.setCarreraEstudiante(estudiante.getCodigoCarrera());//pasando codigoCarrera estudiante a prestamo
             }
         }
         for (Libro libro : libros) {
@@ -371,12 +394,13 @@ public class Bibliotecario {
                 libro.setCantidad(copias - 1);
             }
         }
+        System.out.println(prestamo.toString());
     }
 
-    public void devolverLibro(ArrayList<Libro> libros, ArrayList<Estudiante> estudiantes, ArrayList<Prestamo> prestamos,
+    public boolean devolverLibro(ArrayList<Libro> libros, ArrayList<Estudiante> estudiantes, ArrayList<Prestamo> prestamos,
             int carnetEstudiante, String codigoLibro, String fechaDevolucion) {
-        if (buscarEstudiante(estudiantes, carnetEstudiante)) {
-            if (buscarLibro(libros, codigoLibro)) {
+        if (buscarEstudiante(estudiantes, carnetEstudiante) >= 0) {
+            if (buscarLibro(libros, codigoLibro) >= 0) {
                 int numeroPrestamo = buscarPrestamo(prestamos, carnetEstudiante, codigoLibro);
                 if (numeroPrestamo != -1) {
 
@@ -405,18 +429,25 @@ public class Bibliotecario {
                         String mensajePago = "";
                         if (diferenciaDias > 3) {
                             totalPagar += 15 + ((diferenciaDias - 3) * 10);
+                            prestamos.get(numeroPrestamo).setPagoDemora(totalPagar);
                             mensajePago = "3 días reglamentarios: Q15.00\n"
                                     + (diferenciaDias - 3) + " día(s) de atraso: Q" + ((diferenciaDias - 3) * 10) + ".00\n"
                                     + "Total a pagar: Q" + totalPagar + ".00";
                         } else {
                             totalPagar += diferenciaDias * 5;
+                            prestamos.get(numeroPrestamo).setPagoNormal(totalPagar);
                             mensajePago = diferenciaDias + " día(s) reglamentario(s): Q" + (diferenciaDias * 5) + ".00\n"
                                     + "Total a pagar: Q" + totalPagar + ".00";
                         }
 
                         JOptionPane.showMessageDialog(null, mensajePago, "Pago", JOptionPane.INFORMATION_MESSAGE);
                         JOptionPane.showMessageDialog(null, "El libro se ha devuelto exitosamente", "Devolución", JOptionPane.INFORMATION_MESSAGE);
-
+                        for (Prestamo prestamo : prestamos) {
+                            if (prestamo.getCarnetEstudiante() == carnetEstudiante || prestamo.getCodigoLibro().equals(codigoLibro)) {
+                                prestamo.setActivo(false);
+                            }
+                        }
+                        return true;
                     } else {
                         String mensaje = "El libro no se puede devolver porque la fecha de devolución es menor a la del prestamo";
                         JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
@@ -435,6 +466,7 @@ public class Bibliotecario {
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
+        return false;
     }
 
     private int buscarPrestamo(ArrayList<Prestamo> prestamos, int carnetEstudiante, String codigoLibro) {
@@ -448,8 +480,7 @@ public class Bibliotecario {
         return encontrado;
     }
 
-    private long calcularDiferenciaDias(LocalDate fecha1, LocalDate fecha2) {
-        // Calcular la diferencia de días usando ChronoUnit
+    public long calcularDiferenciaDias(LocalDate fecha1, LocalDate fecha2) {
         return ChronoUnit.DAYS.between(fecha1, fecha2);
     }
 

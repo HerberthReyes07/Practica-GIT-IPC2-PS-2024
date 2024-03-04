@@ -79,7 +79,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         pnlFrame.add(lblTitulo);
         lblTitulo.setBounds(290, 20, 220, 50);
 
-        comboBoxReportes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1. Prestamos de libros a entregar hoy", "2. Prestamos de libros con demora", "3. Dinero recaudado en intervalo de tiempo", "4. Todos los prestamos hechos a un estudiante", "5. Prestamos actuales a un estudiante", "6. Prestamos hechos a cada carrera en intervalo de tiempo" }));
+        comboBoxReportes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1. Prestamos de libros a entregar hoy", "2. Prestamos de libros con demora", "3. Dinero recaudado en intervalo de tiempo", "4. Todos los prestamos hechos a un estudiante", "5. Libros prestados actualmente a un estudiante", "6. Prestamos hechos a cada carrera en intervalo de tiempo" }));
         comboBoxReportes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxReportesActionPerformed(evt);
@@ -219,6 +219,37 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     private void comboBoxReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxReportesActionPerformed
         // TODO add your handling code here:
+        int numeroReporte = comboBoxReportes.getSelectedIndex() + 1;
+
+        System.out.println("NR: " + numeroReporte);
+        switch (numeroReporte) {
+            case 1:
+                Reporte1 reporte1 = new Reporte1(biblioteca);
+                reporte1.setVisible(true);
+                break;
+            case 2:
+                Reporte2 reporte2 = new Reporte2(biblioteca);
+                reporte2.setVisible(true);
+                break;
+            case 3:
+                Reporte3 reporte3 = new Reporte3(biblioteca);
+                reporte3.setVisible(true);
+                break;
+            case 4:
+                Reporte4 reporte4 = new Reporte4(biblioteca);
+                reporte4.setVisible(true);
+                break;
+            case 5:
+                Reporte5 reporte5 = new Reporte5(biblioteca);
+                reporte5.setVisible(true);
+                break;
+            case 6:
+                Reporte6 reporte6 = new Reporte6(biblioteca);
+                reporte6.setVisible(true);
+                break;
+            default:
+                throw new AssertionError();
+        }
     }//GEN-LAST:event_comboBoxReportesActionPerformed
 
 

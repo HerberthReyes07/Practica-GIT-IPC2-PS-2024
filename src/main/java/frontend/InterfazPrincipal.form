@@ -159,7 +159,7 @@
                 <StringItem index="1" value="2. Prestamos de libros con demora"/>
                 <StringItem index="2" value="3. Dinero recaudado en intervalo de tiempo"/>
                 <StringItem index="3" value="4. Todos los prestamos hechos a un estudiante"/>
-                <StringItem index="4" value="5. Prestamos actuales a un estudiante"/>
+                <StringItem index="4" value="5. Libros prestados actualmente a un estudiante"/>
                 <StringItem index="5" value="6. Prestamos hechos a cada carrera en intervalo de tiempo"/>
               </StringArray>
             </Property>

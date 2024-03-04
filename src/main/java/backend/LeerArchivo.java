@@ -214,7 +214,7 @@ public class LeerArchivo extends Thread {
             bto.nuevoEstudianteLeido(est, estudiantes, erroresLectura, mensajeError);
             enEstudiante = false;
         } else if (enPrestamo) {
-            bto.nuevoPrestamoLeido(prt, prestamos, erroresLectura, mensajeError);
+            bto.nuevoPrestamoLeido(prt, prestamos, estudiantes, erroresLectura, mensajeError);
             enPrestamo = false;
         }
         mensajeError = new ArrayList();
