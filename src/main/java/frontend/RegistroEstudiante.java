@@ -164,28 +164,20 @@ public class RegistroEstudiante extends javax.swing.JFrame {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
 
-        int carnet = 0;
-        int codigoCarrera = 0;
+        String carnet = fieldCarnet.getText();
+        String codigoCarrera = fieldCodigoCarrera.getText();
         String nombre = fieldNombre.getText();
         String fechaNacimiento = fieldFecha.getText();
         boolean datosValidos;
 
         if (!fieldCarnet.getText().isEmpty()) {
-            try {
-                carnet = Integer.parseInt(fieldCarnet.getText());
-            } catch (NumberFormatException e) {
-                String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
-                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         if (!fieldCodigoCarrera.getText().isEmpty()) {
-            try {
-                codigoCarrera = Integer.parseInt(fieldCodigoCarrera.getText());
-            } catch (NumberFormatException e) {
-                String mensaje = "En el campo: Codigo Carrera,\nDebe ingresar un valor numerico entero positivo";
-                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            String mensaje = "En el campo: Codigo Carrera,\nDebe ingresar un valor numerico entero positivo";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         if (fieldCarnet.getText().isEmpty() || fieldCodigoCarrera.getText().isEmpty() || fieldNombre.getText().isEmpty()) {
