@@ -43,7 +43,7 @@ public class ErrorEstudiante extends javax.swing.JFrame {
                 carrera = null;
             }
             modelo.addRow(new Object[]{carnet, erroresEnviados.get(i).getEstudianteError().getNombre(),
-                /*erroresEnviados.get(i).getEstudianteError().getCodigoCarrera()*/carrera, "-Ver mensaje-"});
+                carrera, "-Ver mensaje-"});
         }
     }
 

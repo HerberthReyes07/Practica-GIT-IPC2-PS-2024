@@ -4,7 +4,7 @@
  */
 package backend;
 
-import frontend.InterfazIngresoArchivo;
+import frontend.IngresoArchivo;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,26 +22,35 @@ import javax.swing.JLabel;
 public class LeerArchivo extends Thread {
 
     private File archivoEntrada;
-    private InterfazIngresoArchivo iia;
+    private IngresoArchivo ingresoArchivo;
     private JLabel lblCarga;
 
-    Bibliotecario bto = new Bibliotecario();
+    private Bibliotecario bto = new Bibliotecario();
 
     private Libro lbr = new Libro();
-    private ArrayList<Libro> libros = new ArrayList();
+    private ArrayList<Libro> libros;
     private boolean enLibro = false;
 
     private Estudiante est = new Estudiante();
-    private ArrayList<Estudiante> estudiantes = new ArrayList();
+    private ArrayList<Estudiante> estudiantes;
     private boolean enEstudiante = false;
 
     private Prestamo prt = new Prestamo();
-    private ArrayList<Prestamo> prestamos = new ArrayList();
+    private ArrayList<Prestamo> prestamos;
     private boolean enPrestamo = false;
 
     private ArrayList<ErrorLecturaArchivo> erroresLectura = new ArrayList();
     private ArrayList<String> mensajeError = new ArrayList();
 
+    public LeerArchivo(File archivoEntrada, IngresoArchivo ingresoArchivo, JLabel lblCarga, ArrayList<Libro> libros, ArrayList<Estudiante> estudiantes, ArrayList<Prestamo> prestamos) {
+        this.archivoEntrada = archivoEntrada;
+        this.ingresoArchivo = ingresoArchivo;
+        this.lblCarga = lblCarga;
+        this.libros = libros;
+        this.estudiantes = estudiantes;
+        this.prestamos = prestamos;
+    }
+    
     @Override
     public void run() {
         BarraCarga bc = new BarraCarga();
@@ -52,13 +61,9 @@ public class LeerArchivo extends Thread {
         BufferedReader brp = null;
         try {
             brp = new BufferedReader(new FileReader(archivoEntrada));
-            //int linea = 1;
-            //int lineaError = 1;
             try {
                 String cadena = brp.readLine();
                 while (cadena != null) {
-                    //System.out.println("Cadena: " + cadena);
-                    //linea++;
                     switch (cadena) {
                         case "LIBRO":
                             nuevoRegistroLeido();
@@ -182,15 +187,13 @@ public class LeerArchivo extends Thread {
             } catch (IOException ex) {
                 Logger.getLogger(LeerArchivo.class.getName()).log(Level.SEVERE, null, ex);
             }
-            // Verificar errores luego de la lectura en caso de que sea un solo archivo de entrada
             bto.verificarPrestamosLeidos(libros, estudiantes, prestamos, erroresLectura, mensajeError);
-            // Verificar que no se repite alguna llave primaria en el archivo de entrada
             bto.verificarCodigoLibroRepetido(libros, erroresLectura, mensajeError);
             bto.verificarCarnetEstudianteRepetido(estudiantes, erroresLectura, mensajeError);
 
             Thread.sleep(3000);
             bc.setExecute(false);
-            iia.verErrores(libros, estudiantes, prestamos, erroresLectura);
+            ingresoArchivo.verErrores(libros, estudiantes, prestamos, erroresLectura);
 
         } catch (FileNotFoundException | InterruptedException ex) {
             Logger.getLogger(LeerArchivo.class.getName()).log(Level.SEVERE, null, ex);
@@ -215,50 +218,6 @@ public class LeerArchivo extends Thread {
             enPrestamo = false;
         }
         mensajeError = new ArrayList();
-    }
-
-    public File getArchivoEntrada() {
-        return archivoEntrada;
-    }
-
-    public void setArchivoEntrada(File archivoEntrada) {
-        this.archivoEntrada = archivoEntrada;
-    }
-
-    public InterfazIngresoArchivo getIia() {
-        return iia;
-    }
-
-    public void setIia(InterfazIngresoArchivo iia) {
-        this.iia = iia;
-    }
-
-    public void setLblCarga(JLabel lblCarga) {
-        this.lblCarga = lblCarga;
-    }
-
-    public ArrayList<Libro> getLibros() {
-        return libros;
-    }
-
-    public void setLibros(ArrayList<Libro> libros) {
-        this.libros = libros;
-    }
-
-    public ArrayList<Estudiante> getEstudiantes() {
-        return estudiantes;
-    }
-
-    public void setEstudiantes(ArrayList<Estudiante> estudiantes) {
-        this.estudiantes = estudiantes;
-    }
-
-    public ArrayList<Prestamo> getPrestamos() {
-        return prestamos;
-    }
-
-    public void setPrestamos(ArrayList<Prestamo> prestamos) {
-        this.prestamos = prestamos;
     }
 
     public ArrayList<ErrorLecturaArchivo> getErroresLectura() {

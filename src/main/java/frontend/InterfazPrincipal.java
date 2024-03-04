@@ -5,8 +5,10 @@
 package frontend;
 
 import backend.Biblioteca;
-import backend.Bibliotecario;
+import backend.ErrorLecturaArchivo;
+import backend.Estudiante;
 import backend.Libro;
+import backend.Prestamo;
 import java.util.ArrayList;
 
 /**
@@ -15,19 +17,27 @@ import java.util.ArrayList;
  */
 public class InterfazPrincipal extends javax.swing.JFrame {
 
+    //private ArrayList<ErrorLecturaArchivo> errores = new ArrayList();
+    private ArrayList<Libro> libros = new ArrayList();
+    private ArrayList<Estudiante> estudiantes = new ArrayList();
+    private ArrayList<Prestamo> prestamos = new ArrayList();
     private Biblioteca biblioteca;
-    private ArrayList<Libro> libros;
-    private Bibliotecario bibliotecario;
+    //private ArrayList<Libro> libros;
+    //private Bibliotecario bibliotecario;
 
     /**
      * Creates new form InterfazPrincipal
      */
-    public InterfazPrincipal(Biblioteca biblioteca) {
+    public InterfazPrincipal(/*Biblioteca biblioteca*/) {
         initComponents();
+        this.biblioteca = new Biblioteca();
+        this.biblioteca.setLibros(libros);
+        this.biblioteca.setEstudiantes(estudiantes);
+        this.biblioteca.setPrestamos(prestamos);
         //this.setLocationRelativeTo(null);
-        this.biblioteca = biblioteca;
-        libros = biblioteca.getLibros();
-        bibliotecario = biblioteca.getBibliotecario();
+        //this.biblioteca = biblioteca;
+        //libros = biblioteca.getLibros();
+        //bibliotecario = biblioteca.getBibliotecario();
     }
 
     /**
@@ -51,10 +61,12 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         itemRegistrarLibro = new javax.swing.JMenuItem();
         itemRegistrarEstudiante = new javax.swing.JMenuItem();
         menuPrestamos = new javax.swing.JMenu();
-        itemPrestarLibro = new javax.swing.JMenuItem();
         itemDevolverLibro = new javax.swing.JMenuItem();
+        menuImportarDatos = new javax.swing.JMenu();
+        itemLeerArchivo = new javax.swing.JMenuItem();
         menuAyuda = new javax.swing.JMenu();
         menuAcercaDe = new javax.swing.JMenu();
+        itemPrestarLibro = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -122,14 +134,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             }
         });
 
-        itemPrestarLibro.setText("Prestar Libro");
-        itemPrestarLibro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemPrestarLibroActionPerformed(evt);
-            }
-        });
-        menuPrestamos.add(itemPrestarLibro);
-
         itemDevolverLibro.setText("Devolver Libro");
         itemDevolverLibro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -139,6 +143,18 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         menuPrestamos.add(itemDevolverLibro);
 
         menuBar.add(menuPrestamos);
+
+        menuImportarDatos.setText("Importar Datos");
+
+        itemLeerArchivo.setText("Leer archivo de entrada");
+        itemLeerArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemLeerArchivoActionPerformed(evt);
+            }
+        });
+        menuImportarDatos.add(itemLeerArchivo);
+
+        menuBar.add(menuImportarDatos);
 
         menuAyuda.setText("Ayuda");
         menuAyuda.addActionListener(new java.awt.event.ActionListener() {
@@ -154,6 +170,15 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                 menuAcercaDeActionPerformed(evt);
             }
         });
+
+        itemPrestarLibro.setText("Prestar Libro");
+        itemPrestarLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemPrestarLibroActionPerformed(evt);
+            }
+        });
+        menuAcercaDe.add(itemPrestarLibro);
+
         menuBar.add(menuAcercaDe);
 
         setJMenuBar(menuBar);
@@ -199,7 +224,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     private void btnGuardarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarInformacionActionPerformed
         // TODO add your handling code here:
-        System.out.println(libros.toString());
+        //System.out.println(libros.toString());
     }//GEN-LAST:event_btnGuardarInformacionActionPerformed
 
     private void menuPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPrestamosActionPerformed
@@ -218,10 +243,48 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         devolucion.setVisible(true);
     }//GEN-LAST:event_itemDevolverLibroActionPerformed
 
+    private void itemLeerArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLeerArchivoActionPerformed
+        // TODO add your handling code here:
+        IngresoArchivo iia = new IngresoArchivo(biblioteca);
+        iia.setVisible(true);
+    }//GEN-LAST:event_itemLeerArchivoActionPerformed
+
+     public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(InterfazPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(InterfazPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(InterfazPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(InterfazPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new InterfazPrincipal().setVisible(true);
+            }
+        });
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarInformacion;
     private javax.swing.JComboBox<String> comboBoxReportes;
     private javax.swing.JMenuItem itemDevolverLibro;
+    private javax.swing.JMenuItem itemLeerArchivo;
     private javax.swing.JMenuItem itemPrestarLibro;
     private javax.swing.JMenuItem itemRegistrarEstudiante;
     private javax.swing.JMenuItem itemRegistrarLibro;
@@ -232,6 +295,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuAcercaDe;
     private javax.swing.JMenu menuAyuda;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu menuImportarDatos;
     private javax.swing.JMenu menuPrestamos;
     private javax.swing.JMenu menuRegistrar;
     private javax.swing.JPanel pnlFrame;

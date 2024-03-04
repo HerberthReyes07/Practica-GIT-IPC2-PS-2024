@@ -25,11 +25,6 @@ public class ErrorLibro extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         modelo = (DefaultTableModel) jTable1.getModel();
-        /*jTable1.getColumnModel().getColumn(0).setPreferredWidth(135);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(125);
-        jTable1.getColumnModel().getColumn(2).setPreferredWidth(50);
-        jTable1.getColumnModel().getColumn(3).setPreferredWidth(15);
-        jTable1.getColumnModel().getColumn(4).setPreferredWidth(50);*/
     }
 
     /**
@@ -123,7 +118,7 @@ public class ErrorLibro extends javax.swing.JFrame {
                 cantidad = null;
             }
             modelo.addRow(new Object[]{erroresEnviados.get(i).getLibroError().getTitulo(), erroresEnviados.get(i).getLibroError().getAutor(),
-                erroresEnviados.get(i).getLibroError().getCodigo() /*codigo*/, cantidad, "-Ver mensaje-"});
+                erroresEnviados.get(i).getLibroError().getCodigo(), cantidad, "-Ver mensaje-"});
         }
     }
 

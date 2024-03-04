@@ -17,21 +17,22 @@ import javax.swing.JFileChooser;
  *
  * @author herberthreyes
  */
-public class InterfazIngresoArchivo extends javax.swing.JFrame {
+public class IngresoArchivo extends javax.swing.JFrame {
 
     private ArrayList<ErrorLecturaArchivo> erroresEntrada = new ArrayList();
-    private ArrayList<Libro> librosEntrada = new ArrayList();
-    private ArrayList<Estudiante> estudiantesEntrada = new ArrayList();
-    private ArrayList<Prestamo> prestamosEntrada = new ArrayList();
-    private Biblioteca biblioteca;
+    private ArrayList<Libro> libros;
+    private ArrayList<Estudiante> estudiantes;
+    private ArrayList<Prestamo> prestamos;
 
     /**
      * Creates new form InterfazIngresoArchivo
      */
-    public InterfazIngresoArchivo() {
+    public IngresoArchivo(Biblioteca biblioteca) {
         initComponents();
-        this.biblioteca = new Biblioteca();
-        //this.setLocationRelativeTo(null);
+        //this.biblioteca = biblioteca;
+        this.libros = biblioteca.getLibros();
+        this.estudiantes = biblioteca.getEstudiantes();
+        this.prestamos = biblioteca.getPrestamos();
         jLabel1.setVisible(false);
         jButton2.setVisible(false);
         jButton3.setVisible(false);
@@ -58,7 +59,7 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jButton1.setText("Subir Archivo");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -72,7 +73,7 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("BIBLIOTECA - CUNOC");
+        jLabel2.setText("Leer archivo de entrada");
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 3, 15, 0));
 
@@ -100,7 +101,7 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
         });
         jPanel1.add(jButton4);
 
-        jButton5.setText("Ir al Menú Principal");
+        jButton5.setText("Salir");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -111,39 +112,42 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(289, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(306, 306, 306))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(144, 144, 144)
+                        .addGap(80, 80, 80)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(92, 92, 92)
-                        .addComponent(jLabel1))
+                        .addGap(233, 233, 233)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(274, 274, 274)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel1)))
+                .addContainerGap(62, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(220, 220, 220))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(186, 186, 186))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(65, 65, 65)
+                .addGap(40, 40, 40)
                 .addComponent(jLabel2)
                 .addGap(52, 52, 52)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56)
                 .addComponent(jLabel1)
-                .addGap(39, 39, 39)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(85, 85, 85))
+                .addGap(38, 38, 38)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         pack();
@@ -154,10 +158,7 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
         jFileChooser1.setVisible(true);
         int res = jFileChooser1.showOpenDialog(this);
         if (res == JFileChooser.APPROVE_OPTION) {
-            LeerArchivo lra = new LeerArchivo();
-            lra.setArchivoEntrada(jFileChooser1.getSelectedFile());
-            lra.setIia(this);
-            lra.setLblCarga(jLabel1);
+            LeerArchivo lra = new LeerArchivo(jFileChooser1.getSelectedFile(), this,jLabel1, libros, estudiantes, prestamos);
             lra.start();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -203,18 +204,13 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        InterfazPrincipal ip = new InterfazPrincipal(biblioteca);
         this.dispose();
-        ip.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     public void verErrores(ArrayList<Libro> librosAnalizados, ArrayList<Estudiante> estudiantesAnalizados,
             ArrayList<Prestamo> prestamosAnalizados, ArrayList<ErrorLecturaArchivo> erroresAnalizados) {
 
         jButton5.setVisible(true);
-        librosEntrada = librosAnalizados;
-        estudiantesEntrada = estudiantesAnalizados;
-        prestamosEntrada = prestamosAnalizados;
         erroresEntrada = erroresAnalizados;
 
         if (!erroresEntrada.isEmpty()) {
@@ -242,80 +238,18 @@ public class InterfazIngresoArchivo extends javax.swing.JFrame {
             jLabel1.setText("No hay errores en el archivo de entrada");
         }
 
+        System.out.println("INFORMACION ANALIZADA DEL ARCHIVO DE ENTRADA");
         System.out.println("\n----- LIBROS -----");
-        System.out.println("Total de libros: " + librosEntrada.size());
-        System.out.println(librosEntrada);
+        System.out.println("Total de libros: " + librosAnalizados.size());
+        System.out.println(librosAnalizados);
         System.out.println("\n----- ESTUDIANTES -----");
-        System.out.println("Total de estudiantes: " + estudiantesEntrada.size());
-        System.out.println(estudiantesEntrada);
+        System.out.println("Total de estudiantes: " + estudiantesAnalizados.size());
+        System.out.println(estudiantesAnalizados);
         System.out.println("\n----- PRESTAMOS -----");
-        System.out.println("Total de prestamos: " + prestamosEntrada.size());
-        System.out.println(prestamosEntrada);
+        System.out.println("Total de prestamos: " + prestamosAnalizados.size());
+        System.out.println(prestamosAnalizados);
         System.out.println("\n----- ERRORES -----");
         System.out.println(erroresEntrada);
-        
-        biblioteca.setLibros(librosEntrada);
-        biblioteca.setEstudiantes(estudiantesEntrada);
-        biblioteca.setPrestamos(prestamosEntrada);
-    }
-
-    public ArrayList<Libro> getLibrosEntrada() {
-        return librosEntrada;
-    }
-
-    public void setLibrosEntrada(ArrayList<Libro> librosEntrada) {
-        this.librosEntrada = librosEntrada;
-    }
-
-    public ArrayList<Estudiante> getEstudiantesEntrada() {
-        return estudiantesEntrada;
-    }
-
-    public void setEstudiantesEntrada(ArrayList<Estudiante> estudiantesEntrada) {
-        this.estudiantesEntrada = estudiantesEntrada;
-    }
-
-    public ArrayList<Prestamo> getPrestamosEntrada() {
-        return prestamosEntrada;
-    }
-
-    public void setPrestamosEntrada(ArrayList<Prestamo> prestamosEntrada) {
-        this.prestamosEntrada = prestamosEntrada;
-    }
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfazIngresoArchivo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfazIngresoArchivo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfazIngresoArchivo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfazIngresoArchivo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new InterfazIngresoArchivo().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
