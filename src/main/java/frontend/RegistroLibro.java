@@ -66,6 +66,7 @@ public class RegistroLibro extends javax.swing.JFrame {
         btnListadoLibros = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         icnLibro = new javax.swing.JLabel();
+        btnAgregarCopias = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(6, 0));
@@ -75,9 +76,9 @@ public class RegistroLibro extends javax.swing.JFrame {
 
         lblRegistrarLibro.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         lblRegistrarLibro.setForeground(new java.awt.Color(0, 0, 0));
-        lblRegistrarLibro.setText("Registrar Nuevo Libro");
+        lblRegistrarLibro.setText("Registrar Libro");
         pnlFrame.add(lblRegistrarLibro);
-        lblRegistrarLibro.setBounds(190, 30, 210, 40);
+        lblRegistrarLibro.setBounds(250, 30, 140, 40);
 
         lblCodigo.setForeground(new java.awt.Color(0, 0, 255));
         lblCodigo.setText("Codigo:");
@@ -153,7 +154,7 @@ public class RegistroLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnListadoLibros);
-        btnListadoLibros.setBounds(330, 450, 240, 30);
+        btnListadoLibros.setBounds(180, 520, 300, 30);
 
         btnCancelar.setBackground(new java.awt.Color(255, 0, 51));
         btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
@@ -164,9 +165,20 @@ public class RegistroLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnCancelar);
-        btnCancelar.setBounds(220, 510, 130, 30);
+        btnCancelar.setBounds(240, 590, 130, 30);
         pnlFrame.add(icnLibro);
         icnLibro.setBounds(340, 160, 220, 190);
+
+        btnAgregarCopias.setBackground(new java.awt.Color(0, 255, 255));
+        btnAgregarCopias.setForeground(new java.awt.Color(0, 0, 255));
+        btnAgregarCopias.setText("Agregar Copias");
+        btnAgregarCopias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarCopiasActionPerformed(evt);
+            }
+        });
+        pnlFrame.add(btnAgregarCopias);
+        btnAgregarCopias.setBounds(370, 450, 190, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -176,7 +188,9 @@ public class RegistroLibro extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -220,6 +234,12 @@ public class RegistroLibro extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void btnAgregarCopiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarCopiasActionPerformed
+        // TODO add your handling code here:
+        AgregarCopiaLibro agregarCopiaLibro = new AgregarCopiaLibro(biblioteca);
+        agregarCopiaLibro.setVisible(true);
+    }//GEN-LAST:event_btnAgregarCopiasActionPerformed
+
     private void SetImageLabel(JLabel nombreLabel, String ruta) {
         ImageIcon imagen = new ImageIcon(ruta);
         Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(nombreLabel.getWidth(), nombreLabel.getHeight(), Image.SCALE_DEFAULT));
@@ -227,6 +247,7 @@ public class RegistroLibro extends javax.swing.JFrame {
         this.repaint();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarCopias;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnListadoLibros;
     private javax.swing.JButton btnRegistrar;

@@ -368,6 +368,34 @@ public class Bibliotecario {
         return numeroCopias;
     }
 
+    public boolean agregarCopias(ArrayList<Libro> libros, String codigoLibro, String numeroCopias) {
+
+        if (!codigoLibroValido(codigoLibro)) {
+            String mensaje = "Codigo de libro no valido";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!isNumeric(numeroCopias)) {
+            String mensaje = "En el campo: Cantidad de copias nuevas,\nDebe ingresar un valor numerico entero positivo";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        int indexLibro = buscarLibro(libros, codigoLibro);
+        if (indexLibro == -1) {
+            String mensaje = "El libro con codigo: " + codigoLibro + ", no existe";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        int copiasIniciales = libros.get(indexLibro).getCantidad();
+        int copiasAgregar = Integer.parseInt(numeroCopias);
+        libros.get(indexLibro).setCantidad(copiasIniciales + copiasAgregar);
+        
+        return true;
+    }
+
     public void crearPrestamo(ArrayList<Estudiante> estudiantes, ArrayList<Libro> libros, ArrayList<Prestamo> prestamos,
             int carnetEstudiante, String codigoLibro, String fecha) {
         Prestamo prestamo = new Prestamo(codigoLibro, carnetEstudiante, fecha);
@@ -409,7 +437,7 @@ public class Bibliotecario {
 
                         int numeroCopias = libros.get(indexLibro).getCantidad();
                         libros.get(indexLibro).setCantidad(numeroCopias + 1);
-                        
+
                         prestamos.get(indexPrestamo).setActivo(false);
 
                         //calcular el total a pagar
