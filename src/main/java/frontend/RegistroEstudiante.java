@@ -167,9 +167,9 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         String codigoCarrera = fieldCodigoCarrera.getText();
         String nombre = fieldNombre.getText();
         String fechaNacimiento = fieldFecha.getText();
-        boolean datosValidos;
+        //boolean datosValidos;
 
-        if (!fieldCarnet.getText().isEmpty()) {
+        /*if (!fieldCarnet.getText().isEmpty()) {
             String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -177,13 +177,13 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         if (!fieldCodigoCarrera.getText().isEmpty()) {
             String mensaje = "En el campo: Codigo Carrera,\nDebe ingresar un valor numerico entero positivo";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        }*/
 
         if (fieldCarnet.getText().isEmpty() || fieldCodigoCarrera.getText().isEmpty() || fieldNombre.getText().isEmpty()) {
             String mensaje = "Complete los campos vacios";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            datosValidos = bibliotecario.validarRegistroEstudiante(estudiantes, erroresLectura, mensajeError, carnet, nombre, codigoCarrera, fechaNacimiento);
+            boolean datosValidos = bibliotecario.validarRegistroEstudiante(estudiantes, erroresLectura, mensajeError, carnet, nombre, codigoCarrera, fechaNacimiento);
             if (datosValidos) {
                 fieldCarnet.setText("");
                 fieldCodigoCarrera.setText("");

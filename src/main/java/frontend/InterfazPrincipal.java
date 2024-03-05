@@ -69,12 +69,12 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         itemRegistrarLibro = new javax.swing.JMenuItem();
         itemRegistrarEstudiante = new javax.swing.JMenuItem();
         menuPrestamos = new javax.swing.JMenu();
+        itemPrestarLibro = new javax.swing.JMenuItem();
         itemDevolverLibro = new javax.swing.JMenuItem();
         menuImportarDatos = new javax.swing.JMenu();
         itemLeerArchivo = new javax.swing.JMenuItem();
         menuAyuda = new javax.swing.JMenu();
         menuAcercaDe = new javax.swing.JMenu();
-        itemPrestarLibro = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -144,6 +144,14 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             }
         });
 
+        itemPrestarLibro.setText("Prestar Libro");
+        itemPrestarLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemPrestarLibroActionPerformed(evt);
+            }
+        });
+        menuPrestamos.add(itemPrestarLibro);
+
         itemDevolverLibro.setText("Devolver Libro");
         itemDevolverLibro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -180,15 +188,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                 menuAcercaDeActionPerformed(evt);
             }
         });
-
-        itemPrestarLibro.setText("Prestar Libro");
-        itemPrestarLibro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemPrestarLibroActionPerformed(evt);
-            }
-        });
-        menuAcercaDe.add(itemPrestarLibro);
-
         menuBar.add(menuAcercaDe);
 
         setJMenuBar(menuBar);

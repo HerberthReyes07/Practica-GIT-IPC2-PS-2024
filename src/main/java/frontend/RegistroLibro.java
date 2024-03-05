@@ -188,27 +188,15 @@ public class RegistroLibro extends javax.swing.JFrame {
         String codigo = fieldCodigo.getText();
         String autor = fieldAutor.getText();
         String titulo = fieldTitulo.getText();
-        int cantidadCopias = 0;
-        boolean datosValidos;
-        
-        if (!fieldCopias.getText().isEmpty()) {
-            try {
-                cantidadCopias = Integer.parseInt(fieldCopias.getText());
-            } catch (NumberFormatException e) {
-                String mensaje = "En el campo: Cantidad de Copias,\nDebe ingresar un valor numerico entero positivo";
-                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-
+        String cantidadCopias = fieldCopias.getText();
         String fecha = fieldFecha.getText();
         String editorial = fieldEditorial.getText();
 
         if (fieldTitulo.getText().isEmpty() || fieldAutor.getText().isEmpty() || fieldCopias.getText().isEmpty()) {
             String mensaje = "Complete los campos vacios";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-
         } else {
-            datosValidos = bibliotecario.validarRegistroLibro(libros, erroresLectura, mensajeError, titulo, autor, codigo, cantidadCopias, fecha, editorial);
+            boolean datosValidos = bibliotecario.validarRegistroLibro(libros, erroresLectura, mensajeError, titulo, autor, codigo, cantidadCopias, fecha, editorial);
             if (datosValidos) {
                 fieldCodigo.setText("");
                 fieldAutor.setText("");

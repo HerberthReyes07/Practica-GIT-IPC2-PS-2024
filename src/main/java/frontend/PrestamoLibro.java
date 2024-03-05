@@ -161,36 +161,33 @@ public class PrestamoLibro extends javax.swing.JFrame {
     private void btnVerificarPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificarPrestamosActionPerformed
         // TODO add your handling code here:
 
-        int carnet = 0;
-        int prestamosDisponibles = -2;
-        if (!fieldCarnet.getText().isEmpty()) {
-            try {
-                carnet = Integer.parseInt(fieldCarnet.getText());
-            } catch (NumberFormatException e) {
-                String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
-                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
         if (fieldCarnet.getText().isEmpty()) {
-
             String mensaje = "Complete los campos vacios";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
+            if (bibliotecario.isNumeric(fieldCarnet.getText())) {
+                int carnet = Integer.parseInt(fieldCarnet.getText());
+                int prestamosDisponibles = bibliotecario.verificarPrestamosEstudiante(estudiantes, carnet);
+                if (prestamosDisponibles > 0) {
 
-            prestamosDisponibles = bibliotecario.verificarPrestamosEstudiante(estudiantes, carnet);
-            System.out.println("prestamosDisponibles = " + prestamosDisponibles);
-            if (prestamosDisponibles > 0) {
+                    btnVerificarDisponibilidad.setEnabled(true);
+                    btnVerificarPrestamos.setEnabled(false);
+                    fieldCarnet.setEnabled(false);
 
-                btnVerificarDisponibilidad.setEnabled(true);
-                btnVerificarPrestamos.setEnabled(false);
-                fieldCarnet.setEnabled(false);
-
-                String mensaje = "El estudiante tiene: " + prestamosDisponibles + " prestamos disponibles";
-                JOptionPane.showMessageDialog(null, mensaje, "Verificar Prestamos", JOptionPane.INFORMATION_MESSAGE);
-            } else if (prestamosDisponibles <= 0) {
-                String mensaje = "El estudiante no tiene prestamos disponibles";
+                    String mensaje = "El estudiante tiene: " + prestamosDisponibles + " prestamos disponibles";
+                    JOptionPane.showMessageDialog(null, mensaje, "Verificar Prestamos", JOptionPane.INFORMATION_MESSAGE);
+                } else if (prestamosDisponibles == -1) {
+                    String mensaje = "El estudiante con carnet: " + carnet + ", no existe";
+                    JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    String mensaje = "El estudiante no tiene prestamos disponibles";
+                    JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
             }
+
         }
     }//GEN-LAST:event_btnVerificarPrestamosActionPerformed
 
@@ -198,15 +195,11 @@ public class PrestamoLibro extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         String codigoLibro = fieldLibro.getText();
-        int copias;
         if (fieldLibro.getText().isEmpty()) {
-
             String mensaje = "Complete los campos vacios";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-
-            copias = bibliotecario.verificarCopias(libros, codigoLibro);
-            System.out.println("copias = " + copias);
+            int copias = bibliotecario.verificarCopias(libros, codigoLibro);
             if (copias > 0) {
                 btnRealizarPrestamo.setEnabled(true);
                 btnVerificarDisponibilidad.setEnabled(false);
@@ -215,6 +208,9 @@ public class PrestamoLibro extends javax.swing.JFrame {
 
                 String mensaje = "Hay: " + copias + " copias disponibles del libro";
                 JOptionPane.showMessageDialog(null, mensaje, "Verificar Copias", JOptionPane.INFORMATION_MESSAGE);
+            } else if (copias == -1) {
+                String mensaje = "El libro con codigo: " + codigoLibro + ", no existe";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 String mensaje = "No hay copias disponibles del libro solicitado";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
@@ -226,7 +222,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
         // TODO add your handling code here:
         String fecha = fieldFecha.getText();
 
-        if (fieldFecha.getText().isEmpty()) {
+        if (fecha.isEmpty()) {
             String mensaje = "Ingrese la fecha del prestamo";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         } else {

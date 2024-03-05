@@ -180,7 +180,7 @@ public class Reporte6 extends javax.swing.JFrame {
                 || !fieldFechaInicio.getText().isEmpty() && fieldFechaFin.getText().isEmpty()) {
             String mensaje = "Ingrese la fecha del prestamo faltante";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-        } else if (fieldFechaInicio.getText().isEmpty() || fieldFechaFin.getText().isEmpty()) {
+        } else if (fieldFechaInicio.getText().isEmpty() && fieldFechaFin.getText().isEmpty()) {
             fechaInicio = "todos";
             fechaFin = "todos";
             try {

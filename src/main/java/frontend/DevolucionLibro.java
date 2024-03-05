@@ -30,7 +30,6 @@ public class DevolucionLibro extends javax.swing.JFrame {
     public DevolucionLibro(Biblioteca biblioteca) {
         initComponents();
         this.biblioteca = biblioteca;
-        //this.bibliotecario = biblioteca.getBibliotecario();
         this.estudiantes = biblioteca.getEstudiantes();
         this.libros = biblioteca.getLibros();
         this.prestamos = biblioteca.getPrestamos();
@@ -129,29 +128,25 @@ public class DevolucionLibro extends javax.swing.JFrame {
     private void btnCalcularTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularTotalActionPerformed
         // TODO add your handling code here:
         String fecha = fieldFecha.getText();
-        int carnetEstudiante = 0;
+        String carnetEstudiante = fieldCarnetEstudiante.getText();
         String codigoLibro = fieldCodigoLibro.getText();
-
-        if (!fieldCarnetEstudiante.getText().isEmpty()) {
-            try {
-                carnetEstudiante = Integer.parseInt(fieldCarnetEstudiante.getText());
-            } catch (NumberFormatException e) {
-                String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
-                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
 
         if (fieldCarnetEstudiante.getText().isEmpty() || fieldCodigoLibro.getText().isEmpty() || fieldFecha.getText().isEmpty()) {
             String mensaje = "Complete los campos vacios";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             if (bibliotecario.fechaValida(fecha)) {
-                if (bibliotecario.devolverLibro(libros, estudiantes, prestamos, carnetEstudiante, codigoLibro, fecha)) {
-                    fieldCarnetEstudiante.setText("");
-                    fieldCodigoLibro.setText("");
-                    fieldFecha.setText("");
+                if (bibliotecario.isNumeric(carnetEstudiante)) {
+                    int carnet = Integer.parseInt(carnetEstudiante);
+                    if (bibliotecario.devolverLibro(libros, estudiantes, prestamos, carnet, codigoLibro, fecha)) {
+                        fieldCarnetEstudiante.setText("");
+                        fieldCodigoLibro.setText("");
+                        fieldFecha.setText("");
+                    }
+                } else {
+                    String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
+                    JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                
             } else {
                 String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
