@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 public class DevolucionLibro extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
-    private Bibliotecario bibliotecario;
+    private Bibliotecario bibliotecario = new Bibliotecario();
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<Libro> libros;
     private ArrayList<Prestamo> prestamos;
@@ -30,7 +30,7 @@ public class DevolucionLibro extends javax.swing.JFrame {
     public DevolucionLibro(Biblioteca biblioteca) {
         initComponents();
         this.biblioteca = biblioteca;
-        this.bibliotecario = biblioteca.getBibliotecario();
+        //this.bibliotecario = biblioteca.getBibliotecario();
         this.estudiantes = biblioteca.getEstudiantes();
         this.libros = biblioteca.getLibros();
         this.prestamos = biblioteca.getPrestamos();

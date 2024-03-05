@@ -5,10 +5,11 @@
 package frontend;
 
 import backend.Biblioteca;
-import backend.ErrorLecturaArchivo;
+import backend.ControladorArchivoBinario;
 import backend.Estudiante;
 import backend.Libro;
 import backend.Prestamo;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -17,27 +18,34 @@ import java.util.ArrayList;
  */
 public class InterfazPrincipal extends javax.swing.JFrame {
 
-    //private ArrayList<ErrorLecturaArchivo> errores = new ArrayList();
-    private ArrayList<Libro> libros = new ArrayList();
-    private ArrayList<Estudiante> estudiantes = new ArrayList();
-    private ArrayList<Prestamo> prestamos = new ArrayList();
+    ControladorArchivoBinario cab = new ControladorArchivoBinario();
+    File archivoBinario = new File("./biblioteca.bin");
+    private ArrayList<Libro> libros;
+    private ArrayList<Estudiante> estudiantes;
+    private ArrayList<Prestamo> prestamos;
     private Biblioteca biblioteca;
-    //private ArrayList<Libro> libros;
-    //private Bibliotecario bibliotecario;
 
     /**
      * Creates new form InterfazPrincipal
      */
-    public InterfazPrincipal(/*Biblioteca biblioteca*/) {
+    public InterfazPrincipal() {
         initComponents();
-        this.biblioteca = new Biblioteca();
+        this.setLocationRelativeTo(null);
+        Biblioteca bibliotecaArchivoBinario = cab.leerBibliotecaGuardada(archivoBinario);
+        if (bibliotecaArchivoBinario != null) {
+            this.biblioteca = bibliotecaArchivoBinario;
+            libros = bibliotecaArchivoBinario.getLibros();
+            estudiantes = bibliotecaArchivoBinario.getEstudiantes();
+            prestamos = bibliotecaArchivoBinario.getPrestamos();
+        } else {
+            this.biblioteca = new Biblioteca();
+            libros = new ArrayList();
+            estudiantes = new ArrayList();
+            prestamos = new ArrayList();
+        }
         this.biblioteca.setLibros(libros);
         this.biblioteca.setEstudiantes(estudiantes);
         this.biblioteca.setPrestamos(prestamos);
-        //this.setLocationRelativeTo(null);
-        //this.biblioteca = biblioteca;
-        //libros = biblioteca.getLibros();
-        //bibliotecario = biblioteca.getBibliotecario();
     }
 
     /**
@@ -93,6 +101,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         pnlFrame.add(lblReportes);
         lblReportes.setBounds(360, 80, 90, 22);
 
+        btnGuardarInformacion.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         btnGuardarInformacion.setText("Guardar");
         btnGuardarInformacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,10 +111,11 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         pnlFrame.add(btnGuardarInformacion);
         btnGuardarInformacion.setBounds(320, 470, 120, 40);
 
+        lblAlmacenarInfo.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         lblAlmacenarInfo.setForeground(new java.awt.Color(0, 0, 0));
         lblAlmacenarInfo.setText("Almacenar informacion");
         pnlFrame.add(lblAlmacenarInfo);
-        lblAlmacenarInfo.setBounds(290, 430, 181, 22);
+        lblAlmacenarInfo.setBounds(280, 430, 210, 22);
 
         menuRegistrar.setText("Registrar");
 
@@ -221,7 +231,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         int numeroReporte = comboBoxReportes.getSelectedIndex() + 1;
 
-        System.out.println("NR: " + numeroReporte);
         switch (numeroReporte) {
             case 1:
                 Reporte1 reporte1 = new Reporte1(biblioteca);
@@ -255,7 +264,8 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     private void btnGuardarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarInformacionActionPerformed
         // TODO add your handling code here:
-        //System.out.println(libros.toString());
+        cab.guardarBiblioteca(biblioteca, archivoBinario);
+        cab.leerBibliotecaGuardada(archivoBinario);
     }//GEN-LAST:event_btnGuardarInformacionActionPerformed
 
     private void menuPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPrestamosActionPerformed
@@ -276,8 +286,8 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     private void itemLeerArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLeerArchivoActionPerformed
         // TODO add your handling code here:
-        IngresoArchivo iia = new IngresoArchivo(biblioteca);
-        iia.setVisible(true);
+        IngresoArchivo ia = new IngresoArchivo(biblioteca);
+        ia.setVisible(true);
     }//GEN-LAST:event_itemLeerArchivoActionPerformed
 
      public static void main(String args[]) {

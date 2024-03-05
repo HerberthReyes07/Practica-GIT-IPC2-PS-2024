@@ -20,9 +20,8 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
     private ArrayList<Estudiante> estudiantes;
-    private Bibliotecario bibliotecario;
+    private Bibliotecario bibliotecario = new Bibliotecario();
     private DefaultTableModel modeloTabla;
-    //private int contadorBorrar = 0;
 
     /**
      * Creates new form ListadoEstudiantes
@@ -31,10 +30,8 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.biblioteca = biblioteca;
-        this.bibliotecario = biblioteca.getBibliotecario();
         this.estudiantes = biblioteca.getEstudiantes();
 
-        //DefaultTableModel modeloTabla = (DefaultTableModel) tblListado.getModel();
         modeloTabla = (DefaultTableModel) tblListado.getModel();
         bibliotecario.ordenarEstudiantes(estudiantes);
         for (Estudiante estudiante : estudiantes) {
@@ -45,7 +42,6 @@ public class ListadoEstudiantes extends javax.swing.JFrame {
                 estudiante.getFechaNacimiento()
             });
         }
-        //contadorBorrar = estudiantes.size();
     }
 
     /**

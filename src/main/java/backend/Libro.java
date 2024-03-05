@@ -4,11 +4,13 @@
  */
 package backend;
 
+import java.io.Serializable;
+
 /**
  *
  * @author herberthreyes
  */
-public class Libro {
+public class Libro implements Serializable{
 
     private String titulo;
     private String autor;

@@ -26,7 +26,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
      * Creates new form RegistrarEstudiante
      */
     private Biblioteca biblioteca;
-    private Bibliotecario bibliotecario;
+    private Bibliotecario bibliotecario = new Bibliotecario();
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<ErrorLecturaArchivo> erroresLectura = new ArrayList();
     private ArrayList<String> mensajeError = new ArrayList();
@@ -36,7 +36,6 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         SetImageLabel(icnEstudiante, "src/main/java/iconos/estudiante.png");
         this.biblioteca = biblioteca;
-        this.bibliotecario = biblioteca.getBibliotecario();
         this.estudiantes = biblioteca.getEstudiantes();
 
     }

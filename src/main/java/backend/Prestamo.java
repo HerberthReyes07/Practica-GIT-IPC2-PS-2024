@@ -4,11 +4,13 @@
  */
 package backend;
 
+import java.io.Serializable;
+
 /**
  *
  * @author herberthreyes
  */
-public class Prestamo {
+public class Prestamo implements Serializable{
 
     private String codigoLibro;
     private int carnetEstudiante;

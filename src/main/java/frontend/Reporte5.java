@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 public class Reporte5 extends javax.swing.JFrame {
 
     private Biblioteca biblioteca;
-    private Bibliotecario bibliotecario;
+    private Bibliotecario bibliotecario = new Bibliotecario();
     private ArrayList<Prestamo> prestamos;
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<Libro> libros;
@@ -32,20 +32,12 @@ public class Reporte5 extends javax.swing.JFrame {
     public Reporte5(Biblioteca biblioteca) {
         initComponents();
         this.biblioteca = biblioteca;
-        this.bibliotecario = biblioteca.getBibliotecario();
         this.prestamos = biblioteca.getPrestamos();
         this.estudiantes = biblioteca.getEstudiantes();
         this.libros = biblioteca.getLibros();
 
         this.modeloTabla = (DefaultTableModel) tblPrestamos.getModel();
         filtro();
-        /*Filtro filtro = new Filtro();
-        int carnetFiltro = -1;
-        if (bibliotecario.isNumeric(fieldCarnetEstudiante.getText())) {
-            carnetFiltro = Integer.parseInt(fieldCarnetEstudiante.getText());
-        }
-        filtro.filtroPrestamoLibro(tblPrestamos.getRowCount(), carnetFiltro, modeloTabla, prestamos, libros, estudiantes);
-        */
     }
 
     /**
@@ -144,12 +136,6 @@ public class Reporte5 extends javax.swing.JFrame {
 
     private void fieldCarnetEstudianteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldCarnetEstudianteKeyReleased
         // TODO add your handling code here:
-        /*Filtro filtro = new Filtro();
-        int carnetFiltro = -1;
-        if (bibliotecario.isNumeric(fieldCarnetEstudiante.getText())) {
-            carnetFiltro = Integer.parseInt(fieldCarnetEstudiante.getText());
-        }
-        filtro.filtroPrestamoLibro(tblPrestamos.getRowCount(), carnetFiltro, modeloTabla, prestamos, libros, estudiantes);*/
         filtro();
     }//GEN-LAST:event_fieldCarnetEstudianteKeyReleased
 

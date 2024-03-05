@@ -4,25 +4,23 @@
  */
 package backend;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author ronyrojas
  */
-public class Biblioteca {
+public class Biblioteca implements Serializable{
     
     private ArrayList<Libro> libros;
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<Prestamo> prestamos;
-    private Bibliotecario bibliotecario;
 
     public Biblioteca() {
         libros = new ArrayList<Libro>();
         estudiantes = new ArrayList<Estudiante>();
         prestamos = new ArrayList<Prestamo>();
-        bibliotecario = new Bibliotecario();
-        
     }
 
     public ArrayList<Libro> getLibros() {
@@ -49,14 +47,9 @@ public class Biblioteca {
         this.prestamos = prestamos;
     }
 
-    public Bibliotecario getBibliotecario() {
-        return bibliotecario;
+    @Override
+    public String toString() {
+        return "Biblioteca{" + "libros=" + libros + ", estudiantes=" + estudiantes + ", prestamos=" + prestamos + '}';
     }
-
-    public void setBibliotecario(Bibliotecario bibliotecario) {
-        this.bibliotecario = bibliotecario;
-    }
-    
-    
     
 }
