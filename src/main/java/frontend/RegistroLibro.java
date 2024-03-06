@@ -9,6 +9,7 @@ import backend.Bibliotecario;
 import backend.ErrorLecturaArchivo;
 import backend.Libro;
 import java.awt.Image;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -27,6 +28,7 @@ public class RegistroLibro extends javax.swing.JFrame {
     private ArrayList<Libro> libros;
     private ArrayList<ErrorLecturaArchivo> erroresLectura = new ArrayList();
     private ArrayList<String> mensajeError = new ArrayList();
+    private SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Creates new form RegistroLibro
@@ -60,13 +62,13 @@ public class RegistroLibro extends javax.swing.JFrame {
         fieldAutor = new javax.swing.JTextField();
         fieldTitulo = new javax.swing.JTextField();
         fieldCopias = new javax.swing.JTextField();
-        fieldFecha = new javax.swing.JTextField();
         fieldEditorial = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
         btnListadoLibros = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         icnLibro = new javax.swing.JLabel();
         btnAgregarCopias = new javax.swing.JButton();
+        calendario = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(6, 0));
@@ -83,32 +85,32 @@ public class RegistroLibro extends javax.swing.JFrame {
         lblCodigo.setForeground(new java.awt.Color(0, 0, 255));
         lblCodigo.setText("Codigo:");
         pnlFrame.add(lblCodigo);
-        lblCodigo.setBounds(60, 80, 60, 22);
+        lblCodigo.setBounds(60, 80, 60, 18);
 
         lblAutor.setForeground(new java.awt.Color(0, 0, 255));
         lblAutor.setText("Autor:");
         pnlFrame.add(lblAutor);
-        lblAutor.setBounds(60, 140, 60, 22);
+        lblAutor.setBounds(60, 140, 60, 18);
 
         lblTitulo.setForeground(new java.awt.Color(0, 0, 255));
         lblTitulo.setText("Titulo:");
         pnlFrame.add(lblTitulo);
-        lblTitulo.setBounds(60, 200, 50, 22);
+        lblTitulo.setBounds(60, 200, 50, 18);
 
         lblCopias.setForeground(new java.awt.Color(0, 0, 255));
         lblCopias.setText("Cantidad de Copias:");
         pnlFrame.add(lblCopias);
-        lblCopias.setBounds(60, 260, 140, 22);
+        lblCopias.setBounds(60, 260, 140, 18);
 
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Publicacion:");
         pnlFrame.add(lblFecha);
-        lblFecha.setBounds(60, 320, 160, 22);
+        lblFecha.setBounds(60, 320, 160, 18);
 
         lblEditorial.setForeground(new java.awt.Color(0, 0, 255));
         lblEditorial.setText("Editorial:");
         pnlFrame.add(lblEditorial);
-        lblEditorial.setBounds(60, 380, 70, 22);
+        lblEditorial.setBounds(60, 380, 70, 18);
 
         fieldCodigo.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCodigo);
@@ -125,10 +127,6 @@ public class RegistroLibro extends javax.swing.JFrame {
         fieldCopias.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCopias);
         fieldCopias.setBounds(60, 280, 180, 30);
-
-        fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
-        pnlFrame.add(fieldFecha);
-        fieldFecha.setBounds(60, 340, 180, 30);
 
         fieldEditorial.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldEditorial);
@@ -154,11 +152,11 @@ public class RegistroLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnListadoLibros);
-        btnListadoLibros.setBounds(180, 520, 300, 30);
+        btnListadoLibros.setBounds(130, 520, 300, 30);
 
         btnCancelar.setBackground(new java.awt.Color(255, 0, 51));
         btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setText("Regresar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
@@ -178,7 +176,11 @@ public class RegistroLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnAgregarCopias);
-        btnAgregarCopias.setBounds(370, 450, 190, 30);
+        btnAgregarCopias.setBounds(310, 450, 190, 30);
+
+        calendario.setDateFormatString("yyyy-MM-dd");
+        pnlFrame.add(calendario);
+        calendario.setBounds(60, 340, 180, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -203,8 +205,12 @@ public class RegistroLibro extends javax.swing.JFrame {
         String autor = fieldAutor.getText();
         String titulo = fieldTitulo.getText();
         String cantidadCopias = fieldCopias.getText();
-        String fecha = fieldFecha.getText();
         String editorial = fieldEditorial.getText();
+        String fecha = "";
+        try {
+            fecha = formato.format(calendario.getDate());
+        } catch (NullPointerException e) {
+        }
 
         if (fieldTitulo.getText().isEmpty() || fieldAutor.getText().isEmpty() || fieldCopias.getText().isEmpty()) {
             String mensaje = "Complete los campos vacios";
@@ -216,7 +222,6 @@ public class RegistroLibro extends javax.swing.JFrame {
                 fieldAutor.setText("");
                 fieldTitulo.setText("");
                 fieldCopias.setText("");
-                fieldFecha.setText("");
                 fieldEditorial.setText("");
             }
         }
@@ -251,11 +256,11 @@ public class RegistroLibro extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnListadoLibros;
     private javax.swing.JButton btnRegistrar;
+    private com.toedter.calendar.JDateChooser calendario;
     private javax.swing.JTextField fieldAutor;
     private javax.swing.JTextField fieldCodigo;
     private javax.swing.JTextField fieldCopias;
     private javax.swing.JTextField fieldEditorial;
-    private javax.swing.JTextField fieldFecha;
     private javax.swing.JTextField fieldTitulo;
     private javax.swing.JLabel icnLibro;
     private javax.swing.JLabel lblAutor;

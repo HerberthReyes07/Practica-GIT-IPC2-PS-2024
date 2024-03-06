@@ -9,6 +9,7 @@ import backend.Bibliotecario;
 import backend.Estudiante;
 import backend.Libro;
 import backend.Prestamo;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -24,6 +25,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<Libro> libros;
     private ArrayList<Prestamo> prestamos;
+    private SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Creates new form PrestamoLibro
@@ -37,7 +39,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
         this.prestamos = biblioteca.getPrestamos();
         btnVerificarDisponibilidad.setEnabled(false);
         btnRealizarPrestamo.setEnabled(false);
-        fieldFecha.setEnabled(false);
+        calendario.setEnabled(false);
     }
 
     /**
@@ -59,8 +61,8 @@ public class PrestamoLibro extends javax.swing.JFrame {
         btnVerificarDisponibilidad = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnRealizarPrestamo = new javax.swing.JButton();
-        fieldFecha = new javax.swing.JTextField();
         lblFecha = new javax.swing.JLabel();
+        calendario = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,7 +82,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
 
         fieldCarnet.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCarnet);
-        fieldCarnet.setBounds(10, 80, 170, 24);
+        fieldCarnet.setBounds(10, 80, 170, 30);
 
         btnVerificarPrestamos.setBackground(new java.awt.Color(0, 255, 255));
         btnVerificarPrestamos.setForeground(new java.awt.Color(0, 0, 255));
@@ -100,7 +102,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
 
         fieldLibro.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldLibro);
-        fieldLibro.setBounds(10, 160, 170, 24);
+        fieldLibro.setBounds(10, 160, 170, 30);
 
         btnVerificarDisponibilidad.setBackground(new java.awt.Color(0, 255, 255));
         btnVerificarDisponibilidad.setForeground(new java.awt.Color(0, 0, 255));
@@ -115,7 +117,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
 
         btnCancelar.setBackground(new java.awt.Color(255, 0, 0));
         btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setText("Regresar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
@@ -135,14 +137,12 @@ public class PrestamoLibro extends javax.swing.JFrame {
         pnlFrame.add(btnRealizarPrestamo);
         btnRealizarPrestamo.setBounds(210, 390, 170, 24);
 
-        fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
-        pnlFrame.add(fieldFecha);
-        fieldFecha.setBounds(10, 220, 170, 24);
-
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Prestamo:");
         pnlFrame.add(lblFecha);
         lblFecha.setBounds(10, 200, 150, 18);
+        pnlFrame.add(calendario);
+        calendario.setBounds(10, 220, 170, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -204,7 +204,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
                 btnRealizarPrestamo.setEnabled(true);
                 btnVerificarDisponibilidad.setEnabled(false);
                 fieldLibro.setEnabled(false);
-                fieldFecha.setEnabled(true);
+                calendario.setEnabled(true);
 
                 String mensaje = "Hay: " + copias + " copias disponibles del libro";
                 JOptionPane.showMessageDialog(null, mensaje, "Verificar Copias", JOptionPane.INFORMATION_MESSAGE);
@@ -220,9 +220,14 @@ public class PrestamoLibro extends javax.swing.JFrame {
 
     private void btnRealizarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarPrestamoActionPerformed
         // TODO add your handling code here:
-        String fecha = fieldFecha.getText();
 
-        if (fecha.isEmpty()) {
+        String fecha = "";
+        try {
+            fecha = formato.format(calendario.getDate());
+        } catch (NullPointerException e) {
+        }
+
+        if (fecha == "") {
             String mensaje = "Ingrese la fecha del prestamo";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
@@ -233,7 +238,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
 
                 fieldCarnet.setText("");
                 fieldLibro.setText("");
-                fieldFecha.setText("");
+                calendario.setDate(null);
                 btnVerificarPrestamos.setEnabled(true);
                 fieldCarnet.setEnabled(true);
                 fieldLibro.setEnabled(true);
@@ -256,8 +261,8 @@ public class PrestamoLibro extends javax.swing.JFrame {
     private javax.swing.JButton btnRealizarPrestamo;
     private javax.swing.JButton btnVerificarDisponibilidad;
     private javax.swing.JButton btnVerificarPrestamos;
+    private com.toedter.calendar.JDateChooser calendario;
     private javax.swing.JTextField fieldCarnet;
-    private javax.swing.JTextField fieldFecha;
     private javax.swing.JTextField fieldLibro;
     private javax.swing.JLabel lblCarnet;
     private javax.swing.JLabel lblFecha;

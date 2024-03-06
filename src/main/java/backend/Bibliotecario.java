@@ -392,7 +392,7 @@ public class Bibliotecario {
         int copiasIniciales = libros.get(indexLibro).getCantidad();
         int copiasAgregar = Integer.parseInt(numeroCopias);
         libros.get(indexLibro).setCantidad(copiasIniciales + copiasAgregar);
-        
+
         return true;
     }
 

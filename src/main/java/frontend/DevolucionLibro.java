@@ -9,6 +9,7 @@ import backend.Bibliotecario;
 import backend.Estudiante;
 import backend.Libro;
 import backend.Prestamo;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -23,6 +24,7 @@ public class DevolucionLibro extends javax.swing.JFrame {
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<Libro> libros;
     private ArrayList<Prestamo> prestamos;
+    private SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Creates new form DevolucionLibro
@@ -52,8 +54,8 @@ public class DevolucionLibro extends javax.swing.JFrame {
         fieldCodigoLibro = new javax.swing.JTextField();
         btnCalcularTotal = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        fieldFecha = new javax.swing.JTextField();
         lblFecha = new javax.swing.JLabel();
+        calendario = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -69,7 +71,7 @@ public class DevolucionLibro extends javax.swing.JFrame {
         lblCarnetEstudiante.setForeground(new java.awt.Color(0, 0, 255));
         lblCarnetEstudiante.setText("Carnet Estudiante:");
         pnlFrame.add(lblCarnetEstudiante);
-        lblCarnetEstudiante.setBounds(20, 70, 130, 22);
+        lblCarnetEstudiante.setBounds(20, 70, 130, 18);
 
         fieldCarnetEstudiante.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCarnetEstudiante);
@@ -78,7 +80,7 @@ public class DevolucionLibro extends javax.swing.JFrame {
         lblCodigoLibro.setForeground(new java.awt.Color(0, 0, 255));
         lblCodigoLibro.setText("Codigo de Libro a Devolver:");
         pnlFrame.add(lblCodigoLibro);
-        lblCodigoLibro.setBounds(20, 130, 190, 22);
+        lblCodigoLibro.setBounds(20, 130, 190, 18);
 
         fieldCodigoLibro.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCodigoLibro);
@@ -91,7 +93,7 @@ public class DevolucionLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnCalcularTotal);
-        btnCalcularTotal.setBounds(210, 280, 190, 30);
+        btnCalcularTotal.setBounds(210, 280, 190, 24);
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -100,16 +102,16 @@ public class DevolucionLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnCancelar);
-        btnCancelar.setBounds(20, 280, 140, 30);
-
-        fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
-        pnlFrame.add(fieldFecha);
-        fieldFecha.setBounds(20, 210, 180, 30);
+        btnCancelar.setBounds(20, 280, 140, 24);
 
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Devolucion:");
         pnlFrame.add(lblFecha);
-        lblFecha.setBounds(20, 190, 150, 22);
+        lblFecha.setBounds(20, 190, 150, 18);
+
+        calendario.setDateFormatString("yyyy-MM-dd");
+        pnlFrame.add(calendario);
+        calendario.setBounds(20, 210, 180, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,11 +129,16 @@ public class DevolucionLibro extends javax.swing.JFrame {
 
     private void btnCalcularTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularTotalActionPerformed
         // TODO add your handling code here:
-        String fecha = fieldFecha.getText();
+        String fecha = "";
+        try {
+            fecha = formato.format(calendario.getDate());            
+        } catch (NullPointerException e) {
+        }
+        
         String carnetEstudiante = fieldCarnetEstudiante.getText();
         String codigoLibro = fieldCodigoLibro.getText();
 
-        if (fieldCarnetEstudiante.getText().isEmpty() || fieldCodigoLibro.getText().isEmpty() || fieldFecha.getText().isEmpty()) {
+        if (fieldCarnetEstudiante.getText().isEmpty() || fieldCodigoLibro.getText().isEmpty() || fecha =="") {
             String mensaje = "Complete los campos vacios";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
@@ -141,7 +148,7 @@ public class DevolucionLibro extends javax.swing.JFrame {
                     if (bibliotecario.devolverLibro(libros, estudiantes, prestamos, carnet, codigoLibro, fecha)) {
                         fieldCarnetEstudiante.setText("");
                         fieldCodigoLibro.setText("");
-                        fieldFecha.setText("");
+                        calendario.setDate(null);
                     }
                 } else {
                     String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
@@ -164,9 +171,9 @@ public class DevolucionLibro extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalcularTotal;
     private javax.swing.JButton btnCancelar;
+    private com.toedter.calendar.JDateChooser calendario;
     private javax.swing.JTextField fieldCarnetEstudiante;
     private javax.swing.JTextField fieldCodigoLibro;
-    private javax.swing.JTextField fieldFecha;
     private javax.swing.JLabel lblCarnetEstudiante;
     private javax.swing.JLabel lblCodigoLibro;
     private javax.swing.JLabel lblDevolucionLibro;

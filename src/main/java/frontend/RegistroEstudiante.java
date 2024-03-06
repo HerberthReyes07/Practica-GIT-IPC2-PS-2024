@@ -9,6 +9,7 @@ import backend.Bibliotecario;
 import backend.ErrorLecturaArchivo;
 import backend.Estudiante;
 import java.awt.Image;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -30,6 +31,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<ErrorLecturaArchivo> erroresLectura = new ArrayList();
     private ArrayList<String> mensajeError = new ArrayList();
+    private SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
     public RegistroEstudiante(Biblioteca biblioteca) {
         initComponents();
@@ -59,10 +61,10 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         fieldNombre = new javax.swing.JTextField();
         fieldCodigoCarrera = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
-        fieldFecha = new javax.swing.JTextField();
         btnListadoEstudiantes = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         icnEstudiante = new javax.swing.JLabel();
+        calendario = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,22 +80,22 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         lblCarnet.setForeground(new java.awt.Color(0, 0, 255));
         lblCarnet.setText("Carnet:");
         pnlFrame.add(lblCarnet);
-        lblCarnet.setBounds(50, 90, 60, 22);
+        lblCarnet.setBounds(50, 90, 60, 18);
 
         lblNombre.setForeground(new java.awt.Color(0, 0, 255));
         lblNombre.setText("Nombre:");
         pnlFrame.add(lblNombre);
-        lblNombre.setBounds(50, 150, 60, 22);
+        lblNombre.setBounds(50, 150, 60, 18);
 
         lblCarrera.setForeground(new java.awt.Color(0, 0, 255));
         lblCarrera.setText("Codigo de Carrera:");
         pnlFrame.add(lblCarrera);
-        lblCarrera.setBounds(50, 210, 130, 22);
+        lblCarrera.setBounds(50, 210, 130, 18);
 
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Nacimiento:");
         pnlFrame.add(lblFecha);
-        lblFecha.setBounds(50, 270, 150, 22);
+        lblFecha.setBounds(50, 270, 150, 18);
 
         fieldCarnet.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCarnet);
@@ -118,10 +120,6 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         pnlFrame.add(btnRegistrar);
         btnRegistrar.setBounds(50, 350, 150, 30);
 
-        fieldFecha.setBackground(new java.awt.Color(255, 255, 255));
-        pnlFrame.add(fieldFecha);
-        fieldFecha.setBounds(50, 290, 150, 30);
-
         btnListadoEstudiantes.setBackground(new java.awt.Color(0, 204, 204));
         btnListadoEstudiantes.setForeground(new java.awt.Color(0, 0, 255));
         btnListadoEstudiantes.setText("Ver Listado Estudiantes");
@@ -135,7 +133,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
 
         btnCancelar.setBackground(new java.awt.Color(255, 0, 51));
         btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setText("Regresar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
@@ -145,6 +143,11 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         btnCancelar.setBounds(203, 390, 100, 30);
         pnlFrame.add(icnEstudiante);
         icnEstudiante.setBounds(290, 130, 190, 170);
+
+        calendario.setBackground(new java.awt.Color(255, 255, 255));
+        calendario.setDateFormatString("yyyy-MM-dd");
+        pnlFrame.add(calendario);
+        calendario.setBounds(50, 290, 150, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -166,18 +169,11 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         String carnet = fieldCarnet.getText();
         String codigoCarrera = fieldCodigoCarrera.getText();
         String nombre = fieldNombre.getText();
-        String fechaNacimiento = fieldFecha.getText();
-        //boolean datosValidos;
-
-        /*if (!fieldCarnet.getText().isEmpty()) {
-            String mensaje = "En el campo: Carnet,\nDebe ingresar un valor numerico entero positivo";
-            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        String fechaNacimiento = "";
+        try {
+            fechaNacimiento = formato.format(calendario.getDate());
+        } catch (NullPointerException e) {
         }
-
-        if (!fieldCodigoCarrera.getText().isEmpty()) {
-            String mensaje = "En el campo: Codigo Carrera,\nDebe ingresar un valor numerico entero positivo";
-            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-        }*/
 
         if (fieldCarnet.getText().isEmpty() || fieldCodigoCarrera.getText().isEmpty() || fieldNombre.getText().isEmpty()) {
             String mensaje = "Complete los campos vacios";
@@ -187,7 +183,6 @@ public class RegistroEstudiante extends javax.swing.JFrame {
             if (datosValidos) {
                 fieldCarnet.setText("");
                 fieldCodigoCarrera.setText("");
-                fieldFecha.setText("");
                 fieldNombre.setText("");
             }
         }
@@ -215,9 +210,9 @@ public class RegistroEstudiante extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnListadoEstudiantes;
     private javax.swing.JButton btnRegistrar;
+    private com.toedter.calendar.JDateChooser calendario;
     private javax.swing.JTextField fieldCarnet;
     private javax.swing.JTextField fieldCodigoCarrera;
-    private javax.swing.JTextField fieldFecha;
     private javax.swing.JTextField fieldNombre;
     private javax.swing.JLabel icnEstudiante;
     private javax.swing.JLabel lblCarnet;

@@ -11,6 +11,7 @@ import backend.Filtro;
 import backend.Libro;
 import backend.Prestamo;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +30,7 @@ public class Reporte6 extends javax.swing.JFrame {
     private ArrayList<Estudiante> estudiantes;
     private ArrayList<Libro> libros;
     private DefaultTableModel modeloTabla;
+    private SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Creates new form Reporte6
@@ -64,13 +66,13 @@ public class Reporte6 extends javax.swing.JFrame {
         lblCarrera = new javax.swing.JLabel();
         lblFechaInicio = new javax.swing.JLabel();
         lblFechaFin = new javax.swing.JLabel();
-        fieldFechaFin = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPrestamos = new javax.swing.JTable();
         btnRegresar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
-        fieldFechaInicio = new javax.swing.JTextField();
         comboBoxCarrera = new javax.swing.JComboBox<>();
+        calendarioInicio = new com.toedter.calendar.JDateChooser();
+        calendarioFin = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -97,8 +99,6 @@ public class Reporte6 extends javax.swing.JFrame {
         lblFechaFin.setText("Fecha fin:");
         jPanel1.add(lblFechaFin);
         lblFechaFin.setBounds(220, 110, 70, 20);
-        jPanel1.add(fieldFechaFin);
-        fieldFechaFin.setBounds(310, 110, 90, 24);
 
         tblPrestamos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -139,13 +139,19 @@ public class Reporte6 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBuscar);
-        btnBuscar.setBounds(420, 80, 77, 30);
-        jPanel1.add(fieldFechaInicio);
-        fieldFechaInicio.setBounds(310, 70, 90, 24);
+        btnBuscar.setBounds(450, 80, 77, 30);
 
         comboBoxCarrera.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "1", "2", "3", "4", "5", "6" }));
         jPanel1.add(comboBoxCarrera);
         comboBoxCarrera.setBounds(90, 70, 100, 24);
+
+        calendarioInicio.setDateFormatString("yyyy-MM-dd");
+        jPanel1.add(calendarioInicio);
+        calendarioInicio.setBounds(310, 70, 110, 30);
+
+        calendarioFin.setDateFormatString("yyyy-MM-dd");
+        jPanel1.add(calendarioFin);
+        calendarioFin.setBounds(310, 110, 109, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -168,19 +174,26 @@ public class Reporte6 extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-        String fechaInicio = fieldFechaInicio.getText();
-        String fechaFin = fieldFechaFin.getText();
+        String fechaInicio = "";
+        String fechaFin = "";
+        try {
+            fechaInicio = formato.format(calendarioInicio.getDate());
+        } catch (NullPointerException e) {
+        }
+        try {
+            fechaFin = formato.format(calendarioFin.getDate());
+        } catch (NullPointerException e) {
+        }
         int carrera = comboBoxCarrera.getSelectedIndex();
         System.out.println("carrera Fe = " + carrera);
         while (modeloTabla.getRowCount() > 0) {
             modeloTabla.removeRow(0);
         }
 
-        if (fieldFechaInicio.getText().isEmpty() && !fieldFechaFin.getText().isEmpty()
-                || !fieldFechaInicio.getText().isEmpty() && fieldFechaFin.getText().isEmpty()) {
+        if (fechaInicio == "" && fechaFin != "" || fechaInicio != "" && fechaFin == "") {
             String mensaje = "Ingrese la fecha del prestamo faltante";
             JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-        } else if (fieldFechaInicio.getText().isEmpty() && fieldFechaFin.getText().isEmpty()) {
+        } else if (fechaInicio == "" && fechaFin == "") {
             fechaInicio = "todos";
             fechaFin = "todos";
             try {
@@ -204,9 +217,9 @@ public class Reporte6 extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnRegresar;
+    private com.toedter.calendar.JDateChooser calendarioFin;
+    private com.toedter.calendar.JDateChooser calendarioInicio;
     private javax.swing.JComboBox<String> comboBoxCarrera;
-    private javax.swing.JTextField fieldFechaFin;
-    private javax.swing.JTextField fieldFechaInicio;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCarrera;

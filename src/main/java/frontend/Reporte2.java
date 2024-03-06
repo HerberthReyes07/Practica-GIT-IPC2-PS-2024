@@ -8,6 +8,7 @@ import backend.Biblioteca;
 import backend.Bibliotecario;
 import backend.Filtro;
 import backend.Prestamo;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
@@ -22,7 +23,8 @@ public class Reporte2 extends javax.swing.JFrame {
     private Bibliotecario bibliotecario = new Bibliotecario();
     private ArrayList<Prestamo> prestamos;
     private DefaultTableModel modeloTabla;
-    
+    private SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+
     /**
      * Creates new form Reporte2
      */
@@ -45,10 +47,10 @@ public class Reporte2 extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        fieldFecha = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPrestamos = new javax.swing.JTable();
+        calendario = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -87,6 +89,8 @@ public class Reporte2 extends javax.swing.JFrame {
         tblPrestamos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblPrestamos);
 
+        calendario.setDateFormatString("yyyy-MM-dd");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -102,8 +106,8 @@ public class Reporte2 extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(fieldFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(calendario, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton1)))))
                 .addContainerGap(139, Short.MAX_VALUE))
@@ -114,11 +118,11 @@ public class Reporte2 extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(fieldFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addComponent(calendario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35))
@@ -140,12 +144,16 @@ public class Reporte2 extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-
-        if (bibliotecario.fechaValida(fieldFecha.getText())) {
+        String fecha = "";
+        try {
+            fecha = formato.format(calendario.getDate());
+        } catch (NullPointerException e) {
+        }
+        if (bibliotecario.fechaValida(fecha)) {
             Filtro filtro = new Filtro();
-            boolean prestamoEncontrado = filtro.filtroPrestamoFecha(2, tblPrestamos.getRowCount(), fieldFecha.getText(), modeloTabla, prestamos);
+            boolean prestamoEncontrado = filtro.filtroPrestamoFecha(2, tblPrestamos.getRowCount(), fecha, modeloTabla, prestamos);
             if (!prestamoEncontrado) {
-                JOptionPane.showMessageDialog(null, "No hay libros que esten en demora en la fecha: " + fieldFecha.getText());
+                JOptionPane.showMessageDialog(null, "No hay libros que esten en demora en la fecha: " + fecha);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Fecha consultada no valida (yyyy-mm-dd)");
@@ -154,7 +162,7 @@ public class Reporte2 extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField fieldFecha;
+    private com.toedter.calendar.JDateChooser calendario;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
