@@ -264,7 +264,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private void btnGuardarInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarInformacionActionPerformed
         // TODO add your handling code here:
         cab.guardarBiblioteca(biblioteca, archivoBinario);
-        cab.leerBibliotecaGuardada(archivoBinario);
+        //cab.leerBibliotecaGuardada(archivoBinario);
     }//GEN-LAST:event_btnGuardarInformacionActionPerformed
 
     private void menuPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPrestamosActionPerformed

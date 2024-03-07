@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,6 +23,8 @@ public class ControladorArchivoBinario {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(biblioteca);
             objectOutputStream.close();
+            String mensaje = "Información guardada exitosamente";
+            JOptionPane.showMessageDialog(null, mensaje, "Almacenar información", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
             System.out.println(e);
         }
