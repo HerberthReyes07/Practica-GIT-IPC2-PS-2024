@@ -206,7 +206,7 @@ public class RegistroLibro extends javax.swing.JFrame {
         String titulo = fieldTitulo.getText();
         String cantidadCopias = fieldCopias.getText();
         String editorial = fieldEditorial.getText();
-        String fecha = "";
+        String fecha = "FNV";
         try {
             fecha = formato.format(calendario.getDate());
         } catch (NullPointerException e) {
@@ -222,6 +222,7 @@ public class RegistroLibro extends javax.swing.JFrame {
                 fieldAutor.setText("");
                 fieldTitulo.setText("");
                 fieldCopias.setText("");
+                calendario.setCalendar(null);
                 fieldEditorial.setText("");
             }
         }

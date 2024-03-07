@@ -42,6 +42,9 @@ public class Reporte6 extends javax.swing.JFrame {
         this.estudiantes = biblioteca.getEstudiantes();
         this.libros = biblioteca.getLibros();
         this.modeloTabla = (DefaultTableModel) tblPrestamos.getModel();
+        
+        calendarioInicio.getDateEditor().setEnabled(false);
+        calendarioFin.getDateEditor().setEnabled(false);
 
         for (Prestamo prestamo : prestamos) {
             modeloTabla.addRow(new Object[]{
@@ -73,6 +76,7 @@ public class Reporte6 extends javax.swing.JFrame {
         comboBoxCarrera = new javax.swing.JComboBox<>();
         calendarioInicio = new com.toedter.calendar.JDateChooser();
         calendarioFin = new com.toedter.calendar.JDateChooser();
+        btnLimpiarFechas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -130,7 +134,7 @@ public class Reporte6 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnRegresar);
-        btnRegresar.setBounds(220, 570, 120, 24);
+        btnRegresar.setBounds(220, 570, 120, 30);
 
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -139,11 +143,11 @@ public class Reporte6 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBuscar);
-        btnBuscar.setBounds(450, 80, 77, 30);
+        btnBuscar.setBounds(460, 70, 94, 30);
 
         comboBoxCarrera.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "1", "2", "3", "4", "5", "6" }));
         jPanel1.add(comboBoxCarrera);
-        comboBoxCarrera.setBounds(90, 70, 100, 24);
+        comboBoxCarrera.setBounds(90, 70, 100, 30);
 
         calendarioInicio.setDateFormatString("yyyy-MM-dd");
         jPanel1.add(calendarioInicio);
@@ -151,7 +155,16 @@ public class Reporte6 extends javax.swing.JFrame {
 
         calendarioFin.setDateFormatString("yyyy-MM-dd");
         jPanel1.add(calendarioFin);
-        calendarioFin.setBounds(310, 110, 109, 30);
+        calendarioFin.setBounds(310, 110, 110, 30);
+
+        btnLimpiarFechas.setText("Limpiar fechas");
+        btnLimpiarFechas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarFechasActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnLimpiarFechas);
+        btnLimpiarFechas.setBounds(440, 110, 120, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -213,9 +226,16 @@ public class Reporte6 extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    private void btnLimpiarFechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarFechasActionPerformed
+        // TODO add your handling code here:
+        calendarioInicio.setCalendar(null);
+        calendarioFin.setCalendar(null);
+    }//GEN-LAST:event_btnLimpiarFechasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnLimpiarFechas;
     private javax.swing.JButton btnRegresar;
     private com.toedter.calendar.JDateChooser calendarioFin;
     private com.toedter.calendar.JDateChooser calendarioInicio;

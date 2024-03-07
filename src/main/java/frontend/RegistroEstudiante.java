@@ -169,7 +169,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         String carnet = fieldCarnet.getText();
         String codigoCarrera = fieldCodigoCarrera.getText();
         String nombre = fieldNombre.getText();
-        String fechaNacimiento = "";
+        String fechaNacimiento = "FNV";
         try {
             fechaNacimiento = formato.format(calendario.getDate());
         } catch (NullPointerException e) {
@@ -184,6 +184,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
                 fieldCarnet.setText("");
                 fieldCodigoCarrera.setText("");
                 fieldNombre.setText("");
+                calendario.setCalendar(null);
             }
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed

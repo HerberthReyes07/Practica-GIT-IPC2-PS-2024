@@ -33,6 +33,8 @@ public class Reporte3 extends javax.swing.JFrame {
         this.biblioteca = biblioteca;
         this.prestamos = biblioteca.getPrestamos();
         this.modeloTabla = (DefaultTableModel) tblPrestamos.getModel();
+        calendarioInicio.getDateEditor().setEnabled(false);
+        calendarioFin.getDateEditor().setEnabled(false);
     }
 
     /**
@@ -56,6 +58,7 @@ public class Reporte3 extends javax.swing.JFrame {
         tblPrestamos = new javax.swing.JTable();
         calendarioInicio = new com.toedter.calendar.JDateChooser();
         calendarioFin = new com.toedter.calendar.JDateChooser();
+        btnLimpiarFechas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -112,6 +115,13 @@ public class Reporte3 extends javax.swing.JFrame {
 
         calendarioFin.setDateFormatString("yyyy-MM-dd");
 
+        btnLimpiarFechas.setText("Limpiar fechas");
+        btnLimpiarFechas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarFechasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -120,12 +130,7 @@ public class Reporte3 extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(93, 93, 93)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -138,7 +143,14 @@ public class Reporte3 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblNormal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblDemora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(lblDemora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnLimpiarFechas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)
+                        .addGap(38, 38, 38)
+                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(90, 90, 90))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(139, 139, 139)
@@ -165,7 +177,8 @@ public class Reporte3 extends javax.swing.JFrame {
                 .addGap(42, 42, 42)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(lblTotal))
+                    .addComponent(lblTotal)
+                    .addComponent(btnLimpiarFechas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21))
@@ -190,11 +203,9 @@ public class Reporte3 extends javax.swing.JFrame {
         String fechaInicio = "";
         String fechaFin = "";
         boolean mostrarTodos = false;
+
         try {
             fechaInicio = formato.format(calendarioInicio.getDate());
-        } catch (NullPointerException e) {
-        }
-        try {
             fechaFin = formato.format(calendarioFin.getDate());
         } catch (NullPointerException e) {
         }
@@ -207,19 +218,30 @@ public class Reporte3 extends javax.swing.JFrame {
             Filtro filtro = new Filtro();
             boolean prestamoEncontrado = filtro.filtroPrestamoIntervaloFecha(tblPrestamos.getRowCount(), mostrarTodos, fechaInicio, fechaFin, modeloTabla, prestamos, lblDemora, lblNormal, lblTotal);
             if (!prestamoEncontrado) {
-                JOptionPane.showMessageDialog(null, "No hay prestamos realizados en el intervalo de fechas: "
-                        + fechaInicio + " / " + fechaFin);
+                if (mostrarTodos) {
+                    JOptionPane.showMessageDialog(null, "No hay ningun prestamo con dinero recaudado");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No hay prestamos con dinero recaudado en el intervalo de fechas: "
+                            + fechaInicio + " / " + fechaFin);
+                }
             }
         } else {
             JOptionPane.showMessageDialog(null, "Las fechas consultadas no son validas (yyyy-mm-dd)");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnLimpiarFechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarFechasActionPerformed
+        // TODO add your handling code here:
+        calendarioInicio.setCalendar(null);
+        calendarioFin.setCalendar(null);
+    }//GEN-LAST:event_btnLimpiarFechasActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLimpiarFechas;
     private com.toedter.calendar.JDateChooser calendarioFin;
     private com.toedter.calendar.JDateChooser calendarioInicio;
     private javax.swing.JButton jButton1;
