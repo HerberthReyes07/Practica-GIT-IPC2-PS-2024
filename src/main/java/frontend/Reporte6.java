@@ -198,7 +198,6 @@ public class Reporte6 extends javax.swing.JFrame {
         } catch (NullPointerException e) {
         }
         int carrera = comboBoxCarrera.getSelectedIndex();
-        System.out.println("carrera Fe = " + carrera);
         while (modeloTabla.getRowCount() > 0) {
             modeloTabla.removeRow(0);
         }

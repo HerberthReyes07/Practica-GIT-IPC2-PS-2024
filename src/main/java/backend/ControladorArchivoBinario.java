@@ -22,7 +22,6 @@ public class ControladorArchivoBinario {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(biblioteca);
             objectOutputStream.close();
-            System.out.println("Biblioteca almacenada");
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -33,7 +32,6 @@ public class ControladorArchivoBinario {
             FileInputStream fileInputStream = new FileInputStream(archivoBinario);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             Biblioteca biblioteca = (Biblioteca) objectInputStream.readObject();
-            System.out.println(biblioteca.toString());
             objectInputStream.close();
             return biblioteca;
         } catch (IOException e) {

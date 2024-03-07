@@ -27,6 +27,11 @@ public class PrestamoLibro extends javax.swing.JFrame {
     private ArrayList<Prestamo> prestamos;
     private SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
+    private ArrayList<Libro> librosTemp = new ArrayList();
+    private Estudiante estudianteTemp = new Estudiante();
+    private String fechaTemp;
+    private boolean otroLibro = false;
+
     /**
      * Creates new form PrestamoLibro
      */
@@ -40,6 +45,8 @@ public class PrestamoLibro extends javax.swing.JFrame {
         btnVerificarDisponibilidad.setEnabled(false);
         btnRealizarPrestamo.setEnabled(false);
         calendario.setEnabled(false);
+        btnListadoLibrosPrestar.setVisible(false);
+        btnPrestarOtroLibro.setEnabled(false);
     }
 
     /**
@@ -63,6 +70,8 @@ public class PrestamoLibro extends javax.swing.JFrame {
         btnRealizarPrestamo = new javax.swing.JButton();
         lblFecha = new javax.swing.JLabel();
         calendario = new com.toedter.calendar.JDateChooser();
+        btnPrestarOtroLibro = new javax.swing.JButton();
+        btnListadoLibrosPrestar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,7 +87,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
         lblCarnet.setForeground(new java.awt.Color(0, 0, 255));
         lblCarnet.setText("Carnet Estudiante: ");
         pnlFrame.add(lblCarnet);
-        lblCarnet.setBounds(10, 60, 140, 18);
+        lblCarnet.setBounds(10, 60, 140, 22);
 
         fieldCarnet.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCarnet);
@@ -93,12 +102,12 @@ public class PrestamoLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnVerificarPrestamos);
-        btnVerificarPrestamos.setBounds(210, 80, 200, 24);
+        btnVerificarPrestamos.setBounds(210, 80, 200, 30);
 
         lblLibro.setForeground(new java.awt.Color(0, 0, 255));
         lblLibro.setText("Codigo de Libro a Prestar: ");
         pnlFrame.add(lblLibro);
-        lblLibro.setBounds(10, 140, 190, 18);
+        lblLibro.setBounds(10, 140, 190, 22);
 
         fieldLibro.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldLibro);
@@ -113,7 +122,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnVerificarDisponibilidad);
-        btnVerificarDisponibilidad.setBounds(210, 160, 200, 24);
+        btnVerificarDisponibilidad.setBounds(210, 160, 200, 30);
 
         btnCancelar.setBackground(new java.awt.Color(255, 0, 0));
         btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
@@ -124,7 +133,7 @@ public class PrestamoLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnCancelar);
-        btnCancelar.setBounds(20, 390, 130, 24);
+        btnCancelar.setBounds(20, 390, 130, 30);
 
         btnRealizarPrestamo.setBackground(new java.awt.Color(0, 255, 255));
         btnRealizarPrestamo.setForeground(new java.awt.Color(0, 0, 255));
@@ -135,14 +144,32 @@ public class PrestamoLibro extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnRealizarPrestamo);
-        btnRealizarPrestamo.setBounds(210, 390, 170, 24);
+        btnRealizarPrestamo.setBounds(210, 390, 170, 30);
 
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Prestamo:");
         pnlFrame.add(lblFecha);
-        lblFecha.setBounds(10, 200, 150, 18);
+        lblFecha.setBounds(10, 200, 150, 22);
         pnlFrame.add(calendario);
         calendario.setBounds(10, 220, 170, 30);
+
+        btnPrestarOtroLibro.setText("Añadir libro a la lista");
+        btnPrestarOtroLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrestarOtroLibroActionPerformed(evt);
+            }
+        });
+        pnlFrame.add(btnPrestarOtroLibro);
+        btnPrestarOtroLibro.setBounds(20, 320, 200, 30);
+
+        btnListadoLibrosPrestar.setText("Ver lista");
+        btnListadoLibrosPrestar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListadoLibrosPrestarActionPerformed(evt);
+            }
+        });
+        pnlFrame.add(btnListadoLibrosPrestar);
+        btnListadoLibrosPrestar.setBounds(280, 320, 100, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -201,13 +228,30 @@ public class PrestamoLibro extends javax.swing.JFrame {
         } else {
             int copias = bibliotecario.verificarCopias(libros, codigoLibro);
             if (copias > 0) {
-                btnRealizarPrestamo.setEnabled(true);
-                btnVerificarDisponibilidad.setEnabled(false);
-                fieldLibro.setEnabled(false);
-                calendario.setEnabled(true);
 
-                String mensaje = "Hay: " + copias + " copias disponibles del libro";
-                JOptionPane.showMessageDialog(null, mensaje, "Verificar Copias", JOptionPane.INFORMATION_MESSAGE);
+                boolean repetido = false;
+                if (otroLibro) {
+                    int indexLibroTemp = bibliotecario.buscarLibro(libros, fieldLibro.getText());
+                    if (!libroRepetido(libros.get(indexLibroTemp).getCodigo())) {
+                        btnPrestarOtroLibro.setEnabled(true);
+                    } else {
+                        repetido = true;
+                        fieldLibro.setText("");
+                        String mensaje = "El libro solicitado ya esta en la lista";
+                        JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    btnRealizarPrestamo.setEnabled(true);
+                    btnPrestarOtroLibro.setEnabled(true);
+                    btnVerificarDisponibilidad.setEnabled(false);
+                    fieldLibro.setEnabled(false);
+                    calendario.setEnabled(true);
+                }
+                if (!repetido) {
+                    String mensaje = "Hay: " + copias + " copias disponibles del libro";
+                    JOptionPane.showMessageDialog(null, mensaje, "Verificar Copias", JOptionPane.INFORMATION_MESSAGE);
+                }
+
             } else if (copias == -1) {
                 String mensaje = "El libro con codigo: " + codigoLibro + ", no existe";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
@@ -227,28 +271,45 @@ public class PrestamoLibro extends javax.swing.JFrame {
         } catch (NullPointerException e) {
         }
 
-        if (fecha == "") {
-            String mensaje = "Ingrese la fecha del prestamo";
-            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            if (bibliotecario.fechaValida(fecha)) {
-                bibliotecario.crearPrestamo(estudiantes, libros, prestamos, Integer.parseInt(fieldCarnet.getText()), fieldLibro.getText(), fecha);
-                String mensaje = "Prestamo creado correctamente";
-                JOptionPane.showMessageDialog(null, mensaje, "Crear prestamo", JOptionPane.INFORMATION_MESSAGE);
+        if (!otroLibro) {
 
-                fieldCarnet.setText("");
-                fieldLibro.setText("");
-                calendario.setDate(null);
-                btnVerificarPrestamos.setEnabled(true);
-                fieldCarnet.setEnabled(true);
-                fieldLibro.setEnabled(true);
-                btnRealizarPrestamo.setEnabled(false);
-            } else {
-                String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+            if (fecha == "") {
+                String mensaje = "Ingrese la fecha del prestamo";
                 JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                if (bibliotecario.fechaValida(fecha)) {
+                    bibliotecario.crearPrestamo(estudiantes, libros, prestamos, Integer.parseInt(fieldCarnet.getText()), fieldLibro.getText(), fecha);
+                    String mensaje = "Prestamo creado correctamente";
+                    JOptionPane.showMessageDialog(null, mensaje, "Crear prestamo", JOptionPane.INFORMATION_MESSAGE);
+                    reiniciarValores();
+                } else {
+                    String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+                    JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        } else {
+            if (!librosTemp.isEmpty()) {
+                for (int i = 0; i < librosTemp.size(); i++) {
+                    bibliotecario.crearPrestamo(estudiantes, libros, prestamos, Integer.parseInt(fieldCarnet.getText()), librosTemp.get(i).getCodigo(), fecha);
+                }
+                String mensaje = "Prestamos creados correctamente";
+                JOptionPane.showMessageDialog(null, mensaje, "Crear prestamo", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                String mensaje = "No se ha realizado ningun prestamo porque la lista esta vacia";
+                JOptionPane.showMessageDialog(null, mensaje, "Crear prestamo", JOptionPane.INFORMATION_MESSAGE);
             }
 
+            librosTemp = new ArrayList();
+            estudianteTemp = new Estudiante();
+            fechaTemp = "";
+            otroLibro = false;
+            //contLibros = 0;
+
+            reiniciarValores();
+            btnListadoLibrosPrestar.setVisible(false);
         }
+
     }//GEN-LAST:event_btnRealizarPrestamoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -256,8 +317,75 @@ public class PrestamoLibro extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void btnPrestarOtroLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestarOtroLibroActionPerformed
+        // TODO add your handling code here:
+        fechaTemp = "";
+        if (!otroLibro) {
+            int indexEstudianteTemp = bibliotecario.buscarEstudiante(estudiantes, Integer.parseInt(fieldCarnet.getText()));
+            estudianteTemp = estudiantes.get(indexEstudianteTemp);
+            try {
+                fechaTemp = formato.format(calendario.getDate());
+            } catch (NullPointerException e) {
+            }
+        }
+
+        if (estudianteTemp.getNumeroPrestamos() - librosTemp.size() > 0) {
+            if (bibliotecario.fechaValida(fechaTemp) || otroLibro) {
+                int indexLibroTemp = bibliotecario.buscarLibro(libros, fieldLibro.getText());
+                librosTemp.add(libros.get(indexLibroTemp));
+
+                btnListadoLibrosPrestar.setVisible(true);
+                btnPrestarOtroLibro.setEnabled(false);
+
+                fieldCarnet.setEnabled(false);
+                fieldLibro.setEnabled(true);
+                fieldLibro.setText("");
+                btnVerificarDisponibilidad.setEnabled(true);
+                calendario.setEnabled(false);
+                otroLibro = true;
+
+            } else {
+                String mensaje = "Formato de fecha incorrecto (yyyy-mm-dd)";
+                JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            String mensaje = "Ya no se pueden añadir más libros a la lista porque el estudiante ya no tiene prestamos disponibles";
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnPrestarOtroLibroActionPerformed
+
+    private void btnListadoLibrosPrestarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListadoLibrosPrestarActionPerformed
+        // TODO add your handling code here:
+        ListadoLibrosPrestar llp = new ListadoLibrosPrestar(librosTemp);
+        llp.setVisible(true);
+    }//GEN-LAST:event_btnListadoLibrosPrestarActionPerformed
+
+    private boolean libroRepetido(String codigoVerificar) {
+
+        for (int i = 0; i < librosTemp.size(); i++) {
+            if (librosTemp.get(i).getCodigo().equals(codigoVerificar)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void reiniciarValores() {
+        fieldCarnet.setText("");
+        fieldLibro.setText("");
+        calendario.setDate(null);
+        btnVerificarPrestamos.setEnabled(true);
+        fieldCarnet.setEnabled(true);
+        fieldLibro.setEnabled(true);
+        btnRealizarPrestamo.setEnabled(false);
+        btnPrestarOtroLibro.setEnabled(false);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnListadoLibrosPrestar;
+    private javax.swing.JButton btnPrestarOtroLibro;
     private javax.swing.JButton btnRealizarPrestamo;
     private javax.swing.JButton btnVerificarDisponibilidad;
     private javax.swing.JButton btnVerificarPrestamos;

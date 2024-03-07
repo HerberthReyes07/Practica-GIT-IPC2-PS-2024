@@ -301,7 +301,6 @@ public class Filtro {
 
             long diferenciaDias = bibliotecario.calcularDiferenciaDias(fechaInicial, fechaFinal);
             if (diferenciaDias >= 0) {
-                System.out.println("carrera a buscar = " + carrera);
                 for (Prestamo prestamo : prestamos) {
                     LocalDate fechaPrestamo = LocalDate.parse(prestamo.getFecha());
                     if (fechaPrestamo.isAfter(fechaInicial) && fechaPrestamo.isBefore(fechaFinal)
