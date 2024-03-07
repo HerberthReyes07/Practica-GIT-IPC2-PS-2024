@@ -92,7 +92,7 @@ public class Reporte6 extends javax.swing.JFrame {
         lblCarrera.setForeground(new java.awt.Color(0, 0, 255));
         lblCarrera.setText("Carrera: ");
         jPanel1.add(lblCarrera);
-        lblCarrera.setBounds(30, 70, 60, 20);
+        lblCarrera.setBounds(20, 70, 70, 20);
 
         lblFechaInicio.setForeground(new java.awt.Color(0, 0, 255));
         lblFechaInicio.setText("Fecha inicio:");
@@ -134,7 +134,7 @@ public class Reporte6 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnRegresar);
-        btnRegresar.setBounds(220, 570, 120, 30);
+        btnRegresar.setBounds(220, 570, 120, 24);
 
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -143,7 +143,7 @@ public class Reporte6 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnBuscar);
-        btnBuscar.setBounds(460, 70, 94, 30);
+        btnBuscar.setBounds(440, 70, 140, 30);
 
         comboBoxCarrera.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "1", "2", "3", "4", "5", "6" }));
         jPanel1.add(comboBoxCarrera);
@@ -157,14 +157,14 @@ public class Reporte6 extends javax.swing.JFrame {
         jPanel1.add(calendarioFin);
         calendarioFin.setBounds(310, 110, 110, 30);
 
-        btnLimpiarFechas.setText("Limpiar fechas");
+        btnLimpiarFechas.setText("Limpiar Fechas");
         btnLimpiarFechas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLimpiarFechasActionPerformed(evt);
             }
         });
         jPanel1.add(btnLimpiarFechas);
-        btnLimpiarFechas.setBounds(440, 110, 120, 30);
+        btnLimpiarFechas.setBounds(440, 110, 140, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

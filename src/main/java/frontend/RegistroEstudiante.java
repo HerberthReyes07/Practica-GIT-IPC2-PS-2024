@@ -80,22 +80,22 @@ public class RegistroEstudiante extends javax.swing.JFrame {
         lblCarnet.setForeground(new java.awt.Color(0, 0, 255));
         lblCarnet.setText("Carnet:");
         pnlFrame.add(lblCarnet);
-        lblCarnet.setBounds(50, 90, 60, 18);
+        lblCarnet.setBounds(50, 90, 150, 18);
 
         lblNombre.setForeground(new java.awt.Color(0, 0, 255));
         lblNombre.setText("Nombre:");
         pnlFrame.add(lblNombre);
-        lblNombre.setBounds(50, 150, 60, 18);
+        lblNombre.setBounds(50, 150, 150, 18);
 
         lblCarrera.setForeground(new java.awt.Color(0, 0, 255));
         lblCarrera.setText("Codigo de Carrera:");
         pnlFrame.add(lblCarrera);
-        lblCarrera.setBounds(50, 210, 130, 18);
+        lblCarrera.setBounds(50, 210, 150, 18);
 
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Nacimiento:");
         pnlFrame.add(lblFecha);
-        lblFecha.setBounds(50, 270, 150, 18);
+        lblFecha.setBounds(50, 270, 160, 18);
 
         fieldCarnet.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCarnet);
@@ -129,7 +129,7 @@ public class RegistroEstudiante extends javax.swing.JFrame {
             }
         });
         pnlFrame.add(btnListadoEstudiantes);
-        btnListadoEstudiantes.setBounds(290, 350, 200, 30);
+        btnListadoEstudiantes.setBounds(280, 350, 230, 30);
 
         btnCancelar.setBackground(new java.awt.Color(255, 0, 51));
         btnCancelar.setForeground(new java.awt.Color(0, 0, 0));

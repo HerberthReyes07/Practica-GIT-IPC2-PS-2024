@@ -100,12 +100,12 @@ public class RegistroLibro extends javax.swing.JFrame {
         lblCopias.setForeground(new java.awt.Color(0, 0, 255));
         lblCopias.setText("Cantidad de Copias:");
         pnlFrame.add(lblCopias);
-        lblCopias.setBounds(60, 260, 140, 18);
+        lblCopias.setBounds(60, 260, 180, 18);
 
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Publicacion:");
         pnlFrame.add(lblFecha);
-        lblFecha.setBounds(60, 320, 160, 18);
+        lblFecha.setBounds(60, 320, 180, 18);
 
         lblEditorial.setForeground(new java.awt.Color(0, 0, 255));
         lblEditorial.setText("Editorial:");

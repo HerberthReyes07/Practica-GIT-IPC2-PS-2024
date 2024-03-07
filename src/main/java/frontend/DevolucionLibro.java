@@ -71,20 +71,20 @@ public class DevolucionLibro extends javax.swing.JFrame {
         lblCarnetEstudiante.setForeground(new java.awt.Color(0, 0, 255));
         lblCarnetEstudiante.setText("Carnet Estudiante:");
         pnlFrame.add(lblCarnetEstudiante);
-        lblCarnetEstudiante.setBounds(20, 70, 130, 18);
+        lblCarnetEstudiante.setBounds(20, 70, 180, 18);
 
         fieldCarnetEstudiante.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCarnetEstudiante);
-        fieldCarnetEstudiante.setBounds(20, 90, 180, 30);
+        fieldCarnetEstudiante.setBounds(20, 90, 190, 30);
 
         lblCodigoLibro.setForeground(new java.awt.Color(0, 0, 255));
         lblCodigoLibro.setText("Codigo de Libro a Devolver:");
         pnlFrame.add(lblCodigoLibro);
-        lblCodigoLibro.setBounds(20, 130, 190, 18);
+        lblCodigoLibro.setBounds(20, 130, 210, 18);
 
         fieldCodigoLibro.setBackground(new java.awt.Color(255, 255, 255));
         pnlFrame.add(fieldCodigoLibro);
-        fieldCodigoLibro.setBounds(20, 150, 180, 30);
+        fieldCodigoLibro.setBounds(20, 150, 190, 30);
 
         btnCalcularTotal.setText("Calcular Total a Pagar");
         btnCalcularTotal.addActionListener(new java.awt.event.ActionListener() {
@@ -107,11 +107,11 @@ public class DevolucionLibro extends javax.swing.JFrame {
         lblFecha.setForeground(new java.awt.Color(0, 0, 255));
         lblFecha.setText("Fecha de Devolucion:");
         pnlFrame.add(lblFecha);
-        lblFecha.setBounds(20, 190, 150, 18);
+        lblFecha.setBounds(20, 190, 190, 18);
 
         calendario.setDateFormatString("yyyy-MM-dd");
         pnlFrame.add(calendario);
-        calendario.setBounds(20, 210, 180, 30);
+        calendario.setBounds(20, 210, 190, 30);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
